@@ -1,62 +1,45 @@
 /* 🌟 SECCIÓN PRINCIPAL (PORTADA) */
 .myprofile {
   width: 100%;
-  height: 100vh;
+  height: 150vh;
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
   position: relative;
-  overflow: hidden;
+  overflow: visible;
   background-color: var(--color-main);
   font-family: var(--font-title);
 }
 
-/* 🌌 NUEVO FONDO ANIMADO CON CÍRCULOS FLOTANTES */
-.container {
+/* 🖼️ IMAGEN DE FONDO */
+.background-image {
   position: absolute;
-  top: 40%;
-  left: 50%;
-  transform: translateX(-50%);
-  height: 70%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 0;
-  /* Detrás del texto */
+  top: 0;
+  right: 0px;
   width: 100%;
+  height: 100%;
+  background-image: url('../../assets/images/fotografia5.jpeg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: 0;
+  object-fit: cover;
 }
 
-.item {
+/* 🌑 OVERLAY OSCURO PARA LEGIBILIDAD */
+.overlay-dark {
   position: absolute;
-  background-color: transparent;
-  width: calc(var(--i) * 9vmin);
-  height: calc(var(--i) * 5vmin);
-  border-radius: 50%;
-  border: 0.4vmin solid var(--color-title);
-  transform-style: preserve-3d;
-  transform: rotateX(70deg) translateZ(50px);
-  animation: my-move 3s ease-in-out calc(var(--i) * 0.08s) infinite;
-  box-shadow: 0px 0px 8px var(--color-title),
-    inset 0px 0px 8px var(--color-title);
-  opacity: 0.3;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.45);
+  z-index: 1;
+  backdrop-filter: blur(2px);
 }
 
-@keyframes my-move {
-
-  0%,
-  100% {
-    transform: rotateX(70deg) translateZ(50px) translateY(0px);
-    filter: hue-rotate(0deg);
-  }
-
-  50% {
-    transform: rotateX(70deg) translateZ(50px) translateY(-50vmin);
-    filter: hue-rotate(180deg);
-  }
-}
-
-/* 🌈 OVERLAY (TEXTO ENCIMA DEL FONDO) */
+/* 🌈 OVERLAY PRINCIPAL (CONTENIDO) */
 .overlay {
   width: 100%;
   height: 100%;
@@ -66,25 +49,56 @@
   align-items: center;
   position: relative;
   z-index: 2;
+  gap: 2rem;
 }
 
+/* 📌 SECCIÓN DEL TÍTULO */
+.title-section {
+  animation: slideDown 0.8s ease forwards;
+  opacity: 0;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.main-title {
+  color: #ffffff;
+  font-size: 5rem;
+  font-weight: 900;
+  line-height: 1.1;
+  text-shadow: 3px 3px 12px rgba(0, 0, 0, 0.8);
+  letter-spacing: 3px;
+  margin: 0;
+  animation: slideDown 0.8s ease forwards;
+}
+
+/* ✨ PALABRAS DINÁMICAS */
 .intro-text {
   color: #f0f0f0;
-  font-size: 4rem;
-  font-weight: 800;
+  font-size: 2.5rem;
+  font-weight: 700;
   line-height: 1.2;
   opacity: 0;
   transform: translateY(40px);
-  animation: fadeInUp 1.5s ease forwards;
+  animation: fadeInUp 1.2s ease forwards 0.3s;
   text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6);
-  letter-spacing: 2px;
+  letter-spacing: 1px;
   position: relative;
   z-index: 3;
+  min-height: 3rem;
 }
 
-/* ✨ Palabra dinámica */
+/* ✨ Palabra dinámica con color */
 .highlight {
-  background: var(--color-title);
+  background: linear-gradient(135deg, var(--color-second), #ff6b9d, var(--color-second));
   background-size: 200% auto;
   background-clip: text;
   -webkit-background-clip: text;
@@ -98,7 +112,6 @@
   position: relative;
 }
 
-
 .fade-out {
   opacity: 0;
   transform: translateY(-15px);
@@ -109,38 +122,107 @@
   transform: translateY(0);
 }
 
-
-/* 🌈 Animación del gradiente en highlight */
+/* 🌈 Animación del gradiente */
 @keyframes gradientShift {
   0% {
     background-position: 0% 50%;
   }
-
   100% {
     background-position: 100% 50%;
   }
 }
 
-/* ⬇️ Flecha de scroll (opcional, si usas una) */
-.scroll-indicator {
-  position: absolute;
-  bottom: 30px;
-  left: 50%;
-  transform: translateX(-50%);
-  animation: bounce 2s infinite;
+/* 🔘 BOTÓN DE CONSULTA */
+.consultation-btn {
+  background: linear-gradient(135deg, var(--color-second), #ff6b9d);
+  color: white;
+  border: 2px solid transparent;
+  padding: 1.2rem 3rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  animation: fadeInUp 1.2s ease forwards 0.6s;
+  opacity: 0;
+  position: relative;
+  overflow: hidden;
   z-index: 3;
 }
 
-.scroll-arrow {
-  width: 30px;
-  height: 30px;
-  border: 3px solid var(--color-main2);
-  border-top: none;
-  border-left: none;
-  transform: rotate(45deg);
+.consultation-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.1);
+  transition: left 0.4s ease;
+  z-index: -1;
 }
 
-/* 🔁 Animaciones secundarias */
+.consultation-btn:hover::before {
+  left: 100%;
+}
+
+.consultation-btn:hover {
+  transform: translateY(-5px) scale(1.05);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+}
+
+.consultation-btn:active {
+  transform: translateY(-2px) scale(1.02);
+}
+
+.btn-text {
+  display: inline-block;
+}
+
+.btn-icon {
+  font-size: 1.3rem;
+  transition: transform 0.4s ease;
+}
+
+.consultation-btn:hover .btn-icon {
+  transform: translateX(8px);
+}
+
+/* 🌊 ELEMENTO DECORATIVO INFERIOR */
+.wave-decoration {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 180px;
+  background-image: url('../../assets/images/Ilustraciones(10).png');
+  background-size: 100% 100%;
+  background-position: center bottom;
+  background-repeat: no-repeat;
+  background-attachment: scroll;
+  z-index: 4;
+  animation: waveScrollAppear 1s ease forwards;
+  opacity: 1;
+}
+
+@keyframes waveScrollAppear {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 🔁 Animaciones generales */
 @keyframes fadeInUp {
   to {
     opacity: 1;
@@ -148,62 +230,84 @@
   }
 }
 
-@keyframes bounce {
-
-  0%,
-  100% {
-    transform: translateX(-50%) translateY(0);
-  }
-
-  50% {
-    transform: translateX(-50%) translateY(-10px);
-  }
-}
-
 /* --- 📱 RESPONSIVE --- */
 @media (max-width: 1024px) {
+  .main-title {
+    font-size: 3.5rem;
+  }
+
   .intro-text {
-    font-size: 2.8rem;
+    font-size: 1.8rem;
+  }
+
+  .consultation-btn {
+    padding: 1rem 2.5rem;
+    font-size: 1rem;
   }
 }
 
-@media (max-width: 890px) {
+@media (max-width: 768px) {
   .myprofile {
     height: 100dvh;
   }
 
+  .main-title {
+    font-size: 2.5rem;
+    letter-spacing: 1px;
+  }
+
   .intro-text {
-    font-size: 2rem;
+    font-size: 1.4rem;
     line-height: 1.3;
     padding: 0 10px;
   }
 
-  .container {
-    position: absolute;
-    top: 30%;
-    left: 50%;
-    transform: translateX(-50%);
-    height: 70%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 0;
-    /* Detrás del texto */
-    width: 100%;
+  .consultation-btn {
+    padding: 0.9rem 2rem;
+    font-size: 0.95rem;
+    gap: 0.6rem;
   }
 
-  .item {
-    position: absolute;
-    background-color: transparent;
-    width: calc(var(--i) * 5vmin);
-    height: calc(var(--i) * 6vmin);
-    border-radius: 50%;
-    border: 0.4vmin solid var(--color-title);
-    transform-style: preserve-3d;
-    transform: rotateX(70deg) translateZ(50px);
-    animation: my-move 3s ease-in-out calc(var(--i) * 0.08s) infinite;
-    box-shadow: 0px 0px 8px var(--color-title),
-      inset 0px 0px 8px var(--color-title);
-    opacity: 0.3;
+  .btn-text {
+    display: inline;
+  }
+
+  .btn-icon {
+    font-size: 1rem;
+  }
+
+  .wave-decoration {
+    height: 150px;
+    bottom: -3%;
+  }
+}
+
+@media (max-width: 480px) {
+  .main-title {
+    font-size: 1.8rem;
+  }
+
+  .intro-text {
+    font-size: 1.1rem;
+  }
+
+  .consultation-btn {
+    padding: 0.8rem 1.8rem;
+    font-size: 0.9rem;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .btn-text {
+    display: block;
+  }
+
+  .wave-decoration {
+    height: 120px;
+    bottom: -2%;
+  }
+
+  .overlay-dark {
+    background-color: rgba(0, 0, 0, 0.55);
   }
 }
