@@ -1,12 +1,15 @@
 /* Layout principal */
 .about-container {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 40px;
-  padding: 80px 40px;
-  align-items: center;
+  display: flex;
+  gap: 32px;
+  padding: 90px 40px;
+  align-items: stretch;
   /* Centrar verticalmente también si es necesario */
-  background: var(--color-main);
+  background:
+    radial-gradient(circle at 10% 10%, rgba(255, 255, 255, 0.08), transparent 35%),
+    radial-gradient(circle at 90% 20%, rgba(255, 255, 255, 0.06), transparent 40%),
+    linear-gradient(140deg, rgba(0, 0, 0, 0.12), transparent 45%),
+    var(--color-main);
   color: var(--color-text2);
   max-width: 1400px;
   /* Limitar ancho para que se pueda centrar */
@@ -14,12 +17,37 @@
   /* Centrado horizontal */
 }
 
-:host-context(.with-sidebar) .about-container {
-  padding-left: 10px;
-  padding-right: 100px;
-  /* Balancear padding */
-  grid-template-columns: 1fr 1fr;
-  gap: 30px;
+.about-sidebar {
+  position: sticky;
+  top: 120px;
+  align-self: flex-start;
+  opacity: 0;
+  transform: translateX(-35px);
+  transition: opacity 0.8s ease, transform 0.8s ease, flex-basis 0.8s ease, width 0.8s ease;
+  flex: 0 0 0;
+  width: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.about-container.visible .about-sidebar {
+  opacity: 1;
+  transform: translateX(0);
+  flex-basis: 260px;
+  width: 260px;
+  pointer-events: auto;
+}
+
+.about-main {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 32px;
+  min-width: 0;
+}
+
+.about-container.visible .about-main {
+  transition: transform 0.8s ease;
 }
 
 /* ---- LADO IZQUIERDO ---- */
@@ -29,6 +57,17 @@
   color: var(--color-title);
   margin-bottom: 30px;
   text-transform: uppercase;
+}
+
+.about-left {
+  opacity: 0;
+  transform: translateX(25px);
+  transition: opacity 0.9s ease, transform 0.9s ease;
+}
+
+.about-left.visible {
+  opacity: 1;
+  transform: translateX(0);
 }
 
 .about-text {
@@ -177,9 +216,27 @@
 /* Tablets */
 @media (max-width: 1024px) {
   .about-container {
-    grid-template-columns: 1fr;
+    flex-direction: column;
     gap: 30px;
     padding: 60px 30px;
+  }
+
+  .about-sidebar {
+    position: static;
+    width: 100%;
+    flex-basis: auto;
+    transform: translateY(30px);
+  }
+
+  .about-container.visible .about-sidebar {
+    width: 100%;
+    flex-basis: auto;
+    transform: translateY(0);
+  }
+
+  .about-main {
+    grid-template-columns: 1fr;
+    gap: 24px;
   }
 }
 
