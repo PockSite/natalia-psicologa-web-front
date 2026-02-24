@@ -4,6 +4,7 @@
   bottom: auto;
   top: 3.5rem;
   left: 50%;
+  margin-left: 15px;
   transform: translateX(-50%) scaleX(1);
   transform-origin: center;
   z-index: 50;
