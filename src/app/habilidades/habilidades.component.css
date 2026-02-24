@@ -1,38 +1,16 @@
-/* === FONDO GENERAL CON CUADRÍCULA === */
+/* === FONDO GENERAL === */
 .grid-wrapper {
-  min-height: 1000px;
   width: 100%;
   position: relative;
   background-color: var(--color-border);
-  /* fondo base claro */
+  padding: 80px 30px;
   overflow: hidden;
-}
-
-.grid-background {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  z-index: 0;
-  background-image: linear-gradient(to right, var(--color-main) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--color-main2) 1px, transparent 1px);
-  background-size: 20px 30px;
-      -webkit-mask-image: linear-gradient(to bottom,
-        rgba(0, 0, 0, 0) 0%,
-        rgba(0, 0, 0, 0) 55%,
-        rgba(0, 0, 0, 1) 100%);
-      mask-image: linear-gradient(to bottom,
-        rgba(0, 0, 0, 0) 0%,
-        rgba(0, 0, 0, 0) 55%,
-        rgba(0, 0, 0, 1) 100%);
 }
 
 /* === CONTENIDO INTERIOR === */
 .skills-content {
   position: relative;
   z-index: 2;
-  padding: 60px 30px;
 }
 
 /* === TÍTULO DE SECCIÓN === */
@@ -40,166 +18,332 @@
   font-size: 2.5rem;
   font-weight: 900;
   color: var(--color-title);
-  margin-bottom: 50px;
+  margin-bottom: 60px;
   text-transform: uppercase;
   text-align: center;
   letter-spacing: 3px;
+  animation: titleSlideIn 0.8s ease-out;
+}
+
+@keyframes titleSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* === CONTENEDOR PRINCIPAL === */
 .skills-section {
   margin: 0 auto;
-  max-width: 1100px;
+  max-width: 1200px;
 }
 
-.skills-grid {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 25px;
-  /* CSS variable set by component to force uniform heights when needed */
-  --card-height: auto;
+/* === GRID MODERNO HORIZONTAL === */
+.skills-grid-modern {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: auto;
+  gap: 30px;
+  perspective: 1200px;
 }
 
-/* === TARJETA INDIVIDUAL === */
-.card {
+/* === TARJETAS MODERNAS === */
+.card-modern {
   position: relative;
-  width: 300px;
-  max-width: 100%;
-  height: var(--card-height, auto);
-  /* unified height set from TS when needed */
-  background-color: var(--color-main);
-  /* ✅ Fondo blanco de las tarjetas */
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  padding: 18px 14px;
-  gap: 10px;
-  border-radius: 12px;
-  cursor: pointer;
-  text-align: center;
+  border-radius: 24px;
   overflow: hidden;
-  /* Changed to hidden to contain pseudo-elements */
-  box-sizing: border-box;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: none;
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
+    filter 0.5s ease;
   opacity: 0;
-  transform: translateY(50px) scale(0.95);
-  transition: transform 0.6s ease, opacity 0.6s ease, box-shadow 0.6s ease;
-  box-shadow: 0 6px 15px var(--color-main2);
-  backface-visibility: hidden;
+  transform: translateY(60px) scale(0.85);
+  filter: blur(4px);
+  background: transparent;
 }
 
-/* === EFECTO DE BRILLO EN HOVER === */
-.card::before {
-  content: '';
+.card-bg {
   position: absolute;
   inset: 0;
-  left: -50%;
-  top: -50%;
-  width: 200%;
-  height: 200%;
-  background: linear-gradient(180deg, transparent, var(--color-title), transparent);
-  transform-origin: bottom right;
-  animation: none;
-  opacity: 0;
-  transition: opacity 0.5s ease;
-  pointer-events: none;
-  z-index: -10;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: scroll;
+  z-index: 0;
 }
 
-.card:hover::before {
-  opacity: 0.15;
-  animation: rotate 4s linear infinite;
+.card-modern:hover {
+  transform: translateY(-10px) scale(1.02);
+  filter: blur(0);
 }
 
-@keyframes rotate {
+/* === CONTENIDO INTERIOR === */
+.card-inner {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: var(--color-title);
+  padding: 40px 30px;
+  gap: 15px;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+}
+
+/* === TAMAÑOS DE TARJETAS === */
+.card-small {
+  grid-column: span 1;
+  grid-row: span 1;
+  min-height: 280px;
+}
+
+.card-large {
+  grid-column: 2;
+  grid-row: 1 / 3;
+  min-height: 400px;
+}
+
+.card-horizontal {
+  grid-column: span 1;
+  grid-row: 1;
+  min-height: 340px;
+}
+
+/* === POSICIONAMIENTO EN GRID === */
+.card-1 {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.card-2 {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.card-3 {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.card-4 {
+  grid-column: 3;
+  grid-row: 1;
+}
+
+.card-5 {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+/* === AJUSTES ESPECÍFICOS POR TARJETA === */
+/* Carta 1 - Contenido hacia arriba, padding lateral mayor */
+.card-2 .card-inner {
+  justify-content: flex-start;
+  padding-top: 250px;
+  padding-left: 50px;
+  padding-right: 60px;
+  padding-bottom: 40px;
+}
+
+/* Carta 2 y 3 - Contenido hacia la izquierda, padding lateral mayor */
+.card-3 .card-inner {
+  align-items: center;
+  text-align: center;
+  padding-left: 50px;
+  padding-right: 110px;
+}
+
+.card-4 .card-inner {
+  align-items: center;
+  text-align: center;
+  padding-left: 50px;
+  padding-right: 100px;
+}
+
+/* === ANIMACIÓN DE APARICIÓN === */
+.card-modern.visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  filter: blur(0);
+}
+
+.card-1.visible {
+  animation: popIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.card-2.visible {
+  animation: popIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.card-3.visible {
+  animation: popIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s forwards;
+}
+
+.card-4.visible {
+  animation: popIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.4s forwards;
+}
+
+.card-5.visible {
+  animation: popIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.8s forwards;
+}
+
+@keyframes popIn {
   0% {
-    transform: rotate(0deg);
+    opacity: 0;
+    transform: translateY(60px) scale(0.75);
+    filter: blur(6px);
   }
-
+  60% {
+    opacity: 1;
+    transform: translateY(-10px) scale(1.05);
+    filter: blur(0);
+  }
   100% {
-    transform: rotate(360deg);
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
   }
-}
-
-.card::after {
-  content: "";
-  z-index: -1;
-  position: absolute;
-  inset: 2px;
-  border-radius: 12px;
-  background: var(--color-main);
 }
 
 /* === ICONO === */
 .skill-icon {
-  font-size: 40px;
-  color: var(--color-title);
-  margin-bottom: 8px;
-  transition: transform 0.4s ease, color 0.4s ease;
-  z-index: 10;
+  font-size: 50px;
+  color: var(--color-main);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  z-index: 3;
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.4));
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.card:hover .skill-icon {
-  transform: scale(1.1);
-  color: var(--color-second);
+.skill-icon i {
+  font-weight: 600;
+  color: inherit;
+}
+
+.card-modern:hover .skill-icon {
+  transform: scale(1.15) rotateZ(5deg);
 }
 
 /* === TEXTO INTERIOR === */
 .heading {
-  font-size: 1.1rem;
+  font-size: 1.8rem;
   font-weight: 700;
-  color: var(--color-title);
+  font-family: var(--font-title);
+  color: white;
   text-transform: uppercase;
+  letter-spacing: 1px;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  z-index: 3;
+  position: relative;
+  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.3));
+  line-height: 1.1;
+  margin: 0;
 }
 
 .description {
-  font-size: 0.85rem;
-  color: var(--color-text2);
+  font-size: 0.95rem;
+  font-family: var(--font-text);
+  color: #333333;
   line-height: 1.4;
-  margin: 5px 0;
-  white-space: normal;
-  word-break: break-word;
-  overflow-wrap: anywhere;
-}
-
-.entity {
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: var(--color-second);
-}
-
-.date {
-  font-size: 0.75rem;
-  color: var(--color-border);
-  font-weight: 600;
-}
-
-/* === ANIMACIÓN AL APARECER === */
-.card.visible {
-  opacity: 1;
-  transform: translateY(0) scale(1);
+  text-shadow: 0 1px 4px rgba(255, 255, 255, 0.3);
+  z-index: 3;
+  position: relative;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
+  margin: 0;
+  max-width: 90%;
 }
 
 /* === RESPONSIVE === */
+@media (max-width: 1024px) {
+  .skills-grid-modern {
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  .card-large {
+    grid-column: 1 / 3;
+    grid-row: 1;
+    min-height: 320px;
+  }
+
+  .card-2 {
+    grid-column: 1 / 3;
+  }
+
+  .card-small {
+    min-height: 240px;
+  }
+}
+
 @media (max-width: 768px) {
-  .skills-grid {
-    grid-template-columns: repeat(2, 1fr);
+  .skills-grid-modern {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .card-large {
+    grid-column: 1;
+    grid-row: auto;
+    min-height: 300px;
+  }
+
+  .card-small {
+    grid-column: 1;
+    min-height: 220px;
+  }
+
+  .section-title2 {
+    font-size: 1.8rem;
+    margin-bottom: 40px;
+  }
+
+  .heading {
+    font-size: 1.1rem;
+  }
+
+  .description {
+    font-size: 0.85rem;
   }
 }
 
 @media (max-width: 480px) {
-  .skills-grid {
-    grid-template-columns: 1fr;
+  .grid-wrapper {
+    padding: 40px 15px;
   }
 
   .section-title2 {
-    font-size: 1.7rem;
+    font-size: 1.5rem;
+    margin-bottom: 30px;
   }
 
-  .card {
-    width: 90%;
-    height: auto;
-    /* on mobile allow auto height */
+  .card-modern {
+    min-height: 200px;
+  }
+
+  .skill-icon {
+    font-size: 35px;
+  }
+
+  .heading {
+    font-size: 0.95rem;
+  }
+
+  .description {
+    font-size: 0.75rem;
   }
 }
