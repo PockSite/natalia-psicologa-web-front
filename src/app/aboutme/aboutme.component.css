@@ -1,10 +1,9 @@
 /* Layout principal */
 .about-container {
   display: flex;
-  gap: 32px;
-  padding: 90px 40px;
-  align-items: stretch;
-  /* Centrar verticalmente también si es necesario */
+  gap: 40px;
+  padding: 90px 50px;
+  align-items: flex-start;
   background:
     radial-gradient(circle at 10% 10%, rgba(255, 255, 255, 0.08), transparent 35%),
     radial-gradient(circle at 90% 20%, rgba(255, 255, 255, 0.06), transparent 40%),
@@ -12,37 +11,39 @@
     var(--color-main);
   color: var(--color-text2);
   max-width: 1400px;
-  /* Limitar ancho para que se pueda centrar */
   margin: 0 auto;
-  /* Centrado horizontal */
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .about-sidebar {
   position: sticky;
-  top: 120px;
+  top: 0px;
   align-self: flex-start;
   opacity: 0;
   transform: translateX(-35px);
   transition: opacity 0.8s ease, transform 0.8s ease, flex-basis 0.8s ease, width 0.8s ease;
-  flex: 0 0 0;
-  width: 0;
+  flex: 0 0 360px;
+  width: 20px;
   overflow: hidden;
   pointer-events: none;
+  margin-bottom: 100px;
+  padding-bottom: 100px;
 }
 
 .about-container.visible .about-sidebar {
   opacity: 1;
   transform: translateX(0);
-  flex-basis: 260px;
-  width: 260px;
+  flex-basis: 360px;
+  width: 360px;
   pointer-events: auto;
 }
 
 .about-main {
   flex: 1;
   display: grid;
-  grid-template-columns: 1.1fr 1fr;
-  gap: 32px;
+  grid-template-columns: 1fr 1.1fr;
+  gap: 40px;
   min-width: 0;
 }
 
