@@ -26,18 +26,27 @@
   width: 100%;
   height: auto;
   margin-top: 0;
-  padding: 60px 20px 60px 30px;
+  padding: 30px 20px 60px 30px;
   border-radius: 20px;
   background-color: transparent;
   border: none;
-  min-height: 750px;
+  min-height: 680px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 25px;
   overflow: visible;
   position: relative;
+  box-shadow: none;
+  opacity: 0;
+  transform: translateX(-40px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+:host-context(.about-sidebar.visible) :host(.aboutme-sidebar) .sidebar {
+  opacity: 1;
+  transform: translateX(0);
 }
 
 /* Ilustración de fondo separada */
@@ -50,7 +59,7 @@
   height: 100%;
   background-image: url('../../assets/images/Ilustraciones(2).png');
   background-size: 160%;
-  background-position: calc(100% + 100px) center;
+  background-position: calc(100% + 100px) 10%;
   background-repeat: no-repeat;
   background-attachment: local;
   z-index: 0;
