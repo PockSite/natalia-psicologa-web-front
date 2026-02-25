@@ -83,6 +83,7 @@
   letter-spacing: 3px;
   margin: 0;
   animation: slideDown 0.8s ease forwards;
+  font-family: var(--font-title);
 }
 
 /* ✨ PALABRAS DINÁMICAS */
@@ -99,6 +100,7 @@
   position: relative;
   z-index: 3;
   min-height: 3rem;
+  font-family: var(--font-text);
 }
 
 /* ✨ Palabra dinámica con color */

@@ -3,6 +3,11 @@
   width: 100%;
   position: relative;
   background-color: var(--color-border);
+  background-image: url('../../assets/images/fondo-natural.png');
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-attachment: scroll;
   padding: 80px 30px;
   overflow: hidden;
 }
@@ -23,6 +28,7 @@
   text-align: center;
   letter-spacing: 3px;
   animation: titleSlideIn 0.8s ease-out;
+  font-family: var(--font-title);
 }
 
 @keyframes titleSlideIn {
@@ -151,8 +157,8 @@
 .card-2 .card-inner {
   justify-content: flex-start;
   padding-top: 250px;
-  padding-left: 50px;
-  padding-right: 60px;
+  padding-left: 100px;
+  padding-right: 130px;
   padding-bottom: 40px;
 }
 
@@ -241,7 +247,7 @@
 
 /* === TEXTO INTERIOR === */
 .heading {
-  font-size: 1.8rem;
+  font-size: 1.5rem;
   font-weight: 700;
   font-family: var(--font-title);
   color: white;
