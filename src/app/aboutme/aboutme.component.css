@@ -60,7 +60,7 @@
 .section-title {
   font-size: 2.5rem;
   font-weight: 900px;
-  color: var(--color-title);
+  color: var(--color-main2);
   margin-bottom: 30px;
   text-transform: uppercase;
 }
@@ -92,7 +92,7 @@
   font-size: 1.6rem;
   font-weight: 700;
   margin-bottom: 15px;
-  color: var(--color-title);
+  color: var(--color-main2);
 }
 
 .hobbies-bubbles {
@@ -122,7 +122,6 @@
 .bubble:hover {
   transform: translateY(-3px);
   background: var(--color-main2);
-  color: var(--color-text2);
 }
 
 /* ---- LADO DERECHO (CARRUSEL) ---- */

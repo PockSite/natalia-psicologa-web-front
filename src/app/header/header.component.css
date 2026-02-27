@@ -187,12 +187,18 @@
 
 .btn {
   display: block;
+  position: relative;
   padding: 9px;
   border-radius: 8px;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
+  text-align: center;
   text-decoration: none;
-  transition: all 0.3s;
+  border: 1px solid var(--btn-color);
+  background-color: #ffffff;
+  color: var(--btn-color);
+  overflow: hidden;
+  transition: background-color 0.4s ease, color 0.4s ease, transform 0.3s ease, box-shadow 0.4s ease;
 }
 
 :host(.aboutme-sidebar) .btn {
@@ -203,14 +209,43 @@
   transition: all 0.3s ease;
 }
 
-.contact-btn { background: var(--color-btn-contact); color: var(--color-text-primary); }
-.linkedin-btn { background: var(--color-btn-linkedin); color: var(--color-text-primary); }
-.github-btn { background: var(--color-btn-github); color: var(--color-text-primary); }
-.cv-btn { background: var(--color-btn-cv); color: var(--color-text-primary); }
+.btn .btn-label {
+  display: inline-block;
+  position: relative;
+  left: 0;
+  transition: transform 0.4s ease, color 0.4s ease;
+}
+
+.btn i {
+  position: absolute;
+  top: 50%;
+  right: 0.7em;
+  transform: translateY(-50%) translateX(6px);
+  opacity: 0;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  color: #ffffff;
+}
+
+.contact-btn { --btn-color: var(--color-btn-contact); }
+.linkedin-btn { --btn-color: var(--color-btn-linkedin); }
+.github-btn { --btn-color: var(--color-btn-github); }
+.cv-btn { --btn-color: var(--color-btn-cv); }
 
 .btn:hover {
-  opacity: 0.85;
+  background-color: var(--btn-color);
+  color: #ffffff;
   transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.25);
+}
+
+.btn:hover .btn-label {
+  transform: translateX(-6px);
+  color: #ffffff;
+}
+
+.btn:hover i {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
 }
 
 :host(.aboutme-sidebar) .btn:hover {
