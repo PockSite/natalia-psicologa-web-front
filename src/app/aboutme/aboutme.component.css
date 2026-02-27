@@ -213,6 +213,7 @@
     flex-direction: column;
     gap: 30px;
     padding: 60px 30px;
+    height: auto;
   }
 
   .about-sidebar {
@@ -232,6 +233,15 @@
     grid-template-columns: 1fr;
     gap: 24px;
   }
+
+  .about-sidebar {
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  .hobbies-bubbles {
+    margin-bottom: 10px;
+  }
 }
 
 /* Mobile */
@@ -241,6 +251,7 @@
     flex-direction: column;
     gap: 20px;
     padding: 40px 20px;
+    height: auto;
   }
 
   .about-right {
@@ -257,6 +268,23 @@
     flex-shrink: 0;
     flex: 0 0 auto;
     /* asegura que cada tarjeta conserve su tamaño */
+  }
+
+  .about-text {
+    margin-bottom: 24px;
+  }
+
+  .hobbies-title {
+    font-size: 1.3rem;
+  }
+
+  .hobbies-bubbles {
+    gap: 10px;
+  }
+
+  .bubble {
+    font-size: 0.9rem;
+    padding: 8px 14px;
   }
 }
 

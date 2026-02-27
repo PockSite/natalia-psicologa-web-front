@@ -396,13 +396,51 @@
 
 /* Tablets */
 @media (max-width: 1024px) {
-  
+  .sidebar {
+    width: 320px;
+    height: 100vh;
+    margin-top: 0;
+    padding-left: 20px;
+    padding-top: 20px;
+  }
+
+  .profile-section {
+    margin-bottom: 18px;
+  }
+
+  .action-buttons {
+    width: 80%;
+  }
 
 }
 
 /* Mobile */
 @media (max-width: 768px) {
-  
+  .sidebar {
+    display: none;
+  }
+
+  .mobile-header {
+    position: static;
+    height: auto;
+    margin-top: 0;
+    padding: 20px 16px;
+  }
+
+  .profile-sectionmov {
+    margin-top: 0;
+    margin-bottom: 20px;
+  }
+
+  .contact-infomov {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .action-buttonsmov {
+    width: 70%;
+    margin: 0 auto;
+  }
 }
 
 

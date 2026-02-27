@@ -106,6 +106,13 @@
   position: relative;
   z-index: 10;
   animation: diamondAppear 0.8s ease-out forwards;
+  cursor: pointer;
+  outline: none;
+}
+
+.diamond-center:focus-visible {
+  outline: 2px solid rgba(var(--color-second-rgb), 0.8);
+  outline-offset: 4px;
 }
 
 @keyframes diamondAppear {
@@ -290,5 +297,55 @@
 
   .d-md-none {
     display: inline;
+  }
+}
+
+@media (max-width: 480px) {
+  .tubelight-navbar {
+    top: 3rem;
+  }
+
+  .navbar-container {
+    gap: 0.25rem;
+  }
+
+  .nav-item {
+    padding: 0.35rem 0.6rem;
+  }
+
+  .diamond-shape {
+    width: 62px;
+    height: 62px;
+  }
+
+  .heart-logo {
+    width: 85px;
+  }
+}
+
+@media (max-width: 768px) {
+  .tubelight-navbar {
+    margin-left: 0px;
+  }
+
+  .navbar-container {
+    gap: 0.35rem;
+    height: 44px;
+    padding: 0.2rem;
+  }
+
+  .nav-item {
+    padding: 0.4rem 0.75rem;
+    margin: 0 0.2rem;
+    font-size: 0.8rem;
+  }
+
+  .diamond-shape {
+    width: 70px;
+    height: 70px;
+  }
+
+  .heart-logo {
+    width: 95px;
   }
 }
