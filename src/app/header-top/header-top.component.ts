@@ -9,14 +9,14 @@ export class HeaderTopComponent implements OnInit {
 
   navItems = [
     { name: 'Portada', url: '#', icon: 'fas fa-home' },
-    { name: 'Servicios', url: '#sobre-mi', icon: 'fas fa-user' },
-    { name: 'Sobre mi', url: '#cursos', icon: 'fas fa-graduation-cap' },
-    { name: 'Testimonios', url: '#proyectos', icon: 'fas fa-briefcase' },
-    { name: 'Recursos', url: '#blog', icon: 'fas fa-blog' },
+    { name: 'Servicios', url: '#servicios', icon: 'fas fa-user' },
+    { name: 'Sobre mi', url: '#sobre-mi', icon: 'fas fa-graduation-cap' },
+    { name: 'Testimonios', url: '#cursos', icon: 'fas fa-briefcase' },
+    { name: 'Recursos', url: 'proyectos', icon: 'fas fa-blog' },
     { name: 'Contacto', url: '#contacto', icon: 'fas fa-envelope' }
   ];
 
-  activeTab = 'Inicio';
+  activeTab = 'Portada';
   isMobile = false;
 
   ngOnInit() {
@@ -27,6 +27,26 @@ export class HeaderTopComponent implements OnInit {
 
   checkScreenSize() {
     this.isMobile = window.innerWidth < 768;
+  }
+
+  getLeftNavItems() {
+    if (this.isMobile) {
+      return this.navItems.slice(1, 3);
+    }
+    return this.navItems.slice(0, 3);
+  }
+
+  getRightNavItems() {
+    if (this.isMobile) {
+      return this.navItems.slice(3, 5);
+    }
+    return this.navItems.slice(3);
+  }
+
+  goHome(event: Event) {
+    event.preventDefault();
+    this.activeTab = 'Portada';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   setActiveTab(name: string, event: Event) {

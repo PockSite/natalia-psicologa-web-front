@@ -7,7 +7,7 @@
 .section-title2 {
   font-size: 2.5rem;
   font-weight: 900;
-  color: var(--color-title);
+  color: var(--color-main2);
   margin-bottom: 50px;
   text-transform: uppercase;
   text-align: center;
@@ -95,7 +95,7 @@
   padding: 40px;
   border-radius: 20px;
   backdrop-filter: blur(10px);
-  border: 1px solid var(--color-main2);
+  border: 1px solid var(--color-main);
   margin-top: 40px;
 }
 
@@ -110,7 +110,7 @@
 .form-group textarea {
   width: 100%;
   padding: 15px 20px;
-  background: var(--color-main2);
+  background: var(--color-main);
   border: 2px solid transparent;
   border-radius: 10px;
   color: var(--color-text2);
@@ -134,7 +134,7 @@
 .btn-submit {
   width: 100%;
   padding: 15px;
-  background: linear-gradient(135deg, var(--color-title) 0%, var(--color-border) 100%);
+  background: linear-gradient(135deg, var(--color-second) 0%, var(--color-second) 100%);
   border: none;
   border-radius: 10px;
   color: var(--color-main);

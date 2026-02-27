@@ -1,23 +1,46 @@
-<!-- <div class="logo-container">
-  <img class="lion-logo" src="assets/images/logonew2.png" alt="Logo">
-</div> -->
 <div class="tubelight-navbar" [class.hidden-nav]="isHidden">
   <div class="navbar-container">
-    <a *ngFor="let item of navItems" [href]="item.url" (click)="setActiveTab(item.name, $event)" class="nav-item"
-      [class.active]="activeTab === item.name">
-
-      <span class="nav-text d-none d-md-inline">{{ item.name }}</span>
-      <span class="nav-icon d-md-none">
-        <i [class]="item.icon"></i>
-      </span>
-
-      <div *ngIf="activeTab === item.name" class="lamp-effect">
-        <div class="lamp-base">
-          <div class="lamp-light"></div>
-          <div class="lamp-glow-top"></div>
-          <div class="lamp-glow-bottom"></div>
+    <!-- Left Nav Items -->
+    <div class="nav-group nav-left">
+      <a *ngFor="let item of getLeftNavItems()" [href]="item.url" (click)="setActiveTab(item.name, $event)" class="nav-item"
+        [class.active]="activeTab === item.name">
+        <span class="nav-text d-none d-md-inline">{{ item.name }}</span>
+        <span class="nav-icon d-md-none">
+          <i [class]="item.icon"></i>
+        </span>
+        <div *ngIf="activeTab === item.name" class="lamp-effect">
+          <div class="lamp-base">
+            <div class="lamp-light"></div>
+            <div class="lamp-glow-top"></div>
+            <div class="lamp-glow-bottom"></div>
+          </div>
         </div>
+      </a>
+    </div>
+
+    <!-- Diamond Center with Heart Logo -->
+    <div class="diamond-center" role="button" tabindex="0" (click)="goHome($event)" (keydown.enter)="goHome($event)">
+      <div class="diamond-shape">
+        <img class="heart-logo" src="assets/images/logo.png" alt="Heart Logo">
       </div>
-    </a>
+    </div>
+
+    <!-- Right Nav Items -->
+    <div class="nav-group nav-right">
+      <a *ngFor="let item of getRightNavItems()" [href]="item.url" (click)="setActiveTab(item.name, $event)" class="nav-item"
+        [class.active]="activeTab === item.name">
+        <span class="nav-text d-none d-md-inline">{{ item.name }}</span>
+        <span class="nav-icon d-md-none">
+          <i [class]="item.icon"></i>
+        </span>
+        <div *ngIf="activeTab === item.name" class="lamp-effect">
+          <div class="lamp-base">
+            <div class="lamp-light"></div>
+            <div class="lamp-glow-top"></div>
+            <div class="lamp-glow-bottom"></div>
+          </div>
+        </div>
+      </a>
+    </div>
   </div>
 </div>

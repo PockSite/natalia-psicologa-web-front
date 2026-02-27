@@ -1,34 +1,79 @@
 /* Layout principal */
 .about-container {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
   gap: 40px;
-  padding: 80px 40px;
-  align-items: center;
-  /* Centrar verticalmente también si es necesario */
-  background: var(--color-main);
+  padding: 90px 50px;
+  align-items: flex-start;
+  background:
+    radial-gradient(circle at 10% 10%, rgba(255, 255, 255, 0.08), transparent 35%),
+    radial-gradient(circle at 90% 20%, rgba(255, 255, 255, 0.06), transparent 40%),
+    linear-gradient(140deg, rgba(0, 0, 0, 0.12), transparent 45%),
+    var(--color-main);
   color: var(--color-text2);
   max-width: 1400px;
-  /* Limitar ancho para que se pueda centrar */
   margin: 0 auto;
-  /* Centrado horizontal */
+  width: 100%;
+  box-sizing: border-box;
+  height: 165vh;
 }
 
-:host-context(.with-sidebar) .about-container {
-  padding-left: 10px;
-  padding-right: 100px;
-  /* Balancear padding */
-  grid-template-columns: 1fr 1fr;
-  gap: 30px;
+.about-sidebar {
+  position: sticky;
+  top: 0px;
+  align-self: flex-start;
+  opacity: 0;
+  transform: translateX(-35px);
+  flex: 0 0 360px;
+  width: 20px;
+  overflow: hidden;
+  pointer-events: none;
+  margin-bottom: 100px;
+  padding-bottom: 100px;
+}
+
+.aboutme-sidebar{
+  margin-top: -200px;
+  padding: 20px;
+}
+
+.about-container.visible .about-sidebar {
+  opacity: 1;
+  transform: translateX(0);
+  flex-basis: 360px;
+  width: 360px;
+  pointer-events: auto;
+}
+
+.about-main {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: 40px;
+  min-width: 0;
+}
+
+.about-container.visible .about-main {
+  transition: transform 0.8s ease;
 }
 
 /* ---- LADO IZQUIERDO ---- */
 .section-title {
   font-size: 2.5rem;
   font-weight: 900px;
-  color: var(--color-title);
+  color: var(--color-main2);
   margin-bottom: 30px;
   text-transform: uppercase;
+}
+
+.about-left {
+  opacity: 0;
+  transform: translateX(25px);
+  transition: opacity 0.9s ease, transform 0.9s ease;
+}
+
+.about-left.visible {
+  opacity: 1;
+  transform: translateX(0);
 }
 
 .about-text {
@@ -47,7 +92,7 @@
   font-size: 1.6rem;
   font-weight: 700;
   margin-bottom: 15px;
-  color: var(--color-title);
+  color: var(--color-main2);
 }
 
 .hobbies-bubbles {
@@ -58,6 +103,7 @@
 
 .bubble {
   background: var(--color-main2);
+  color: var(--color-title);
   padding: 10px 18px;
   border-radius: 50px;
   font-size: 0.95rem;
@@ -76,7 +122,6 @@
 .bubble:hover {
   transform: translateY(-3px);
   background: var(--color-main2);
-  color: var(--color-text2);
 }
 
 /* ---- LADO DERECHO (CARRUSEL) ---- */
@@ -125,27 +170,24 @@
 /* tarjeta individual */
 .achievement-card {
   background: var(--color-main2);
-  padding: 20px;
-  border-radius: 12px;
+  border-radius: 14px;
   display: flex;
   align-items: center;
-  gap: 15px;
-  min-height: 90px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+  justify-content: center;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
   border: 1px solid transparent;
-  transition: all 0.4s ease;
+  transition: transform 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
   flex: 0 0 auto;
-  width: 90%;
-  /* Ajuste para dar espacio a los lados */
-  max-width: 480px;
+  width: 260px;
+  height: 260px;
   margin: 10px auto;
-  /* Centrado y con margen vertical para sombras */
+  overflow: hidden;
 }
 
 /* Cuando la app añade la clase `with-sidebar` al contenedor principal */
 :host-context(.with-sidebar) .achievement-card {
-  width: 90%;
-  max-width: 300px;
+  width: 230px;
+  height: 230px;
 }
 
 .achievement-card:hover {
@@ -155,31 +197,50 @@
   transform: scale(1.02);
 }
 
-.achievement-card i {
-  font-size: 1.8rem;
-  color: var(--color-title);
+.achievement-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
-.achievement-text h3 {
-  margin: 0;
-  font-size: 1.2rem;
-  color: var(--color-title);
-}
-
-.achievement-text p {
-  margin: 5px 0 0;
-  font-size: 0.95rem;
-  color: var(--color-text2);
-}
 
 /* --- Responsive --- */
 
 /* Tablets */
 @media (max-width: 1024px) {
   .about-container {
-    grid-template-columns: 1fr;
+    flex-direction: column;
     gap: 30px;
     padding: 60px 30px;
+    height: auto;
+  }
+
+  .about-sidebar {
+    position: static;
+    width: 100%;
+    flex-basis: auto;
+    transform: translateY(30px);
+  }
+
+  .about-container.visible .about-sidebar {
+    width: 100%;
+    flex-basis: auto;
+    transform: translateY(0);
+  }
+
+  .about-main {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .about-sidebar {
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  .hobbies-bubbles {
+    margin-bottom: 10px;
   }
 }
 
@@ -190,6 +251,7 @@
     flex-direction: column;
     gap: 20px;
     padding: 40px 20px;
+    height: auto;
   }
 
   .about-right {
@@ -201,11 +263,28 @@
   }
 
   .achievement-card {
-    width: 250px;
-    /* 🔥 ajusta el ancho */
+    width: 220px;
+    height: 220px;
     flex-shrink: 0;
     flex: 0 0 auto;
     /* asegura que cada tarjeta conserve su tamaño */
+  }
+
+  .about-text {
+    margin-bottom: 24px;
+  }
+
+  .hobbies-title {
+    font-size: 1.3rem;
+  }
+
+  .hobbies-bubbles {
+    gap: 10px;
+  }
+
+  .bubble {
+    font-size: 0.9rem;
+    padding: 8px 14px;
   }
 }
 

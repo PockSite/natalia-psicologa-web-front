@@ -10,11 +10,11 @@ export class MyprofileComponent implements OnInit, OnDestroy {
 
   // 🌟 Palabras dinámicas
   words: string[] = [
-    'DEV FRONTEND',
-    'INNOVADOR',
-    'DEV MÓVIL',
-    'CREATIVO',
-    'EMPRENDEDOR'
+    'Empatía y Escucha',
+    'Conexión Humana',
+    'Bienestar Menta',
+    'Apoyo Profesional',
+    'Conexión Genuina'
   ];
   currentWord: string = this.words[0];
   private wordIndex: number = 0;
@@ -68,6 +68,19 @@ export class MyprofileComponent implements OnInit, OnDestroy {
         }, 600); // tiempo para que termine el fade-out
       }
     }, 3500); // cada 3.5 segundos cambia
+  }
+
+  /**
+   * 🌊 Efecto de scroll en elemento decorativo
+   */
+  @HostListener('window:scroll', [])
+  onWindowScroll() {
+    const waveDecoration = document.querySelector('.wave-decoration') as HTMLElement;
+    if (waveDecoration) {
+      const scrollY = window.scrollY;
+      const parallaxSpeed = 0.5;
+      waveDecoration.style.transform = `translateY(${scrollY * parallaxSpeed}px)`;
+    }
   }
 
   @HostListener('window:resize')

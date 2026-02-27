@@ -39,76 +39,58 @@ import { CommonModule } from '@angular/common';
 export class ProjectsComponent implements AfterViewInit {
   projects = [
     {
-      image: '/assets/images/gif_landing.gif',
-      title: 'Sitio Web para Restaurante de Hamburguesas - Frontend',
-      short: 'Landing Page para restaurant de Hamburguesas',
-      description: 'Diseño y desarrollo de la interfaz de usuario para la plataforma web del restaurante El Pórtico, enfocada en una experiencia intuitiva, moderna y funcional. Se implementó una landing page atractiva, vistas dinámicas para la gestión de productos y pedidos, y un dashboard administrativo, priorizando usabilidad y claridad en la navegación. El frontend fue desarrollado con Angular, aplicando principios de UX/UI, componentes reutilizables y una arquitectura escalable.',
-      features: ['Angular 15', 'Figma', 'HTML', 'CSS', 'TypeScript', 'Bootstrap', "UX/UI"],
-      repoUrl: 'https://github.com/Hamburguesas-El-Portico/portico_angular',
-      demoUrl: 'https://angular-el-portico-oficial.vercel.app'
+      image: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=600&h=400&fit=crop',
+      title: 'Mindfulness y Manejo del Estrés',
+      short: 'Encuentra paz y serenidad en tu día a día',
+      description: 'Aprende técnicas de meditación mindfulness y manejo del estrés basadas en evidencia científica. Este curso te proporciona herramientas prácticas para reducir la ansiedad, mejorar la concentración y cultivar el bienestar mental. Incluye meditaciones guiadas, ejercicios de respiración y estrategias para mantener el equilibrio emocional en situaciones desafiantes.',
+      features: ['Mindfulness', 'Meditación', 'Técnicas de Relajación', 'Bienestar Mental', '5 semanas'],
+      repoUrl: '#',
+      demoUrl: 'https://wa.me/573001234567'
     },
     {
-      image: '/assets/images/backend.png',
-      title: 'Sitio Web para Restaurante de Hamburguesas - Backend',
-      short: 'Gestion de productos, pedidos, clientes, domiciliarios y operadores',
-      description: 'Desarrollo del backend de la plataforma web full stack para El Pórtico, incluyendo autenticación de usuarios, seguridad, gestión de pedidos, CRUD de productos, integración con base de datos y lógica de negocio. Se implementaron servicios REST con Spring Boot, control de acceso, pruebas básicas y despliegue mediante Docker, garantizando escalabilidad y mantenimiento del sistema.',
-      features: ['Spring Boot', 'Java', 'Aronium', 'PostgreSQL', 'Docker', 'JWT Auth', 'Charts.js', "REST API", "Vercel", "Postman"],
-      repoUrl: 'https://github.com/Hamburguesas-El-Portico/portico_spring',
-      demoUrl: '#'
+      image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=600&h=400&fit=crop',
+      title: 'Comunicación Asertiva y Relaciones Interpersonales',
+      short: 'Mejora tus habilidades de comunicación efectiva',
+      description: 'Domina el arte de la comunicación asertiva para expresar tus ideas, necesidades y sentimientos de forma clara y respetuosa. Este curso te enseña a establecer límites saludables, resolver conflictos constructivamente y fortalecer tus relaciones personales y profesionales. Incluye práctica de escucha activa, lenguaje no verbal y estrategias de negociación.',
+      features: ['Comunicación Asertiva', 'Escucha Activa', 'Resolución de Conflictos', 'Relaciones', '7 semanas'],
+      repoUrl: '#',
+      demoUrl: 'https://wa.me/573001234567'
     },
     {
-      image: '/assets/images/parkeasyapp.jpeg',
-      title: 'App movil de Buscar Parqueaderos',
-      short: 'Encuentra y reserva parqueaderos',
-      description: 'Desarrollo de una aplicación móvil híbrida para la localización de parqueaderos disponibles en tiempo real, que permite a los usuarios realizar reservas y pagos digitales. La aplicación integra mapas interactivos, notificaciones push y una interfaz intuitiva enfocada en la experiencia de usuario. Fue desarrollada en Android Studio con Kotlin y respaldada por Firebase para autenticación y base de datos en tiempo real, garantizando sincronización inmediata, escalabilidad y seguridad.',
-      features: ['Android Studio', 'Kotlin', 'Firebase', 'OpenStreetMap', 'Flutter', 'Push Notifications'],
-      repoUrl: 'https://github.com/Intro-CompuMovil/ParkEasy',
-      demoUrl: 'https://www.youtube.com/shorts/cba7RciYqsI'
+      image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600&h=400&fit=crop',
+      title: 'Autoestima y Desarrollo Personal',
+      short: 'Construye una imagen positiva de ti mismo',
+      description: 'Este curso te guía en un viaje de autoconocimiento y amor propio. Aprenderás a identificar creencias limitantes, fortalecer tu autoestima y desarrollar una mentalidad de crecimiento. Incluye ejercicios prácticos para aumentar tu confianza, superar la vergüenza y el perfeccionismo, y construir una vida alineada con tus valores y metas personales.',
+      features: ['Autoestima', 'Amor Propio', 'Mentalidad de Crecimiento', 'Desarrollo Personal', '6 semanas'],
+      repoUrl: '#',
+      demoUrl: 'https://wa.me/573001234567'
     },
     {
-      image: '/assets/images/lionview.jpeg',
-      title: 'Emprendimiento de venta de plataformas de streaming "LION VIEW"',
-      short: 'Venta de plataformas de streaming',
-      description: 'Plataforma de comercio electrónico para venta de plataformas de streaming con atención al cliente, gestión de inventario y panel administrativo completo; ya llevo mas de tres años en el mercado y he podido generar ingresos, mienstras aprendo de areas del emprendimiento como las finanzas, la atención al cliente y el marketing digital',
-      features: ['Excel', 'WhatsApp', 'Instagram', 'Marketing'],
-      repoUrl: 'https://wa.me/qr/O7UUJEMANOWPA1',
-      demoUrl: 'https://www.instagram.com/lionview08/?hl=es'
+      image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=600&h=400&fit=crop',
+      title: 'Psicología Familiar y Consejería',
+      short: 'Fortalece tus relaciones familiares',
+      description: 'Explora la dinámica familiar desde una perspectiva psicológica. Este curso aborda sistemas familiares, patrones de comunicación transmitidos generacionalmente, y técnicas de consejería para mejorar relaciones entre padres e hijos, parejas y hermanos. Aprenderás a reconocer conflictos familiares recurrentes y a implementar estrategias de sanación y conexión emocional.',
+      features: ['Dinámica Familiar', 'Consejería', 'Relaciones Parentales', 'Patrones Familiares', '7 semanas'],
+      repoUrl: '#',
+      demoUrl: 'https://wa.me/573001234567'
     },
     {
-      image: '/assets/images/sinapsis.png',
-      title: 'Marketplace web para La Fundación Sinapsis',
-      short: 'Marketing y automatización IA',
-      description: 'Desarrollo y mantenimiento de un marketplace digital orientado a estudiantes con discapacidades mentales, utilizando WordPress y el plugin Elementor para el diseño y optimización del sitio web. Se integró TiendaNube como plataforma de comercio electrónico, habilitando una pasarela de compras completa y funcional. Además, se realizaron labores de marketing digital, análisis de estrategias de mercado para atraer clientes en línea, y creación de contenido, incluyendo la ejecución de talleres formativos dentro de la fundación, con enfoque social e inclusivo.',
-      features: ['WordPress', 'Elementor', 'TiendaNube', 'Marketing', 'CRM Integration', 'DaVinci', 'Figma'],
-      repoUrl: 'https://github.com/danieleon08/Proyecto-Fundacion-Sinapsis-WordPress-y-TiendaNube',
-      demoUrl: 'https://funsinapsis.com'
+      image: 'https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?w=600&h=400&fit=crop',
+      title: 'Terapia de Aceptación y Compromiso',
+      short: 'Vive una vida plena y con propósito',
+      description: 'La Terapia de Aceptación y Compromiso (ACT) te enseña a aceptar tus pensamientos y sentimientos difíciles sin dejarte controlar por ellos. Este curso se enfoca en la acción comprometida hacia tus valores personales, aumentando tu capacidad de resiliencia psicológica. Incluye técnicas de mindfulness, clarificación de valores, y compromisos conductuales para una vida significativa y auténtica.',
+      features: ['Aceptación', 'Valores Personales', 'Mindfulness', 'Resiliencia', '8 semanas'],
+      repoUrl: '#',
+      demoUrl: 'https://wa.me/573001234567'
     },
     {
-      image: '/assets/images/taxis.jpg',
-      title: 'Sistema Multiagente Taxis',
-      short: 'Comunicación distribuida',
-      description: 'Proyecto académico de un sistema multiagente y distribuido para la gestión de taxis, donde cada taxi opera como un agente independiente que se comunica con un servidor central mediante ZeroMQ. El sistema permite el intercambio de información en tiempo real sobre ubicación, estado y disponibilidad, aplicando algoritmos de optimización de rutas y toma de decisiones para mejorar la asignación de servicios y la eficiencia del sistema.',
-      features: ['Python', 'ZeroMQ', 'Algoritmos IA', 'Sistemas Distribuidos'],
-      repoUrl: 'https://github.com/danieleon08/Sistema-Distribuido-de-Taxis---ZeroMQ',
-      demoUrl: '#'
-    },
-    {
-      image: '/assets/images/aprendizajemaquina.jpeg',
-      title: 'Implementación de Tecnicas de Aprendizaje de Maquina',
-      short: 'Aprendizaje de Maquina',
-      description: 'Seleccionar las librerías de trabajo en Python: tensorflow, keras o similares. Estas deben proveer implementaciones/funciones para las siguientes técnicas de aprendizaje automático: - Support Vector Machine (SVM) - Red neuronal multicapa - árbol de decisión ID3',
-      features: ['Python', 'TensorFlow', 'Keras', 'Algoritmos IA', 'Sistemas Distribuidos'],
-      repoUrl: 'https://github.com/danieleon08/Tecnicas-de-Aprendizaje-de-Maquina',
-      demoUrl: '#'
-    },
-    {
-      image: '/assets/images/cicla.jpg',
-      title: 'WinBici - Servicio Web',
-      short: 'Proyecto de sitio web para marcar recorrido en cicla',
-      description: 'En este proyecto se utilizaron tecnologias como git page para el despliegue, spring boot para el backend, gitpod para el entorno de desarrollo y html, css, js para el frontend. El servicio web permite a los usuarios marcar recorridos en bicicleta y ver estadísticas de sus recorridos, a lo igual que ganar recompensas y poder compartirlo con amigos',
-      features: ['Github Pages', 'SpringBoot', 'Gitpod', 'HTML', 'CSS', 'JS', 'Azure', 'github'],
-      repoUrl: 'https://github.com/IngenieriaZ/WINBICI',
-      demoUrl: '#'
+      image: 'https://images.unsplash.com/photo-1516321318423-f06f70d504f0?w=600&h=400&fit=crop',
+      title: 'Psicología del Comportamiento Humano',
+      short: 'Comprende los principios que guían el comportamiento',
+      description: 'Exploraremos los fundamentos teóricos y prácticos de por qué los seres humanos actúan de cierta manera. Este curso cubre teorías conductistas, cognitivas y ambientales, aplicadas a la vida cotidiana. Aprenderás a analizar patrones de comportamiento, motivaciones ocultas y cómo el contexto influye en nuestras decisiones y acciones diarias.',
+      features: ['Conductismo', 'Cognición', 'Motivación', 'Aprendizaje', '8 semanas'],
+      repoUrl: '#',
+      demoUrl: 'https://wa.me/573001234567'
     }
   ];
 

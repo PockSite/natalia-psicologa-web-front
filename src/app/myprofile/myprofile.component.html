@@ -1,44 +1,37 @@
 <div class="myprofile">
-  <!-- Fondo animado -->
-  <div class="container">
-    <div class="item" style="--i:0;"></div>
-    <div class="item" style="--i:1;"></div>
-    <div class="item" style="--i:2;"></div>
-    <div class="item" style="--i:3;"></div>
-    <div class="item" style="--i:4;"></div>
-    <div class="item" style="--i:5;"></div>
-    <div class="item" style="--i:6;"></div>
-    <div class="item" style="--i:7;"></div>
-    <div class="item" style="--i:8;"></div>
-    <div class="item" style="--i:9;"></div>
-    <div class="item" style="--i:10;"></div>
-    <div class="item" style="--i:11;"></div>
-    <div class="item" style="--i:12;"></div>
-    <div class="item" style="--i:13;"></div>
-    <div class="item" style="--i:14;"></div>
-    <div class="item" style="--i:15;"></div>
-    <div class="item" style="--i:16;"></div>
-    <div class="item" style="--i:17;"></div>
-    <div class="item" style="--i:18;"></div>
-    <div class="item" style="--i:19;"></div>
-    <div class="item" style="--i:20;"></div>
-  </div>
+  <!-- Imagen de fondo -->
+  <div class="background-image"></div>
 
+  <!-- Overlay oscuro -->
+  <div class="overlay-dark"></div>
 
-  <!-- Texto y overlay encima -->
+  <!-- Contenedor de contenido -->
   <div class="overlay">
-    <h1 class="intro-text">
-      ¡Hola!, Soy Daniel León <br>
+    <!-- Título principal -->
+    <div class="title-section">
+      <h1 class="main-title">Psicóloga Natalia Güechá</h1>
+    </div>
+
+    <!-- Texto dinámico con palabras rotativas -->
+    <div class="intro-text">
       <span class="highlight">{{ currentWord }}</span>
-    </h1>
+    </div>
+
+    <!-- Botón central -->
+    <button class="consultation-btn btn-96">
+      <span>Quiero una consulta</span>
+    </button>
   </div>
+
+  <!-- Elemento decorativo inferior que responde al scroll -->
+  <div class="wave-decoration"></div>
 </div>
 
-<app-aboutme></app-aboutme>
 <app-habilidades></app-habilidades>
+<app-aboutme></app-aboutme>
 <app-cursos></app-cursos>
 <app-projects></app-projects>
 <!--<app-experiences></app-experiences>-->
-<app-tech></app-tech>
+<!--<app-tech></app-tech>-->
 <app-contact></app-contact>
-<app-chatbot></app-chatbot>
+<!--<app-chatbot></app-chatbot>-->
