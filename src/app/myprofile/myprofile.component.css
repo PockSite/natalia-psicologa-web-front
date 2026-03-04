@@ -105,13 +105,13 @@
 
 /* ✨ Palabra dinámica con color */
 .highlight {
-  background: linear-gradient(135deg, var(--color-main), var(--color-main));
+  background: linear-gradient(135deg, var(--color-second), var(--color-second));
   background-size: 200% auto;
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  -webkit-text-stroke: 1px var(--color-main);
-  text-shadow: 1px 0 0 var(--color-main2), -1px 0 0 var(--color-main2), 0 1px 0 var(--color-main2), 0 -1px 0 var(--color-main2);
+  -webkit-text-stroke: 1px var(--color-second);
+  text-shadow: 1px 0 0 var(--color-second), -1px 0 0 var(--color-second), 0 1px 0 var(--color-second), 0 -1px 0 var(--color-second);
   font-weight: 900;
   display: inline-block;
   animation: gradientShift 6s linear infinite;

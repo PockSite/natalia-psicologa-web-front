@@ -3,7 +3,7 @@
   width: 100%;
   position: relative;
   background-color: var(--color-border);
-  background-image: url('../../assets/images/fondo-natural.png');
+  background-image: url('../../assets/images/naturaleza1.png');
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
@@ -22,7 +22,7 @@
 .section-title2 {
   font-size: 2.5rem;
   font-weight: 900;
-  color: var(--color-title);
+  color: var(--color-second);
   margin-bottom: 60px;
   text-transform: uppercase;
   text-align: center;

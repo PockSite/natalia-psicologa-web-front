@@ -12,7 +12,7 @@ export class MyprofileComponent implements OnInit, OnDestroy {
   words: string[] = [
     'Empatía y Escucha',
     'Conexión Humana',
-    'Bienestar Menta',
+    'Bienestar Mental',
     'Apoyo Profesional',
     'Conexión Genuina'
   ];
