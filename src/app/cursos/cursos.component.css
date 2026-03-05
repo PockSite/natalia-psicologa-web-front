@@ -211,10 +211,10 @@ button:active .button-text {
   margin: 0 15px;
   width: 280px;
   border-radius: 20px;
-  background: var(--color-main2);
+  background: var(--color-border);
   padding: 5px;
   overflow: hidden;
-  box-shadow:var(--color-main2) 0px 7px 20px 0px;
+  box-shadow:var(--color-border) 0px 7px 20px 0px;
   transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   opacity: 0;
   transform: translateY(50px);
@@ -232,7 +232,7 @@ button:active .button-text {
   border-radius: 15px;
   display: flex;
   flex-direction: column;
-  background: var(--color-main2);
+  background: var(--color-border);
   position: relative;
   align-items: center;
   justify-content: center;
@@ -355,7 +355,7 @@ button:active .button-text {
 
 .arrow-top,
 .arrow-bottom {
-  background-color: var(--color-main2);
+  background-color: var(--color-title);
   height: 4px;
   position: absolute;
   top: 50%;
@@ -364,7 +364,7 @@ button:active .button-text {
 
 .arrow-top:after,
 .arrow-bottom:after {
-  background-color: var(--color-text2);
+  background-color: var(--color-main);
   content: "";
   height: 100%;
   position: absolute;

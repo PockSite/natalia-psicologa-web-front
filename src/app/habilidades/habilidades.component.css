@@ -1,21 +1,56 @@
 /* === FONDO GENERAL === */
 .grid-wrapper {
   width: 100%;
+  height: 300px;
   position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background-color: var(--color-border);
-  background-image: url('../../assets/images/naturaleza1.png');
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
   background-attachment: scroll;
-  padding: 80px 30px;
-  overflow: hidden;
+  padding: 80px;
 }
 
 /* === CONTENIDO INTERIOR === */
 .skills-content {
   position: relative;
   z-index: 2;
+  width: 100%;
+  margin: 0 auto;
+  margin-left: -70px;
+}
+
+.wave-decoration {
+  position: absolute;
+  top: -320px;
+  left: 0;
+  width: 120vw;
+  height: 1900px;
+  margin-left: -60px;
+  background-image: url('../../assets/images/Ilustraciones(10).png');
+  background-size: 100% 100%;
+  background-position: center top;
+  background-repeat: no-repeat;
+  background-attachment: scroll;
+  margin-top: -450px;
+  z-index: 1;
+  animation: waveScrollAppear 1s ease forwards;
+  opacity: 1;
+  pointer-events: none;
+}
+
+@keyframes waveScrollAppear {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* === TÍTULO DE SECCIÓN === */
@@ -23,7 +58,7 @@
   font-size: 2.5rem;
   font-weight: 900;
   color: var(--color-second);
-  margin-bottom: 60px;
+  margin-top: 200px;
   text-transform: uppercase;
   text-align: center;
   letter-spacing: 3px;
@@ -250,14 +285,11 @@
   font-size: 1.5rem;
   font-weight: 700;
   font-family: var(--font-title);
-  color: white;
+  color: var(--color-main);
   text-transform: uppercase;
   letter-spacing: 1px;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
   z-index: 3;
   position: relative;
-  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.3));
-  line-height: 1.1;
   margin: 0;
 }
 
@@ -297,6 +329,13 @@
 }
 
 @media (max-width: 768px) {
+  .wave-decoration {
+    top: -200px;
+    height: 520px;
+    width: 125vw;
+    margin-left: -12.5vw;
+  }
+
   .skills-grid-modern {
     grid-template-columns: 1fr;
     gap: 20px;
@@ -328,6 +367,11 @@
 }
 
 @media (max-width: 480px) {
+  .wave-decoration {
+    top: -150px;
+    height: 420px;
+  }
+
   .grid-wrapper {
     padding: 40px 15px;
   }
