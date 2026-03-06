@@ -21,6 +21,8 @@ export class MyprofileComponent implements OnInit, OnDestroy {
   private wordIntervalId: any;
 
   isMobile: boolean = window.innerWidth <= 768;
+  showFloatingBtn: boolean = false;
+  private consultationBtnObserver: IntersectionObserver | null = null;
 
   ngOnInit(): void {
     this.startWordAnimation();
@@ -42,6 +44,23 @@ export class MyprofileComponent implements OnInit, OnDestroy {
         observer.observe(target);
       }
     }
+
+    // 🔵 Observar botón de consulta original para mostrar/ocultar botón flotante
+    setTimeout(() => {
+      const consultationBtn = document.querySelector('.consultation-btn');
+      if (consultationBtn) {
+        this.consultationBtnObserver = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              // Mostrar botón flotante cuando el botón original NO está visible
+              this.showFloatingBtn = !entry.isIntersecting;
+            });
+          },
+          { threshold: 0.1 }
+        );
+        this.consultationBtnObserver.observe(consultationBtn);
+      }
+    }, 100);
   }
 
   /**
@@ -92,5 +111,18 @@ export class MyprofileComponent implements OnInit, OnDestroy {
     if (this.wordIntervalId) {
       clearInterval(this.wordIntervalId);
     }
+    if (this.consultationBtnObserver) {
+      this.consultationBtnObserver.disconnect();
+    }
+  }
+
+  /**
+   * 💬 Abrir WhatsApp con número de contacto
+   */
+  openWhatsApp(): void {
+    const phoneNumber = '573017486316'; // Reemplaza con el número de Natalia
+    const message = 'Hola, me gustaría agendar una consulta';
+    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
   }
 }
