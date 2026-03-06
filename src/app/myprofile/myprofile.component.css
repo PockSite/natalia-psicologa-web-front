@@ -7,97 +7,119 @@
   align-items: center;
   text-align: center;
   position: relative;
-  overflow: hidden;
+  overflow: visible;
   background-color: var(--color-main);
   font-family: var(--font-title);
+  --wave-height: clamp(240px, 22vw, 360px);
+  --wave-overlap: clamp(40px, 6vw, 90px);
+  padding-bottom: calc(var(--wave-height) - var(--wave-overlap));
+  margin-bottom: 0;
 }
 
-/* 🌌 NUEVO FONDO ANIMADO CON CÍRCULOS FLOTANTES */
-.container {
+/* 🖼️ IMAGEN DE FONDO */
+.background-image {
   position: absolute;
-  top: 40%;
-  left: 50%;
-  transform: translateX(-50%);
-  height: 70%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 0;
-  /* Detrás del texto */
+  top: 0;
+  right: 0px;
   width: 100%;
+  height: 100%;
+  background-image: url('../../assets/images/fotografia5.jpeg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: 0;
+  object-fit: cover;
 }
 
-.item {
+/* 🌑 OVERLAY OSCURO PARA LEGIBILIDAD */
+.overlay-dark {
   position: absolute;
-  background-color: transparent;
-  width: calc(var(--i) * 9vmin);
-  height: calc(var(--i) * 5vmin);
-  border-radius: 50%;
-  border: 0.4vmin solid var(--color-title);
-  transform-style: preserve-3d;
-  transform: rotateX(70deg) translateZ(50px);
-  animation: my-move 3s ease-in-out calc(var(--i) * 0.08s) infinite;
-  box-shadow: 0px 0px 8px var(--color-title),
-    inset 0px 0px 8px var(--color-title);
-  opacity: 0.3;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.45);
+  z-index: 1;
+  backdrop-filter: blur(2px);
 }
 
-@keyframes my-move {
-
-  0%,
-  100% {
-    transform: rotateX(70deg) translateZ(50px) translateY(0px);
-    filter: hue-rotate(0deg);
-  }
-
-  50% {
-    transform: rotateX(70deg) translateZ(50px) translateY(-50vmin);
-    filter: hue-rotate(180deg);
-  }
-}
-
-/* 🌈 OVERLAY (TEXTO ENCIMA DEL FONDO) */
+/* 🌈 OVERLAY PRINCIPAL (CONTENIDO) */
 .overlay {
   width: 100%;
   height: 100%;
+  margin-top: 250px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   position: relative;
   z-index: 2;
+  gap: 2rem;
 }
 
+/* 📌 SECCIÓN DEL TÍTULO */
+.title-section {
+  animation: slideDown 0.8s ease forwards;
+  opacity: 0;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.main-title {
+  color: #ffffff;
+  font-size: 5rem;
+  font-weight: 900;
+  line-height: 1.1;
+  text-shadow: 3px 3px 12px rgba(0, 0, 0, 0.8);
+  letter-spacing: 3px;
+  margin: 0;
+  animation: slideDown 0.8s ease forwards;
+  font-family: var(--font-title);
+}
+
+/* ✨ PALABRAS DINÁMICAS */
 .intro-text {
   color: #f0f0f0;
-  font-size: 4rem;
-  font-weight: 800;
+  font-size: 2.5rem;
+  font-weight: 700;
   line-height: 1.2;
   opacity: 0;
   transform: translateY(40px);
-  animation: fadeInUp 1.5s ease forwards;
+  animation: fadeInUp 1.2s ease forwards 0.3s;
   text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6);
-  letter-spacing: 2px;
+  letter-spacing: 1px;
   position: relative;
   z-index: 3;
+  min-height: 3rem;
+  font-family: var(--font-text);
 }
 
-/* ✨ Palabra dinámica */
+/* ✨ Palabra dinámica con color */
 .highlight {
-  background: var(--color-title);
+  background: linear-gradient(135deg, var(--color-second), var(--color-second));
   background-size: 200% auto;
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  font-style: italic;
+  -webkit-text-stroke: 1px var(--color-second);
+  text-shadow: 1px 0 0 var(--color-second), -1px 0 0 var(--color-second), 0 1px 0 var(--color-second), 0 -1px 0 var(--color-second);
   font-weight: 900;
   display: inline-block;
   animation: gradientShift 6s linear infinite;
   transition: opacity 0.8s ease, transform 0.8s ease;
   opacity: 1;
   position: relative;
+  font-family: var(--font-title);
 }
-
 
 .fade-out {
   opacity: 0;
@@ -109,38 +131,124 @@
   transform: translateY(0);
 }
 
-
-/* 🌈 Animación del gradiente en highlight */
+/* 🌈 Animación del gradiente */
 @keyframes gradientShift {
   0% {
     background-position: 0% 50%;
   }
-
   100% {
     background-position: 100% 50%;
   }
 }
 
-/* ⬇️ Flecha de scroll (opcional, si usas una) */
-.scroll-indicator {
-  position: absolute;
-  bottom: 30px;
-  left: 50%;
-  transform: translateX(-50%);
-  animation: bounce 2s infinite;
+/* 🔘 BOTÓN DE CONSULTA */
+.consultation-btn {
+  animation: fadeInUp 1.2s ease forwards 0.6s;
+  opacity: 0;
+  position: relative;
   z-index: 3;
 }
 
-.scroll-arrow {
-  width: 30px;
-  height: 30px;
-  border: 3px solid var(--color-main2);
-  border-top: none;
-  border-left: none;
-  transform: rotate(45deg);
+.btn-96,
+.btn-96 *,
+.btn-96 :after,
+.btn-96 :before,
+.btn-96:after,
+.btn-96:before {
+  border: 0 solid;
+  box-sizing: border-box;
 }
 
-/* 🔁 Animaciones secundarias */
+.btn-96 {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-appearance: button;
+  background-color: var(--color-second);
+  background-image: none;
+  color: var(--color-tech);
+  cursor: pointer;
+  font-family: var(--font-title);
+  font-size: clamp(0.95rem, 1.4vw, 1.1rem);
+  line-height: 1.2;
+  margin: 0;
+  -webkit-mask-image: -webkit-radial-gradient(#000, #fff);
+  padding: 0;
+}
+
+.btn-96:disabled {
+  cursor: default;
+}
+
+.btn-96:-moz-focusring {
+  outline: auto;
+}
+
+.btn-96 svg {
+  display: block;
+  vertical-align: middle;
+}
+
+.btn-96 [hidden] {
+  display: none;
+}
+
+.btn-96 {
+  box-sizing: border-box;
+  display: inline-block;
+  font-weight: 900;
+  -webkit-mask-image: none;
+  padding: clamp(1rem, 2vw, 1.4rem) clamp(3.25rem, 7vw, 5.5rem);
+  perspective: 800px;
+  position: relative;
+  text-transform: uppercase;
+  transform-style: preserve-3d;
+  letter-spacing: 1px;
+  border-radius: 999px;
+  box-shadow: 0 18px 35px rgba(0, 0, 0, 0.35);
+  min-width: clamp(230px, 28vw, 360px);
+}
+
+.btn-96 span {
+  background: var(--color-main);
+  color: var(--color-border);
+  display: grid;
+  inset: 0;
+  place-items: center;
+  position: absolute;
+  transform: rotateX(0deg);
+  transform-origin: top center;
+  transition: 0.2s;
+  border-radius: 999px;
+}
+
+.btn-96:hover span {
+  transform: rotateX(35deg);
+}
+
+.btn-96:after,
+.btn-96:before {
+  background: rgba(255, 255, 255, 0.35);
+  content: "";
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  transform: rotateX(0deg);
+  width: 100%;
+  z-index: -1;
+  border-radius: 999px;
+}
+
+.btn-96:after {
+  background: rgba(255, 255, 255, 0.5);
+  width: 0;
+}
+
+.btn-96:hover:after {
+  -webkit-animation: progress-bar 1.2s;
+  animation: progress-bar 1.2s;
+}
+
+/* 🔁 Animaciones generales */
 @keyframes fadeInUp {
   to {
     opacity: 1;
@@ -148,62 +256,205 @@
   }
 }
 
-@keyframes bounce {
-
-  0%,
-  100% {
-    transform: translateX(-50%) translateY(0);
-  }
-
-  50% {
-    transform: translateX(-50%) translateY(-10px);
-  }
-}
-
 /* --- 📱 RESPONSIVE --- */
 @media (max-width: 1024px) {
-  .intro-text {
-    font-size: 2.8rem;
+  .main-title {
+    font-size: 3.5rem;
   }
+
+  .intro-text {
+    font-size: 1.8rem;
+  }
+
 }
 
-@media (max-width: 890px) {
+@media (max-width: 768px) {
   .myprofile {
     height: 100dvh;
   }
 
+  .main-title {
+    font-size: 2.5rem;
+    letter-spacing: 1px;
+  }
+
   .intro-text {
-    font-size: 2rem;
+    font-size: 1.4rem;
     line-height: 1.3;
     padding: 0 10px;
   }
+}
 
-  .container {
-    position: absolute;
-    top: 30%;
-    left: 50%;
-    transform: translateX(-50%);
-    height: 70%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 0;
-    /* Detrás del texto */
-    width: 100%;
+@media (max-width: 480px) {
+  .main-title {
+    font-size: 1.8rem;
   }
 
-  .item {
-    position: absolute;
-    background-color: transparent;
-    width: calc(var(--i) * 5vmin);
-    height: calc(var(--i) * 6vmin);
-    border-radius: 50%;
-    border: 0.4vmin solid var(--color-title);
-    transform-style: preserve-3d;
-    transform: rotateX(70deg) translateZ(50px);
-    animation: my-move 3s ease-in-out calc(var(--i) * 0.08s) infinite;
-    box-shadow: 0px 0px 8px var(--color-title),
-      inset 0px 0px 8px var(--color-title);
-    opacity: 0.3;
+  .intro-text {
+    font-size: 1.1rem;
+  }
+  .overlay-dark {
+    background-color: rgba(0, 0, 0, 0.55);
+  }
+}
+
+/* 🔵 BOTÓN FLOTANTE WHATSAPP === */
+.floating-btn-wrapper {
+  position: fixed;
+  bottom: 80px;
+  right: -200px;
+  z-index: 999;
+  opacity: 0;
+  transition: opacity 0.6s ease-out, right 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.floating-btn-wrapper.visible {
+  right: 30px;
+  opacity: 1;
+  pointer-events: auto;
+  animation: floatInFromButton 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.float-label {
+  font-size: 0.85rem;
+  color: #599a53;
+  font-weight: 600;
+  text-align: center;
+  font-family: var(--font-text);
+  white-space: nowrap;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  animation: labelSlideIn 0.6s ease-out forwards;
+}
+
+@keyframes labelSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes floatInFromButton {
+  0% {
+    opacity: 0;
+    right: -200px;
+    transform: scale(0.6);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    opacity: 1;
+    right: 30px;
+    transform: scale(1);
+  }
+}
+
+/* Estilos del botón moderno */
+.styled-wrapper .button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 76px;
+  height: 76px;
+  margin: 0;
+  overflow: visible;
+  outline: none;
+  background-color: transparent;
+  cursor: pointer;
+  border: 0;
+  transition: filter 0.3s ease;
+}
+
+.styled-wrapper .button:before {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  inset: 7px;
+  border: 3px solid #599a53;
+  transition:
+    opacity 0.4s cubic-bezier(0.77, 0, 0.175, 1) 80ms,
+    transform 0.5s cubic-bezier(0.455, 0.03, 0.515, 0.955) 80ms;
+  box-shadow: 0 4px 15px rgba(89, 154, 83, 0.2);
+}
+
+.styled-wrapper .button:after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  inset: 7px;
+  border: 4px solid #599a53;
+  transform: scale(1.3);
+  transition:
+    opacity 0.4s cubic-bezier(0.165, 0.84, 0.44, 1),
+    transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  opacity: 0;
+  box-shadow: 0 4px 20px rgba(89, 154, 83, 0.3);
+}
+
+.styled-wrapper .button:hover:before,
+.styled-wrapper .button:focus:before {
+  opacity: 0;
+  transform: scale(0.7);
+  transition:
+    opacity 0.4s cubic-bezier(0.165, 0.84, 0.44, 1),
+    transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.styled-wrapper .button:hover:after,
+.styled-wrapper .button:focus:after {
+  opacity: 1;
+  transform: scale(1);
+  transition:
+    opacity 0.4s cubic-bezier(0.77, 0, 0.175, 1) 80ms,
+    transform 0.5s cubic-bezier(0.455, 0.03, 0.515, 0.955) 80ms;
+}
+
+.styled-wrapper .button:hover,
+.styled-wrapper .button:focus {
+  filter: brightness(1.1);
+}
+
+.whatsapp-icon {
+  width: 42px;
+  height: 42px;
+  fill: #599a53;
+  filter: drop-shadow(0 2px 4px rgba(89, 154, 83, 0.3));
+  z-index: 10;
+  position: relative;
+  display: block;
+  margin: 0;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .floating-btn-wrapper.visible {
+    bottom: 20px;
+    right: 20px;
+  }
+
+  .float-label {
+    font-size: 0.75rem;
+  }
+
+  .styled-wrapper .button {
+    width: 64px;
+    height: 64px;
+  }
+
+  .whatsapp-icon {
+    width: 35px;
+    height: 35px;
   }
 }

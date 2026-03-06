@@ -3,7 +3,11 @@
 /* ============================= */
 
 .courses-section {
-  background: var(--color-main);
+  background-image: url('../../assets/images/naturaleza2.png');
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-attachment: scroll;
   padding: 80px 20px;
   text-align: center;
   position: relative;
@@ -46,7 +50,7 @@
 
 
 .carousel-card {
-  flex: 0 0 calc(100% / var(--color-main2, 1));
+  flex: 0 0 calc(100% / var(--color-main, 1));
   box-sizing: border-box;
   margin: 0 10px; /* espacio entre tarjetas */
 }
@@ -58,7 +62,7 @@
   transform: translateY(-50%);
   background: var(--color-main);
   border: none;
-  color: var(--color-text2);
+  color: var(--color-title);
   font-size: 2rem;
   padding: 10px;
   cursor: pointer;
@@ -102,7 +106,7 @@ button.learn-more {
 
 button.learn-more .circle {
   transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
-  box-shadow: 0 0 5px 1px var(--color-text2);
+  box-shadow: 0 0 5px 1px var(--color-title);
   position: relative;
   display: block;
   margin: 0;
@@ -118,7 +122,7 @@ button.learn-more .circle .icon {
   top: 0;
   bottom: 0;
   margin: auto;
-  background: var(--color-text2);
+  background: var(--color-title);
 }
 
 button.learn-more .circle .icon.arrow {
@@ -136,8 +140,8 @@ button.learn-more .circle .icon.arrow::before {
   right: 0.0625rem;
   width: 0.625rem;
   height: 0.625rem;
-  border-top: 0.125rem solid var(--color-text2);
-  border-right: 0.125rem solid var(--color-text2);
+  border-top: 0.125rem solid var(--color-title);
+  border-right: 0.125rem solid var(--color-title);
   transform: rotate(45deg);
 }
 
@@ -207,14 +211,16 @@ button:active .button-text {
   margin: 0 15px;
   width: 280px;
   border-radius: 20px;
-  background: var(--color-main2);
+  background: var(--color-border);
   padding: 5px;
   overflow: hidden;
-  box-shadow:var(--color-main2) 0px 7px 20px 0px;
+  box-shadow:var(--color-border) 0px 7px 20px 0px;
   transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   opacity: 0;
   transform: translateY(50px);
   animation: slideUp 0.8s ease forwards;
+  display: flex;
+  flex-direction: column;
 }
 
 .card:hover {
@@ -222,112 +228,72 @@ button:active .button-text {
 }
 
 .card .top-section {
-  height: 300px;
+  height: 150px;
   border-radius: 15px;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(45deg, var(--color-main2) 0%, var(--color-title) 100%);
+  background: var(--color-border);
   position: relative;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
 }
 
 .card .top-section .border {
-  border-bottom-right-radius: 10px;
-  height: 80px;
-  width: 250px;
-  background: var(--color-main2);
-  position: relative;
-  transform: skew(-40deg);
-  box-shadow: -10px -10px 0 0 var(--color-main2);
-}
-
-.card .top-section .border::before {
-  content: "";
-  position: absolute;
-  width: 15px;
-  height: 15px;
-  top: 0;
-  right: -15px;
-  background: var(--color-main2);
-  border-top-left-radius: 10px;
-  box-shadow: -5px -5px 0 2px var(--color-main2);
+  display: none;
 }
 
 .card .top-section::before {
-  content: "";
-  position: absolute;
-  top: 30px;
-  left: 0;
-  background: var(--color-main2);
-  height: 15px;
-  width: 15px;
-  border-top-left-radius: 15px;
-  box-shadow: -5px -5px 0 2px var(--color-main2);
+  content: none;
 }
 
-.card .top-section .icons {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: auto;
-  height: 30px;
-  display: flex;
-  justify-content: flex-end;
-  z-index: 3;
-  padding: 8px 15px;
-}
-
-.card .top-section .icons .view-icon {
-  height: 100%;
-  display: flex;
-  align-items: center;
-}
-
-.card .top-section .icons .view-icon .svg {
-  height: 100%;
-  fill: var(--color-main2);
-  transition: fill 0.3s ease;
-}
-
-.card .top-section .icons .view-icon .svg:hover {
-  fill: var(--color-text2);
-}
-
-.card .top-section .course-image {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+.card .top-section .testimonial-icon {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.65);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1;
+  z-index: 2;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
 }
 
-.card .top-section .course-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 15px;
-  transition: transform 0.3s ease;
-}
-
-.card:hover .top-section .course-image img {
-  transform: scale(1.05);
+.card .top-section .testimonial-icon i {
+  font-size: 2rem;
+  color: var(--color-title);
 }
 
 .card .bottom-section {
-  margin-top: 15px;
-  padding: 10px 5px;
+  margin-top: 10px;
+  padding: 14px 14px 18px;
+  text-align: left;
+  flex: 1;
 }
 
 .card .bottom-section .title {
   display: block;
-  font-size: 17px;
+  font-size: 16px;
   font-weight: bolder;
-  color: var(--color-text2);
-  text-align: center;
+  color: var(--color-title);
+  text-align: left;
   letter-spacing: 2px;
+}
+
+.card .bottom-section .testimonial-text {
+  margin: 12px 0 14px;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--color-title);
+}
+
+.card .bottom-section .testimonial-tag {
+  display: inline-block;
+  font-size: 0.8rem;
+  color: var(--color-title);
+  background: rgba(255, 255, 255, 0.6);
+  padding: 6px 10px;
+  border-radius: 20px;
 }
 
 .card .bottom-section .row {
@@ -340,7 +306,7 @@ button:active .button-text {
   flex: 30%;
   text-align: center;
   padding: 5px;
-  color: var(--color-border);
+  color: var(--color-title);
 }
 
 .card .bottom-section .row .item .big-text {
@@ -389,7 +355,7 @@ button:active .button-text {
 
 .arrow-top,
 .arrow-bottom {
-  background-color: var(--color-main2);
+  background-color: var(--color-title);
   height: 4px;
   position: absolute;
   top: 50%;
@@ -398,7 +364,7 @@ button:active .button-text {
 
 .arrow-top:after,
 .arrow-bottom:after {
-  background-color: var(--color-text2);
+  background-color: var(--color-main);
   content: "";
   height: 100%;
   position: absolute;

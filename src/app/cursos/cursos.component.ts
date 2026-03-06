@@ -8,13 +8,13 @@ import { Component, OnInit, OnDestroy, HostListener, ViewChild, ElementRef, Afte
 export class CursosComponent implements OnInit, OnDestroy, AfterViewInit {
   // 🌟 Cursos (carrusel)
   courses = [
-    { image: 'https://www.isotools.us/wp-content/uploads/2024/06/Software-para-sistemas-de-gestion-de-calidad-que-caracteristicas-y-funcionalidades-debe-reunir.jpg', title: 'Calidad del Software - Sena', description: 'Curso en el Sena sobre la calidad del Software y las diferentes normas ISO', modalidad: 'Online' },
-    { image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRAMBwFp4blXgNy24gKGab6WDL8IiVktJNvgQ&s', title: 'Nube de AWS', description: 'Curso ofrecido por AWS para saber manejar su nube y poder elegir correctamente entre todos los servicios que ofrece', modalidad: 'Online' },
-    { image: 'https://www.javeriana.edu.co/recursosdb/704339/6116923/Mesa%20de%20trabajo%2099%20copia%203.png/52cb4ae7-0b89-8087-1af3-e8ce7ed92796', title: 'Javeriana Territorio Emprendedor', description: 'Participé en el programa "Javeriana Territorio Emprendedor".', modalidad: 'Presencial' },
-    { image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT3Pw9vZvgrTOe4Z3OLIwdOjQqXmM5bgKz1Hw&s', title: 'Prompting Responsable - Microsoft', description: 'Curso de prompting responsable en IA, desarrollado por Microsoft y Founderz.', modalidad: 'Online' },
-    { image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSFmSHVHNeO1x6dCPXq5d1Fb_33f9UXdbaonw&s', title: 'Ingles B1 - American School Way', description: 'Hice un curso en American School Way donde alcance un nivel B1 en Ingles', modalidad: 'Presencial' },
-    { image: 'https://www.ucatalunya.edu.co/img/blog/la-transformacion-digital.jpg', title: 'Transformación Digital - MIT', description: 'Curso de Transformación Digital para empresas, MIT Professional Education.', modalidad: 'Online' },
-    { image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNCObqnzWneBa0iTZsC5rsLKuI9YbZPUBUKw&s', title: 'Integración de IA en Sitios Web', description: 'Integración de herramientas de IA en Sitios Web, como lo son chatbots, IA para análisis de datos y IA para análisis de imágenes', modalidad: 'Online' }
+    { name: 'Paciente anonimo', text: 'Me senti escuchado y acompanado en todo el proceso. Las sesiones me ayudaron a organizar mis emociones y tomar decisiones con mas calma.', focus: 'Ansiedad y estres' },
+    { name: 'Paciente anonimo', text: 'Aprendi herramientas practicas para manejar momentos de crisis. Siento que ahora tengo mas control sobre mis pensamientos.', focus: 'Ataques de panico' },
+    { name: 'Paciente anonimo', text: 'El espacio fue muy respetuoso y seguro. Pude hablar con libertad y entender mejor mis patrones de conducta.', focus: 'Autoestima' },
+    { name: 'Paciente anonimo', text: 'Las sesiones me ayudaron a mejorar la comunicacion en mi relacion y a poner limites de forma sana.', focus: 'Terapia de pareja' },
+    { name: 'Paciente anonimo', text: 'Recibi acompanamiento claro y humano en un momento dificil. Me senti guiado y comprendido.', focus: 'Duelo' },
+    { name: 'Paciente anonimo', text: 'Me gusto el enfoque practico y la cercania. Avance paso a paso con metas realistas.', focus: 'Crecimiento personal' },
+    { name: 'Paciente anonimo', text: 'Las sesiones me ayudaron a reconocer mis emociones y a regularlas en el dia a dia.', focus: 'Regulacion emocional' }
   ];
 
   currentIndex = 0;

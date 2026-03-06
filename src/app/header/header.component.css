@@ -3,7 +3,7 @@
   position: fixed;
   top: 0;
   left: 0;
-  width: var(--sidebar-desktop);
+  width: 1000px;
   height: 500vh;
   background-color: var(--color-main);
   color: var(--color-text2);
@@ -15,6 +15,64 @@
   overflow-y: auto;
   scrollbar-width: none;
   margin-top: 650px;
+  padding-left: 200px;
+}
+
+/* Sidebar when embedded inside About Me */
+:host(.aboutme-sidebar) .sidebar {
+  position: sticky;
+  top: 10px;
+  left: auto;
+  width: 100%;
+  height: auto;
+  margin-top: 0;
+  padding: 30px 20px 60px 30px;
+  border-radius: 20px;
+  background-color: transparent;
+  border: none;
+  min-height: 680px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 25px;
+  overflow: visible;
+  position: relative;
+  box-shadow: none;
+  opacity: 0;
+  transform: translateX(-40px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+:host-context(.about-sidebar.visible) :host(.aboutme-sidebar) .sidebar {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Ilustración de fondo separada */
+:host(.aboutme-sidebar) .sidebar::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('../../assets/images/Ilustraciones(2).png');
+  background-size: 160%;
+  background-position: calc(100% + 100px) 10%;
+  background-repeat: no-repeat;
+  background-attachment: local;
+  z-index: 0;
+  pointer-events: none;
+}
+
+:host(.aboutme-sidebar) .action-buttons {
+  width: 100%;
+  max-width: 280px;
+  z-index: 10;
+  position: relative;
+  gap: 8px;
+  align-self: flex-start;
 }
 
 .sidebar::-webkit-scrollbar {
@@ -26,13 +84,33 @@
   margin-bottom: 25px;
 }
 
+:host(.aboutme-sidebar) .profile-section {
+  margin-bottom: 15px;
+  z-index: 10;
+  position: relative;
+  text-align: center;
+  margin-left: 0;
+  align-self: center;
+  width: 100%;
+  margin-right: 70px;
+
+}
+
 .profile-pic {
   width: 110px;
   height: 110px;
   border-radius: 50%;
   overflow: hidden;
   margin: 0 auto 15px auto;
-  border: 3px solid var(--color-text2);
+  border: 3px solid var(--color-title);
+}
+
+:host(.aboutme-sidebar) .profile-pic {
+  width: 150px;
+  height: 150px;
+  border: 4px solid var(--color-title);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  margin: 0 auto 15px auto;
 }
 
 .profile-pic img {
@@ -44,28 +122,47 @@
 .name {
   font-size: 19px;
   font-weight: bold;
-  color: var(--color-text2);
+  color: var(--color-title);
   margin: 5px 0;
+}
+
+:host(.aboutme-sidebar) .name {
+  font-size: 1.5rem;
+  font-weight: 700;
 }
 
 .role {
   font-size: 15px;
   font-weight: 600;
-  color: var(--color-title);
+  color: var(--color-second);
   margin: 5px 0;
+}
+
+:host(.aboutme-sidebar) .role {
+  font-size: 1.15rem;
+  letter-spacing: 0.5px;
 }
 
 .focus {
   font-size: 13px;
   font-weight: 400;
   color: var(--color-second);
-  margin-bottom: 18px;
+  margin-bottom: 5px;
 }
 
 .contact-info {
   font-size: 13px;
-  color: var(--color-text2);
+  color: var(--color-title);
   margin-bottom: 22px;
+}
+
+:host(.aboutme-sidebar) .contact-info {
+  margin-bottom: 20px;
+  z-index: 10;
+  position: relative;
+  font-size: 0.95rem;
+  text-align: left;
+  width: 100%;
 }
 
 .contact-info p {
@@ -90,22 +187,70 @@
 
 .btn {
   display: block;
+  position: relative;
   padding: 9px;
   border-radius: 8px;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
+  text-align: center;
   text-decoration: none;
-  transition: all 0.3s;
+  border: 1px solid var(--btn-color);
+  background-color: #ffffff;
+  color: var(--btn-color);
+  overflow: hidden;
+  transition: background-color 0.4s ease, color 0.4s ease, transform 0.3s ease, box-shadow 0.4s ease;
 }
 
-.contact-btn { background: var(--color-btn-contact); color: var(--color-text-primary); }
-.linkedin-btn { background: var(--color-btn-linkedin); color: var(--color-text-primary); }
-.github-btn { background: var(--color-btn-github); color: var(--color-text-primary); }
-.cv-btn { background: var(--color-btn-cv); color: var(--color-text-primary); }
+:host(.aboutme-sidebar) .btn {
+  padding: 12px 20px;
+  font-size: 0.95rem;
+  border-radius: 12px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn .btn-label {
+  display: inline-block;
+  position: relative;
+  left: 0;
+  transition: transform 0.4s ease, color 0.4s ease;
+}
+
+.btn i {
+  position: absolute;
+  top: 50%;
+  right: 0.7em;
+  transform: translateY(-50%) translateX(6px);
+  opacity: 0;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  color: #ffffff;
+}
+
+.contact-btn { --btn-color: var(--color-btn-contact); }
+.linkedin-btn { --btn-color: var(--color-btn-linkedin); }
+.github-btn { --btn-color: var(--color-btn-github); }
+.cv-btn { --btn-color: var(--color-btn-cv); }
 
 .btn:hover {
-  opacity: 0.85;
+  background-color: var(--btn-color);
+  color: #ffffff;
   transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.25);
+}
+
+.btn:hover .btn-label {
+  transform: translateX(-6px);
+  color: #ffffff;
+}
+
+.btn:hover i {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+}
+
+:host(.aboutme-sidebar) .btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
 }
 
 /* === ESTILOS CELULAR (Navbar) === */
@@ -120,6 +265,27 @@
   padding: 30px;
   height: 1000px ;
   margin-top: 100px;
+}
+
+/* Mobile layout when embedded inside About Me */
+:host(.aboutme-sidebar) .mobile-header {
+  position: static;
+  height: auto;
+  margin-top: 0;
+  padding: 20px 16px;
+  border-radius: 18px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+:host(.aboutme-sidebar) .profile-sectionmov {
+  margin-top: 0;
+}
+
+:host(.aboutme-sidebar) .contact-infomov,
+:host(.aboutme-sidebar) .action-buttonsmov {
+  margin-left: 0;
+  width: 100%;
 }
 
 .profile-sectionmov {
@@ -230,13 +396,51 @@
 
 /* Tablets */
 @media (max-width: 1024px) {
-  
+  .sidebar {
+    width: 320px;
+    height: 100vh;
+    margin-top: 0;
+    padding-left: 20px;
+    padding-top: 20px;
+  }
+
+  .profile-section {
+    margin-bottom: 18px;
+  }
+
+  .action-buttons {
+    width: 80%;
+  }
 
 }
 
 /* Mobile */
 @media (max-width: 768px) {
-  
+  .sidebar {
+    display: none;
+  }
+
+  .mobile-header {
+    position: static;
+    height: auto;
+    margin-top: 0;
+    padding: 20px 16px;
+  }
+
+  .profile-sectionmov {
+    margin-top: 0;
+    margin-bottom: 20px;
+  }
+
+  .contact-infomov {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .action-buttonsmov {
+    width: 70%;
+    margin: 0 auto;
+  }
 }
 
 
