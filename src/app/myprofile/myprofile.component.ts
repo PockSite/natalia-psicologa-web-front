@@ -120,8 +120,8 @@ export class MyprofileComponent implements OnInit, OnDestroy {
    * 💬 Abrir WhatsApp con número de contacto
    */
   openWhatsApp(): void {
-    const phoneNumber = '573017486316'; // Reemplaza con el número de Natalia
-    const message = 'Hola, me gustaría agendar una consulta';
+    const phoneNumber = '573182018778'; // Reemplaza con el número de Natalia
+    const message = 'Hola vi tu sitio web y me gustaría agendar una consulta contigo 🤗.';
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
   }
