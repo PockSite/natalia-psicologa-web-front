@@ -308,9 +308,42 @@
 
 /* === RESPONSIVE === */
 @media (max-width: 1024px) {
+  .grid-wrapper {
+    height: auto;
+    padding: 70px 28px;
+  }
+
+  .skills-content {
+    margin-left: 0;
+  }
+
+  .skills-section {
+    width: 100%;
+    max-width: 560px;
+  }
+
   .skills-grid-modern {
     grid-template-columns: 1fr;
-    gap: 20px;
+    gap: 26px;
+    justify-items: center;
+  }
+
+  .card-modern {
+    width: min(100%, 560px);
+    min-height: clamp(360px, 66vw, 460px);
+  }
+
+  .card-bg {
+    background-size: 100% 100%;
+    background-position: center;
+  }
+
+  .card-inner {
+    width: 78%;
+    margin: 0 auto;
+    padding: 20px 18px;
+    gap: 12px;
+    margin-right: 30px;
   }
 
   .card-2,
@@ -323,26 +356,69 @@
   .card-large {
     grid-column: 1;
     grid-row: auto;
-    min-height: 320px;
+    min-height: clamp(340px, 62vw, 430px);
   }
 
   .card-small {
     grid-column: 1;
-    min-height: 240px;
+    min-height: clamp(300px, 58vw, 390px);
+  }
+
+  .card-2 .card-inner {
+    justify-content: flex-start;
+    padding-top: 48%;
+    padding-left: 12%;
+    padding-right: 12%;
+    padding-bottom: 10%;
+  }
+
+  .card-3 .card-inner {
+    justify-content: flex-start;
+    padding-top: 50%;
+    padding-left: 12%;
+    padding-right: 12%;
+    padding-bottom: 12%;
+    transform: translate(-30px, 20px);
+  }
+
+  .card-4 .card-inner {
+    justify-content: flex-start;
+    padding-top: 50%;
+    padding-left: 12%;
+    padding-right: 12%;
+    padding-bottom: 12%;
+    transform: translate(-30px, 20px);
+  }
+
+  .card-3 .description {
+    max-width: 76%;
+  }
+
+  .card-4 .description {
+    max-width: 76%;
   }
 }
 
 @media (max-width: 768px) {
+  .grid-wrapper {
+    height: auto;
+    padding: 48px 16px;
+  }
+
+  .skills-content {
+    margin-left: 0;
+  }
+
   .wave-decoration {
-    top: 200px;
-    height: 520px;
+    top: -280px;
     width: 125vw;
     margin-left: -12.5vw;
+    height: 2000px;
   }
 
   .skills-grid-modern {
     grid-template-columns: 1fr;
-    gap: 20px;
+    gap: 24px;
   }
 
   .card-2,
@@ -352,24 +428,55 @@
     grid-row: auto;
   }
 
+  .card-modern {
+    width: min(100%, 460px);
+    min-height: clamp(300px, 96vw, 420px);
+  }
+
+  .card-inner {
+    width: 82%;
+    margin: 0 auto;
+    gap: 10px;
+    margin-right: 30px;
+  }
 
   .skills-section {
     margin-top: 50px;
+    max-width: 460px;
   }
-
-  .grid-wrapper {
-  height: 1200px;
-}
 
   .card-large {
     grid-column: 1;
     grid-row: auto;
-    min-height: 300px;
+    min-height: clamp(290px, 92vw, 390px);
   }
 
   .card-small {
     grid-column: 1;
-    min-height: 220px;
+    min-height: clamp(280px, 88vw, 360px);
+  }
+
+  .card-2 .card-inner {
+    padding-top: 50%;
+    padding-left: 11%;
+    padding-right: 11%;
+    padding-bottom: 8%;
+  }
+
+  .card-3 .card-inner {
+    padding-top: 50%;
+    padding-left: 20%;
+    padding-right: 11%;
+    padding-bottom: 10%;
+    transform: translate(-30px, 20px);
+  }
+
+  .card-4 .card-inner {
+    padding-top: 50%;
+    padding-left: 11%;
+    padding-right: 11%;
+    padding-bottom: 10%;
+    transform: translate(-30px, 20px);
   }
 
   .section-title2 {
@@ -383,13 +490,23 @@
 
   .description {
     font-size: 0.85rem;
+    max-width: 100%;
+  }
+
+  .card-3 .description {
+    max-width: 74%;
+  }
+
+  .card-4 .description {
+    max-width: 74%;
   }
 }
 
+
 @media (max-width: 320px) {
   .wave-decoration {
-    top: 200px;
-    height: 420px;
+    top: -180px;
+    height: 1600px;
   }
 
   .grid-wrapper {
@@ -402,7 +519,33 @@
   }
 
   .card-modern {
-    min-height: 200px;
+    min-height: 260px;
+  }
+
+  .card-inner {
+    width: 86%;
+    margin-right: 30px;
+  }
+
+  .card-2 .card-inner {
+    padding-top: 52%;
+    padding-left: 9%;
+    padding-right: 9%;
+    
+  }
+
+  .card-3 .card-inner {
+    padding-top: 50%;
+    padding-left: 20%;
+    padding-right: 9%;
+    transform: translate(-30px, 20px);
+  }
+
+  .card-4 .card-inner {
+    padding-top: 36%;
+    padding-left: 18%;
+    padding-right: 9%;
+    transform: translate(-30px, 20px);
   }
 
   .skill-icon {
@@ -415,5 +558,13 @@
 
   .description {
     font-size: 0.75rem;
+  }
+
+  .card-3 .description {
+    max-width: 70%;
+  }
+
+  .card-4 .description {
+    max-width: 70%;
   }
 }
