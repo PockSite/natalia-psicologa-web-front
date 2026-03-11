@@ -8,12 +8,12 @@ import { Component, HostListener, Input } from '@angular/core';
 export class HeaderComponent {
   @Input() forceSidebar: boolean = false; // nuevo input
 
-  isMobile: boolean = window.innerWidth <= 768;
+  isMobile: boolean = window.innerWidth <= 1024;
   menuOpen: boolean = false;
 
   @HostListener('window:resize')
   onResize() {
-    this.isMobile = window.innerWidth <= 768;
+    this.isMobile = window.innerWidth <= 1024;
     if (!this.isMobile) {
       this.menuOpen = false;
     }

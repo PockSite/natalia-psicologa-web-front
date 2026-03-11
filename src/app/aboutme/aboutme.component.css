@@ -206,6 +206,13 @@
 
 
 /* --- Responsive --- */
+@media (max-width: 1441px){
+  .about-container {
+    height: 110vh;
+  }
+
+}
+
 
 /* Tablets */
 @media (max-width: 1024px) {

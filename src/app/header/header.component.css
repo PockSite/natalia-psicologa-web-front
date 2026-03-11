@@ -228,8 +228,8 @@
 
 .contact-btn { --btn-color: var(--color-btn-contact); }
 .linkedin-btn { --btn-color: var(--color-btn-linkedin); }
-.github-btn { --btn-color: var(--color-btn-github); }
-.cv-btn { --btn-color: var(--color-btn-cv); }
+.whatsapp-btn { --btn-color: var(--color-btn-whatsapp); }
+.tiktok-btn { --btn-color: var(--color-btn-tiktok); }
 
 .btn:hover {
   background-color: var(--btn-color);
@@ -332,9 +332,11 @@
   display: flex;
   flex-direction: column;
   gap: 5px;
-  width: 80%;
+  width: 100%;
   text-align: center;
-  margin-left: 25px;
+  margin: 0 auto;
+  padding: 0 20px;
+  box-sizing: border-box;
 }
 
 
@@ -412,6 +414,7 @@
     width: 80%;
   }
 
+
 }
 
 /* Mobile */
@@ -437,10 +440,6 @@
     width: 100%;
   }
 
-  .action-buttonsmov {
-    width: 70%;
-    margin: 0 auto;
-  }
 }
 
 
