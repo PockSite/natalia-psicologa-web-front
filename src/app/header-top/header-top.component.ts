@@ -9,7 +9,7 @@ export class HeaderTopComponent implements OnInit {
 
   navItems = [
     { name: 'Portada', url: '#', icon: 'fas fa-home' },
-    { name: 'Servicios', url: '#servicios', icon: 'fas fa-user' },
+    { name: 'Identidad', url: '#servicios', icon: 'fas fa-user' },
     { name: 'Sobre mi', url: '#sobre-mi', icon: 'fas fa-graduation-cap' },
     { name: 'Testimonios', url: '#cursos', icon: 'fas fa-briefcase' },
     { name: 'Recursos', url: 'proyectos', icon: 'fas fa-blog' },
