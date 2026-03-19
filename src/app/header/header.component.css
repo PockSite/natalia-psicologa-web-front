@@ -216,6 +216,16 @@
   transition: transform 0.4s ease, color 0.4s ease;
 }
 
+.btn .btn-labelm {
+  display: inline-block;
+  position: relative;
+  left: 0;
+  transition: transform 0.4s ease, color 0.4s ease;
+  font-weight: 50px;
+}
+
+
+
 .btn i {
   position: absolute;
   top: 50%;
@@ -251,6 +261,25 @@
 :host(.aboutme-sidebar) .btn:hover {
   transform: translateY(-3px);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .btn {
+    background-color: var(--btn-color);
+    color: #ffffff;
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.25);
+  }
+
+  .btn .btn-label,
+  .btn .btn-labelm {
+    transform: translateX(-6px);
+    color: #ffffff;
+  }
+
+  .btn i {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0);
+  }
 }
 
 /* === ESTILOS CELULAR (Navbar) === */
@@ -438,6 +467,15 @@
   .contact-infomov {
     margin-left: 0;
     width: 100%;
+  }
+
+  
+
+  .action-buttonsmov .btn {
+    width: min(86%, 600px);
+    margin: 0 auto;
+    padding: 8px 14px;
+    transform: translateX(-20px);
   }
 
 }
