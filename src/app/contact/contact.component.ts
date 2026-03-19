@@ -7,6 +7,32 @@ import { Component } from '@angular/core';
 })
 export class ContactComponent {
 
+  form = {
+    name: '',
+    email: '',
+    subject: '',
+    message: ''
+  };
+
+  enviarWhatsApp() {
+
+    const telefono = '573104671284'; // sin espacios ni +
+
+    const mensaje = `
+Hola, soy ${this.form.name}
+
+Correo: ${this.form.email}
+Asunto: ${this.form.subject}
+
+Mensaje:
+${this.form.message}
+    `;
+
+    const url = `https://wa.me/${telefono}?text=${encodeURIComponent(mensaje)}`;
+
+    window.open(url, '_blank');
+  }
+
   // 🌟 Contacto
 
   contactMethods = [
@@ -18,7 +44,7 @@ export class ContactComponent {
 
   socialLinks = [
     { icon: 'fab fa-linkedin', url: 'https://www.linkedin.com/in/natalia-güechá-nieto-91a636244/' },
-    { icon: 'fab fa-google', url: 'mailto:psicologanataliagnieto@gmail.com' },
+    { icon: 'fas fa-at', url: 'mailto:psicologanataliagnieto@gmail.com' },
     { icon: 'fab fa-instagram', url: 'https://www.instagram.com/psicologa.nataliaguecha/' },
     { icon: 'fab fa-tiktok', url: 'https://www.tiktok.com/@psicologa.nataliaguecha' }
   ];
