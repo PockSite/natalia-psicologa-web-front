@@ -24,19 +24,23 @@
     </div>
 
     <div class="contact-form">
-      <form method="POST">
+      <form (ngSubmit)="enviarWhatsApp()">
         <label class="form-group">
-          <input type="text" name="name" placeholder="Tu nombre" required>
+          <input type="text" [(ngModel)]="form.name" name="name" placeholder="Tu nombre" required>
         </label>
+
         <label class="form-group">
-          <input type="email" name="email" placeholder="Tu email" required>
+          <input type="email" [(ngModel)]="form.email" name="email" placeholder="Tu email" required>
         </label>
+
         <label class="form-group">
-          <input type="text" name="subject" placeholder="Asunto" required>
+          <input type="text" [(ngModel)]="form.subject" name="subject" placeholder="Asunto" required>
         </label>
+
         <label class="form-group">
-          <textarea name="message" placeholder="Tu mensaje" rows="5" required></textarea>
+          <textarea [(ngModel)]="form.message" name="message" placeholder="Tu mensaje" rows="5" required></textarea>
         </label>
+
         <button type="submit" class="btn-submit">
           <i class="fas fa-paper-plane"></i>
           Enviar Mensaje
