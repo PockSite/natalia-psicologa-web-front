@@ -5,6 +5,9 @@
   <div class="projects-container">
     <!-- Detalle del proyecto -->
     <div class="project-detail" *ngIf="selectedProject" [@projectTransition]="selectedProject">
+      <div class="type-badge big" [ngClass]="selectedProject.type">
+        <i class="fas" [ngClass]="selectedProject.type === 'producto' ? 'fa-shopping-bag' : 'fa-calendar-check'"></i>
+      </div>
       <img [src]="selectedProject.image" alt="Detalle proyecto">
       <div class="detail-content">
         <h3>{{ selectedProject.title }}</h3>
@@ -12,12 +15,21 @@
         <div class="project-tags">
           <span class="tag" *ngFor="let feature of selectedProject.features">{{ feature }}</span>
         </div>
+
+        <div class="project-tags" *ngIf="selectedProject.price">
+          <span class="tag price-tag">Precio: {{ selectedProject.price }}</span>
+        </div>
         <div class="project-links">
           <a [href]="selectedProject.repoUrl" target="_blank" class="project-link">
             <i class="fas fa-info-circle"></i> Mas información
           </a>
-          <a [href]="selectedProject.demoUrl" target="_blank" class="project-link">
-            <i class="fas fa-external-link-alt"></i> Comprar curso
+          <a [href]="getWhatsappLink(selectedProject)" target="_blank" class="project-link">
+
+            <i class="fas" [ngClass]="selectedProject.type === 'producto' ? 'fa-shopping-cart' : 'fa-calendar-check'">
+            </i>
+
+            {{ selectedProject.type === 'producto' ? 'Comprar ahora' : 'Agendar sesión' }}
+
           </a>
         </div>
       </div>
@@ -27,8 +39,15 @@
     <div class="projects-list">
       <div class="project-card" *ngFor="let project of projects; let i = index" (click)="goToProjectSection(project)"
         [class.active]="selectedProject === project" [style.animation-delay]="i * 0.1 + 's'">
+
         <div class="project-image">
           <img [src]="project.image" alt="proyecto">
+
+          <!-- ICONO -->
+          <div class="type-badge" [ngClass]="project.type">
+            <i class="fas" [ngClass]="project.type === 'producto' ? 'fa-shopping-bag' : 'fa-calendar-check'"></i>
+          </div>
+
           <div class="overlay">
             <h3>{{ project.title }}</h3>
             <p>{{ project.short }}</p>

@@ -1,10 +1,8 @@
 .footer {
   background: var(--color-main);
   color: var(--color-text2);
-  padding: 40px 20px 20px 20px;
-  margin-top: 0px;
+  padding: 1px 20px 20px 20px;
 }
-
 
 /* Línea inferior */
 .footer-bottom {
@@ -13,5 +11,24 @@
   padding-top: 15px;
   margin-top: 20px;
   font-size: 13px;
-  color: var(--color-text2);
+  color: var(--color-text-2);
+  display: flex;              /* cambiar inline-flex */
+  justify-content: center;    /* centra horizontalmente */
+}
+
+.footer-bottom p {
+  display: flex;
+  align-items: flex-end;      /* alinea texto con base del logo */
+  gap: 8px;
+  margin: 0;
+  color: var(--color-text-2);
+}
+
+.footer-logo {
+  height: 40px;
+}
+
+.footer-logo-link {
+  text-decoration: none;
+  color: inherit;
 }
