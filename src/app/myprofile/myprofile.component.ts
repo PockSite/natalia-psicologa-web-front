@@ -121,7 +121,7 @@ export class MyprofileComponent implements OnInit, OnDestroy {
    */
   openWhatsApp(): void {
     const phoneNumber = '573104671284'; // Reemplaza con el número de Natalia
-    const message = 'Hola vi tu sitio web y me gustaría agendar una consulta contigo 🤗.';
+    const message = 'Hola vi tu sitio web y me gustaría agendar una consulta contigo.';
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
   }

@@ -12,7 +12,7 @@ export class HeaderTopComponent implements OnInit {
     { name: 'Identidad', url: '#servicios', icon: 'fas fa-user' },
     { name: 'Sobre mi', url: '#sobre-mi', icon: 'fas fa-graduation-cap' },
     { name: 'Testimonios', url: '#cursos', icon: 'fas fa-briefcase' },
-    { name: 'Recursos', url: 'proyectos', icon: 'fas fa-blog' },
+    { name: 'Servicios', url: 'proyectos', icon: 'fas fa-blog' },
     { name: 'Contacto', url: '#contacto', icon: 'fas fa-envelope' }
   ];
 
