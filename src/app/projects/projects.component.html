@@ -23,9 +23,11 @@
         </div>
         
         <div class="project-links">
+          <!--
           <a [href]="selectedProject.repoUrl" target="_blank" class="project-link">
             <i class="fas fa-info-circle"></i> Mas información
           </a>
+        -->
           <a [href]="getWhatsappLink(selectedProject)" target="_blank" class="project-link">
             <i class="fas" [ngClass]="selectedProject.type === 'producto' ? 'fa-shopping-cart' : 'fa-calendar-check'"></i>
             {{ selectedProject.type === 'producto' ? 'Comprar ahora' : 'Agendar sesión' }}
