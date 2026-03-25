@@ -88,6 +88,7 @@ export class ProjectsComponent implements AfterViewInit {
       'Herramientas concretas de estabilización emocional para el contexto migrante',
       'Herramientas concretas de estabilización emocional para el contexto migrante',
     ],
+    price: "$40",
     repoUrl: '#',
     demoUrl: 'https://wa.me/573001234567'
   },
