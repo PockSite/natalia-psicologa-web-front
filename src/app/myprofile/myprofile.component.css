@@ -110,15 +110,15 @@
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  -webkit-text-stroke: 1px var(--color-second);
-  text-shadow: 1px 0 0 var(--color-second), -1px 0 0 var(--color-second), 0 1px 0 var(--color-second), 0 -1px 0 var(--color-second);
+  -webkit-text-stroke: 0.2px var(--color-text2);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
   font-weight: 900;
   display: inline-block;
   animation: gradientShift 6s linear infinite;
   transition: opacity 0.8s ease, transform 0.8s ease;
   opacity: 1;
   position: relative;
-  font-family: var(--font-title);
+  font-family: var(--font-subtitle);
 }
 
 .fade-out {
@@ -279,7 +279,7 @@
   }
 
   .intro-text {
-    font-size: 1.4rem;
+    font-size: 1.8rem;
     line-height: 1.3;
     padding: 0 10px;
   }
@@ -291,7 +291,7 @@
   }
 
   .intro-text {
-    font-size: 1.1rem;
+    font-size: 1.6rem;
   }
   .overlay-dark {
     background-color: rgba(0, 0, 0, 0.55);
