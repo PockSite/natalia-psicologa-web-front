@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ProductService } from '../services/product.service';
-import { Appointment, Day, Product, Psychologist } from '../models/product.model';
+import { Product } from '../models/product.model';
+import { Psychologist } from '../models/psychologist.model';
+import { Appointment, Day } from '../models/agenda.model';
 
 interface CalendarCell {
   date: Date;

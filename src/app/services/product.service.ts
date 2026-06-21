@@ -2,7 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
-import { Agenda, Appointment, Day, Product, Psychologist } from '../models/product.model';
+import { Product } from '../models/product.model';
+import { Psychologist } from '../models/psychologist.model';
+import { Agenda, Appointment, Day } from '../models/agenda.model';
 
 /**
  * Servicio de productos / agenda.
