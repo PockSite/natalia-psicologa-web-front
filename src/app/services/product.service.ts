@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { Product } from '../models/product.model';
+import { ProductType } from '../models/product-type.model';
 import { Psychologist } from '../models/psychologist.model';
 import { Agenda, Appointment, Day } from '../models/agenda.model';
 
@@ -20,12 +21,11 @@ export class ProductService {
   /** TODO: mover a environment.ts cuando se configure el backend */
   private readonly apiUrl = 'http://localhost:3000/api';
 
-  /**
-   * Psicólogas registradas. `productIds` materializa la agregación
-   * psychologist ◇── 0..* product del diagrama de clases: para un servicio,
-   * toda psicóloga que lo incluya puede atenderlo (cada una con su agenda);
-   * los productos digitales solo los tiene su autora.
-   */
+  private readonly productTypes: Record<string, ProductType> = {
+    servicio: { id: 'type-servicio', name: 'servicio' },
+    producto: { id: 'type-producto', name: 'producto' },
+  };
+
   private readonly psychologists: Psychologist[] = [
     {
       id: 'psy-natalia',
@@ -33,13 +33,6 @@ export class ProductService {
       photo: 'assets/images/fotografia1.jpeg',
       headline: 'Psicóloga clínica',
       yearsExperience: 7,
-      productIds: [
-        'terapia-individual',
-        'terapia-pareja',
-        'terapia-migrantes',
-        'plan-crisis-emocional',
-        'manual-noche-dificil'
-      ]
     },
     {
       id: 'psy-sofia',
@@ -47,19 +40,14 @@ export class ProductService {
       photo: 'assets/images/fotografia2.jpeg',
       headline: 'Psicóloga clínica',
       yearsExperience: 5,
-      productIds: [
-        'terapia-individual',
-        'terapia-migrantes',
-        'duelo-migratorio'
-      ]
     }
   ];
 
   private readonly products: Product[] = [
     {
       id: 'terapia-individual',
-      type: 'servicio',
       psychologistId: 'psy-natalia',
+      type: this.productTypes['servicio'],
       image: 'https://images.unsplash.com/photo-1607746882042-944635dfe10e?w=600&h=400&fit=crop',
       name: 'Terapia individual - Consulta unitaria virtual',
       short: 'Sesión individual para crisis emocionales, decisiones importantes o procesos quincenales.',
@@ -80,8 +68,8 @@ export class ProductService {
     },
     {
       id: 'terapia-pareja',
-      type: 'servicio',
       psychologistId: 'psy-natalia',
+      type: this.productTypes['servicio'],
       image: 'https://images.unsplash.com/photo-1573497491208-6b1acb260507?w=600&h=400&fit=crop',
       name: 'Terapia de pareja - Consulta unitaria virtual',
       short: 'Sesión profesional para resolver conflictos, crisis de comunicación o rupturas de confianza.',
@@ -99,8 +87,8 @@ export class ProductService {
     },
     {
       id: 'terapia-migrantes',
-      type: 'servicio',
       psychologistId: 'psy-natalia',
+      type: this.productTypes['servicio'],
       image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=600&h=400&fit=crop',
       name: 'Terapia para migrantes individual - Sesión unitaria virtual',
       short: 'Sesión especializada para latinos viviendo en el exterior que enfrentan soledad o ansiedad.',
@@ -123,8 +111,8 @@ export class ProductService {
     },
     {
       id: 'plan-crisis-emocional',
-      type: 'producto',
       psychologistId: 'psy-natalia',
+      type: this.productTypes['producto'],
       image: 'https://images.unsplash.com/photo-1596495578065-6e0763fa1178?w=600&h=400&fit=crop',
       name: 'De 0 a 10 en segundos: tu plan personal para frenar una crisis emocional',
       short: 'Workbook práctico para intervenir antes de explotar emocionalmente.',
@@ -144,8 +132,8 @@ export class ProductService {
     },
     {
       id: 'manual-noche-dificil',
-      type: 'producto',
       psychologistId: 'psy-natalia',
+      type: this.productTypes['producto'],
       image: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=600&h=400&fit=crop',
       name: 'Cuando son las 2am y la cabeza no para: Manual de la noche difícil',
       short: 'Guía práctica para calmar la ansiedad nocturna paso a paso.',
@@ -166,8 +154,8 @@ export class ProductService {
     },
     {
       id: 'duelo-migratorio',
-      type: 'producto',
-      psychologistId: 'psy-sofia',
+      psychologistId: 'psy-natalia',
+      type: this.productTypes['producto'],
       image: 'https://images.unsplash.com/photo-1493836512294-502baa1986e2?w=600&h=400&fit=crop',
       name: 'Todo lo que nadie te dijo que ibas a sentir cuando te fuiste: Duelo migratorio',
       short: 'Ebook para comprender, nombrar y procesar el duelo migratorio.',
@@ -214,19 +202,12 @@ export class ProductService {
     return of(this.psychologists.find(p => p.id === id)).pipe(delay(100));
   }
 
-  /**
-   * Psicólogas que ofrecen un producto / servicio.
-   * Para un servicio puede devolver varias (cada una con su agenda);
-   * para un producto digital devuelve únicamente a su autora.
-   */
   getPsychologistsByProduct(productId: string): Observable<Psychologist[]> {
     // return this.http.get<Psychologist[]>(`${this.apiUrl}/products/${productId}/psychologists`);
-    // La dueña (product.psychologistId) siempre se incluye, aunque el dato
-    // no esté replicado en su `productIds`, para que la autora nunca se pierda.
-    const ownerId = this.products.find(p => p.id === productId)?.psychologistId;
-    return of(this.psychologists.filter(p =>
-      p.productIds.includes(productId) || p.id === ownerId
-    )).pipe(delay(100));
+    const product = this.products.find(p => p.id === productId);
+    if (!product) return of([]);
+    const psychologist = this.psychologists.find(p => p.id === product.psychologistId);
+    return of(psychologist ? [psychologist] : []).pipe(delay(100));
   }
 
   /** Agenda de disponibilidad de una psicóloga (días y citas). UML: psychologist 1 ── 1 agenda */

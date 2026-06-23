@@ -1,10 +1,10 @@
-export type ProductType = 'producto' | 'servicio';
+import { ProductType } from './product-type.model';
 
 export interface Product {
   id: string;
+  psychologistId: string;
   name: string;
   price: number;
-  psychologistId: string;
   type: ProductType;
   image: string;
   short: string;

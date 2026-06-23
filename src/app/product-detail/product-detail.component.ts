@@ -79,7 +79,7 @@ export class ProductDetailComponent implements OnInit {
   }
 
   get isService(): boolean {
-    return this.product?.type === 'servicio';
+    return this.product?.type.name === 'servicio';
   }
 
   get monthLabel(): string {
@@ -101,10 +101,9 @@ export class ProductDetailComponent implements OnInit {
     this.productService.getPsychologistsByProduct(product.id).subscribe(psychologists => {
       this.availablePsychologists = psychologists;
       // Por defecto se selecciona la dueña / creadora del producto
-      this.selectedPsychologist =
-        psychologists.find(p => p.id === product.psychologistId) ?? psychologists[0];
+      this.selectedPsychologist = psychologists[0];
 
-      if (product.type === 'servicio' && this.selectedPsychologist) {
+      if (product.type.name === 'servicio' && this.selectedPsychologist) {
         this.loadAgenda(this.selectedPsychologist.id);
       }
     });
