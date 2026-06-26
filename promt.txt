@@ -1,0 +1,37 @@
+Quiero que me ayudes con la implementación y diseño (ui y ux), este desarrollo lo hare en el siguiente componente @src/app/product-detail/ .
+Este componente corresponde al detalle del producto escogido en el componente @src/app/projects/projects.component.html con el boton (este boton por el momento esta gestionando un redireccionamiento al whatsapp de la psicologa):
+        <!-- Acción -->
+        <div class="detail-action">
+          <a [href]="getWhatsappLink(selectedProject)" target="_blank" class="detail-btn">
+            <i class="fas" [ngClass]="selectedProject.type === 'producto' ? 'fa-shopping-cart' : 'fa-calendar-check'"></i>
+            {{ selectedProject.type === 'producto' ? 'Comprar ahora' : 'Agendar sesión' }}
+          </a>
+        </div>
+//
+
+La idea es que al presionar el boton indicado este no realize el redireccionamiento a whatsapp, sino que lo redirija al nuevo componente (product-detail) y muestre toda la información del producto correspondiente. Te muestro un implementacion que puedes usar como referencia para hacer esta conexion:
+
+.html:
+ <div class="card-actions">
+              <a class="btn-buy" href="#" (click)="viewPropertyDetail(p, $event)">
+                Ver detalle
+              </a>
+              <button (click)="enviarWhatsApp(p)" class="btn-secondary" type="button">
+                <i class="fab fa-whatsapp"></i>
+                Preguntar por esta propiedad
+              </button>
+            </div>
+//
+.ts:
+ // Navegar a la vista de detalles de la propiedad
+  public viewPropertyDetail(property: Property, event: Event): void {
+    event.preventDefault();
+    this.router.navigate(['/propiedad', property.codpro]);
+  }
+//
+Con esto tendriamos un flujo sencillo, seguro y dinamico para ver los detalles del producto; este producto puede ser un producto digital o una sesión virtual.
+A continuación te adjunto la maquetación de como se deberia ver esta pantalla de detalle para cada uno de los productos, ten en cuenta que esta es una referencia de estructura y parte del diseño que se quiere tener, los atributos que se detallan no son los definitivos.
+Por el momento los productos se encuentran quemados en el .ts; sin embargo, lo ideal sera crear un controlador que consuma de una API (Backend), que devolvera estos productos con sus respectivos atributos. Por el momento quiero que sigas dejando los productos quemados para poder validar el nuevo componente de detalles, pero de una vez realiza la implementacion del controlador que te indique y asi estar ya preparados para el consumo a la Api.
+A continuacion te muestro el diagrama de clase en donde se indican los atributos y la forma de llegar a cada uno de ellos.
+Quiero que con las referencias que te mostre implementes una interfaz estetica, llamativa y dinamica (pequeños efectos de trasiciones cuando se llegue a la vista), ubica la foto del producto en el espacio correspondiente (donde dice "foto" en la imagen) y en el espacio de formulario diseña un formulario moderno en que se agreguen datos del comprador (nombre, apellido, numero celular, correo, sexo, edad, entre otros).
+Utiliza la skill de /frontend-design para mejorar detalles de usabilidad.

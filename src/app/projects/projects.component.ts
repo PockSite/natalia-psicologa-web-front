@@ -1,6 +1,8 @@
-import { Component, AfterViewInit, ElementRef } from '@angular/core';
+import { Component, AfterViewInit, ElementRef, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { trigger, transition, style, animate, query } from '@angular/animations';
-import { CommonModule } from '@angular/common';
+import { ProductService } from '../services/product.service';
+import { Product } from '../models/product.model';
 
 @Component({
   selector: 'app-projects',
@@ -144,11 +146,27 @@ export class ProjectsComponent implements AfterViewInit {
     }
   ];
 
-  selectedProject: any = this.projects[0];
+  constructor(
+    private el: ElementRef,
+    private router: Router,
+    private productService: ProductService
+  ) { }
 
-  constructor(private el: ElementRef) { }
+  ngOnInit(): void {
+    this.productService.getProducts().subscribe(products => {
+      this.projects = products;
+      this.selectedProject = products[0] ?? null;
+      // Las cards se renderizan después de la respuesta del servicio,
+      // por eso el observer se conecta en el siguiente ciclo.
+      setTimeout(() => this.observeCards());
+    });
+  }
 
   ngAfterViewInit(): void {
+    this.observeCards();
+  }
+
+  private observeCards(): void {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -166,11 +184,11 @@ export class ProjectsComponent implements AfterViewInit {
     sections.forEach((section: Element) => observer.observe(section));
   }
 
-  selectProject(project: any): void {
+  selectProject(project: Product): void {
     this.selectedProject = project;
   }
 
-  goToProjectSection(project: any): void {
+  goToProjectSection(project: Product): void {
     this.selectedProject = project;
     const section = document.getElementById('titulo-proyecto');
     if (section) {
@@ -178,8 +196,14 @@ export class ProjectsComponent implements AfterViewInit {
     }
   }
 
-  getWhatsappLink(project: any): string {
-    const message = `Hola, me interesa ${project.title}`;
+  // Navegar a la vista de detalle del producto / servicio
+  viewProductDetail(product: Product, event: Event): void {
+    event.preventDefault();
+    this.router.navigate(['/producto', product.id]);
+  }
+
+  getWhatsappLink(project: Product): string {
+    const message = `Hola, me interesa ${project.name}`;
     const encoded = encodeURIComponent(message);
     return `https://wa.me/573104671284?text=${encoded}`;
   }

@@ -1,0 +1,341 @@
+<section class="pd-page">
+
+  <!-- Fondo decorativo -->
+  <div class="pd-blob pd-blob-one" aria-hidden="true"></div>
+  <div class="pd-blob pd-blob-two" aria-hidden="true"></div>
+
+  <div class="pd-container">
+
+    <!-- Volver -->
+    <button type="button" class="pd-back" (click)="goBack()">
+      <i class="fas fa-arrow-left"></i>
+      Volver a servicios
+    </button>
+
+    <!-- Cargando -->
+    <div class="pd-loading" *ngIf="loading">
+      <span class="pd-spinner"></span>
+      <p>Cargando detalle...</p>
+    </div>
+
+    <!-- Producto no encontrado -->
+    <div class="pd-notfound" *ngIf="!loading && notFound">
+      <i class="fas fa-heart-crack"></i>
+      <h2>No encontramos este producto</h2>
+      <p>Es posible que el enlace haya cambiado. Vuelve al catálogo para ver todos los servicios disponibles.</p>
+      <button type="button" class="pd-cta" (click)="goBack()">
+        <span>Ver servicios</span>
+        <span class="pd-cta-arrow"><i class="fas fa-arrow-right"></i></span>
+      </button>
+    </div>
+
+    <!-- Detalle -->
+    <div class="pd-grid" *ngIf="!loading && product">
+
+      <!-- ════════ FICHA DEL PRODUCTO / SESIÓN ════════ -->
+      <aside class="pd-ficha rise d1">
+
+        <!-- Foto + precio -->
+        <div class="pd-photo-wrap">
+          <img class="pd-photo" [src]="product.image" [alt]="product.name">
+
+          <span class="pd-type-chip" [ngClass]="product.type">
+            <i class="fas" [ngClass]="isService ? 'fa-calendar-check' : 'fa-shopping-bag'"></i>
+            {{ isService ? 'Sesión virtual' : 'Producto digital' }}
+          </span>
+
+          <span class="pd-price-tag">
+            <span class="pd-price-currency">$</span>{{ product.price }}
+            <small *ngIf="isService">/ sesión</small>
+          </span>
+        </div>
+
+        <!-- Badges -->
+        <div class="pd-badges">
+          <span class="pd-badge" *ngIf="product.rating">
+            <i class="fas fa-thumbs-up"></i> Mejor evaluado
+          </span>
+          <span class="pd-badge" *ngIf="isService">
+            <i class="fas fa-video"></i> 100% virtual
+          </span>
+          <span class="pd-badge">
+            <i class="fas fa-globe-americas"></i> {{ product.language || 'Español' }}
+          </span>
+        </div>
+
+        <h1 class="pd-title">{{ product.name }}</h1>
+        <p class="pd-short">{{ product.short }}</p>
+
+        <!-- ── Profesional que atiende (solo sesiones) ── -->
+        <div class="pd-psy-select" *ngIf="isService && availablePsychologists.length">
+          <p class="pd-psy-select-label">
+            <i class="fas fa-user-doctor"></i> Tu sesión será con
+          </p>
+          <div class="pd-psy-options">
+            <button type="button" *ngFor="let psy of availablePsychologists"
+              class="pd-psy-option"
+              [class.selected]="selectedPsychologist?.id === psy.id"
+              (click)="selectPsychologist(psy)">
+              <img [src]="psy.photo" [alt]="psy.fullName">
+              <span class="pd-psy-option-info">
+                <span class="pd-psy-option-name">{{ psy.fullName }}</span>
+                <span class="pd-psy-option-sub">
+                  {{ psy.headline }}
+                  <ng-container *ngIf="psy.yearsExperience">
+                    · {{ psy.yearsExperience }} años
+                  </ng-container>
+                </span>
+              </span>
+              <i class="fas fa-circle-check pd-psy-option-check"></i>
+            </button>
+          </div>
+          <p class="pd-psy-select-hint" *ngIf="availablePsychologists.length > 1">
+            Puedes cambiar de profesional: cada una tiene su propia disponibilidad.
+          </p>
+        </div>
+
+        <!-- ── Calendario (solo sesiones) ── -->
+        <div class="pd-calendar" *ngIf="isService">
+
+          <!-- Cargando la agenda de la profesional seleccionada -->
+          <div class="pd-cal-loading" *ngIf="agendaLoading">
+            <span class="pd-spinner small"></span>
+            <span>Cargando disponibilidad...</span>
+          </div>
+
+          <ng-container *ngIf="!agendaLoading">
+          <div class="pd-cal-header">
+            <button type="button" class="pd-cal-nav" (click)="changeMonth(-1)"
+              [disabled]="!canGoPrevMonth" aria-label="Mes anterior">
+              <i class="fas fa-chevron-left"></i>
+            </button>
+            <span class="pd-cal-month">{{ monthLabel }}</span>
+            <button type="button" class="pd-cal-nav" (click)="changeMonth(1)"
+              [disabled]="!canGoNextMonth" aria-label="Mes siguiente">
+              <i class="fas fa-chevron-right"></i>
+            </button>
+          </div>
+
+          <div class="pd-cal-grid">
+            <span class="pd-cal-weekday" *ngFor="let w of weekdays">{{ w }}</span>
+
+            <button type="button" *ngFor="let cell of calendarCells"
+              class="pd-cal-cell"
+              [class.out]="!cell.inMonth"
+              [class.today]="isToday(cell)"
+              [class.available]="dayHasAvailability(cell.day)"
+              [class.selected]="isSelectedDay(cell)"
+              [disabled]="!dayHasAvailability(cell.day)"
+              (click)="selectDay(cell)">
+              {{ cell.date.getDate() }}
+            </button>
+          </div>
+
+          <!-- Horarios del día seleccionado -->
+          <div class="pd-slots" *ngIf="selectedDay">
+            <p class="pd-slots-label">
+              <i class="far fa-clock"></i> Horarios disponibles
+            </p>
+            <div class="pd-slots-grid">
+              <button type="button" *ngFor="let slot of selectedDay.appointments"
+                class="pd-slot"
+                [class.selected]="selectedAppointment?.id === slot.id"
+                [disabled]="!slot.available"
+                (click)="selectAppointment(slot)">
+                {{ slot.startTime }}
+              </button>
+            </div>
+          </div>
+
+          <p class="pd-slots-hint" *ngIf="!selectedDay">
+            Selecciona un día disponible para ver los horarios.
+          </p>
+          </ng-container>
+        </div>
+
+        <!-- ── Features ── -->
+        <ul class="pd-features">
+          <li *ngFor="let feature of product.features">
+            <span class="pd-feature-icon"><i class="fas fa-check"></i></span>
+            <span>{{ feature }}</span>
+          </li>
+        </ul>
+
+        <!-- Meta -->
+        <div class="pd-meta">
+          <p *ngIf="product.format"><strong>Formato:</strong> {{ product.format }}</p>
+          <p *ngIf="product.category"><strong>Categoría:</strong> {{ product.category }}</p>
+          <p *ngIf="product.rating"><i class="fas fa-star"></i> {{ product.rating }}</p>
+        </div>
+
+        <!-- Autora (solo productos digitales: el producto es único de su creadora) -->
+        <div class="pd-psy" *ngIf="!isService && selectedPsychologist">
+          <img class="pd-psy-photo" [src]="selectedPsychologist.photo" [alt]="selectedPsychologist.fullName">
+          <div class="pd-psy-info">
+            <span class="pd-psy-name">{{ selectedPsychologist.fullName }}</span>
+            <span class="pd-psy-sub">
+              {{ selectedPsychologist.headline }}
+              <ng-container *ngIf="selectedPsychologist.yearsExperience">
+                · {{ selectedPsychologist.yearsExperience }} años de experiencia
+              </ng-container>
+            </span>
+          </div>
+        </div>
+
+        <p class="pd-footnote" *ngIf="!isService">
+          Al comprar el producto, recibirás las instrucciones de acceso por email.
+        </p>
+        <p class="pd-footnote" *ngIf="isService">
+          Recibirás el enlace de la videollamada por email y WhatsApp antes de tu sesión.
+        </p>
+      </aside>
+
+      <!-- ════════ FORMULARIO ════════ -->
+      <main class="pd-form-panel rise d2">
+
+        <ng-container *ngIf="!submitted; else successCard">
+          <h2 class="pd-form-title">Completa tus datos</h2>
+          <p class="pd-form-sub">
+            {{ isService
+              ? 'Con estos datos confirmamos tu cita y te enviamos el enlace de la sesión.'
+              : 'Con estos datos te enviamos el acceso a tu producto digital.' }}
+          </p>
+
+          <form class="pd-form" [formGroup]="buyerForm" (ngSubmit)="onSubmit()" novalidate>
+
+            <div class="pd-form-grid">
+
+              <!-- Nombre -->
+              <div class="pd-field" [class.has-error]="invalid('nombre')">
+                <label for="pd-nombre">Nombre</label>
+                <input id="pd-nombre" type="text" formControlName="nombre"
+                  placeholder="Tu nombre" autocomplete="given-name">
+                <small class="pd-error" *ngIf="invalid('nombre')">
+                  Ingresa tu nombre (mínimo 2 letras).
+                </small>
+              </div>
+
+              <!-- Apellido -->
+              <div class="pd-field" [class.has-error]="invalid('apellido')">
+                <label for="pd-apellido">Apellido</label>
+                <input id="pd-apellido" type="text" formControlName="apellido"
+                  placeholder="Tu apellido" autocomplete="family-name">
+                <small class="pd-error" *ngIf="invalid('apellido')">
+                  Ingresa tu apellido (mínimo 2 letras).
+                </small>
+              </div>
+
+              <!-- Celular -->
+              <div class="pd-field" [class.has-error]="invalid('celular')">
+                <label for="pd-celular">Número de celular</label>
+                <input id="pd-celular" type="tel" formControlName="celular"
+                  placeholder="+57 300 000 0000" autocomplete="tel">
+                <small class="pd-error" *ngIf="invalid('celular')">
+                  Ingresa un número de celular válido (7 a 15 dígitos).
+                </small>
+              </div>
+
+              <!-- Correo -->
+              <div class="pd-field" [class.has-error]="invalid('correo')">
+                <label for="pd-correo">Correo electrónico</label>
+                <input id="pd-correo" type="email" formControlName="correo"
+                  placeholder="tucorreo@ejemplo.com" autocomplete="email">
+                <small class="pd-error" *ngIf="invalid('correo')">
+                  Ingresa un correo electrónico válido.
+                </small>
+              </div>
+
+              <!-- Sexo -->
+              <div class="pd-field pd-field-wide" [class.has-error]="invalid('sexo')">
+                <label>Sexo</label>
+                <div class="pd-pills" role="radiogroup" aria-label="Sexo">
+                  <label class="pd-pill">
+                    <input type="radio" formControlName="sexo" value="femenino">
+                    <span>Femenino</span>
+                  </label>
+                  <label class="pd-pill">
+                    <input type="radio" formControlName="sexo" value="masculino">
+                    <span>Masculino</span>
+                  </label>
+                  <label class="pd-pill">
+                    <input type="radio" formControlName="sexo" value="otro">
+                    <span>Otro</span>
+                  </label>
+                  <label class="pd-pill">
+                    <input type="radio" formControlName="sexo" value="prefiero-no-decir">
+                    <span>Prefiero no decir</span>
+                  </label>
+                </div>
+                <small class="pd-error" *ngIf="invalid('sexo')">
+                  Selecciona una opción.
+                </small>
+              </div>
+
+              <!-- Edad -->
+              <div class="pd-field" [class.has-error]="invalid('edad')">
+                <label for="pd-edad">Edad</label>
+                <input id="pd-edad" type="number" formControlName="edad"
+                  placeholder="Ej: 28" min="14" max="99">
+                <small class="pd-error" *ngIf="invalid('edad')">
+                  Ingresa una edad entre 14 y 99 años.
+                </small>
+              </div>
+
+            </div>
+
+            <!-- Resumen de cita seleccionada -->
+            <div class="pd-summary" *ngIf="isService && selectedSlotLabel">
+              <i class="fas fa-calendar-check"></i>
+              <span>Tu cita: <strong>{{ selectedSlotLabel }}</strong></span>
+            </div>
+
+            <p class="pd-schedule-error" *ngIf="scheduleError">
+              <i class="fas fa-circle-exclamation"></i>
+              Selecciona un día y un horario en el calendario para agendar tu sesión.
+            </p>
+
+            <!-- CTA -->
+            <div class="pd-actions">
+              <button type="submit" class="pd-cta" [disabled]="submitting">
+                <span *ngIf="!submitting">{{ isService ? 'Agendar' : 'Comprar' }}</span>
+                <span *ngIf="submitting">Enviando...</span>
+                <span class="pd-cta-arrow">
+                  <i class="fas" [ngClass]="submitting ? 'fa-circle-notch fa-spin' : 'fa-arrow-right'"></i>
+                </span>
+              </button>
+            </div>
+          </form>
+        </ng-container>
+
+        <!-- ── Confirmación ── -->
+        <ng-template #successCard>
+          <div class="pd-success">
+            <span class="pd-success-icon"><i class="fas fa-check"></i></span>
+            <h2>{{ isService ? '¡Tu sesión quedó agendada!' : '¡Gracias por tu compra!' }}</h2>
+            <p *ngIf="isService">
+              Reservamos <strong>{{ selectedSlotLabel }}</strong>
+              <ng-container *ngIf="selectedPsychologist">
+                con <strong>{{ selectedPsychologist.fullName }}</strong>
+              </ng-container>
+              para ti. Te enviaremos la confirmación y el enlace de la videollamada a tu correo.
+            </p>
+            <p *ngIf="!isService">
+              En unos minutos recibirás en tu correo las instrucciones de acceso a
+              <strong>{{ product.name }}</strong>.
+            </p>
+            <div class="pd-success-actions">
+              <a class="pd-cta whatsapp" [href]="getWhatsappConfirmLink()" target="_blank">
+                <span>Confirmar por WhatsApp</span>
+                <span class="pd-cta-arrow"><i class="fab fa-whatsapp"></i></span>
+              </a>
+              <button type="button" class="pd-link-btn" (click)="goBack()">
+                Volver a los servicios
+              </button>
+            </div>
+          </div>
+        </ng-template>
+
+      </main>
+    </div>
+  </div>
+</section>
