@@ -22,8 +22,8 @@ export class ProductService {
   private readonly apiUrl = 'http://localhost:3000/api';
 
   private readonly productTypes: Record<string, ProductType> = {
-    servicio: { id: 'type-servicio', name: 'servicio' },
-    producto: { id: 'type-producto', name: 'producto' },
+    consulta: { id: 1, code: 'consulta', name: 'Consulta', description: 'Servicios de consulta psicológica' },
+    libro: { id: 2, code: 'libro', name: 'Libro', description: 'Productos digitales descargables' },
   };
 
   private readonly psychologists: Psychologist[] = [
@@ -47,7 +47,7 @@ export class ProductService {
     {
       id: 'terapia-individual',
       psychologistId: 'psy-natalia',
-      type: this.productTypes['servicio'],
+      type: this.productTypes['consulta'],
       image: 'https://images.unsplash.com/photo-1607746882042-944635dfe10e?w=600&h=400&fit=crop',
       name: 'Terapia individual - Consulta unitaria virtual',
       short: 'Sesión individual para crisis emocionales, decisiones importantes o procesos quincenales.',
@@ -69,7 +69,7 @@ export class ProductService {
     {
       id: 'terapia-pareja',
       psychologistId: 'psy-natalia',
-      type: this.productTypes['servicio'],
+      type: this.productTypes['consulta'],
       image: 'https://images.unsplash.com/photo-1573497491208-6b1acb260507?w=600&h=400&fit=crop',
       name: 'Terapia de pareja - Consulta unitaria virtual',
       short: 'Sesión profesional para resolver conflictos, crisis de comunicación o rupturas de confianza.',
@@ -88,7 +88,7 @@ export class ProductService {
     {
       id: 'terapia-migrantes',
       psychologistId: 'psy-natalia',
-      type: this.productTypes['servicio'],
+      type: this.productTypes['consulta'],
       image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=600&h=400&fit=crop',
       name: 'Terapia para migrantes individual - Sesión unitaria virtual',
       short: 'Sesión especializada para latinos viviendo en el exterior que enfrentan soledad o ansiedad.',
@@ -112,7 +112,7 @@ export class ProductService {
     {
       id: 'plan-crisis-emocional',
       psychologistId: 'psy-natalia',
-      type: this.productTypes['producto'],
+      type: this.productTypes['libro'],
       image: 'https://images.unsplash.com/photo-1596495578065-6e0763fa1178?w=600&h=400&fit=crop',
       name: 'De 0 a 10 en segundos: tu plan personal para frenar una crisis emocional',
       short: 'Workbook práctico para intervenir antes de explotar emocionalmente.',
@@ -133,7 +133,7 @@ export class ProductService {
     {
       id: 'manual-noche-dificil',
       psychologistId: 'psy-natalia',
-      type: this.productTypes['producto'],
+      type: this.productTypes['libro'],
       image: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=600&h=400&fit=crop',
       name: 'Cuando son las 2am y la cabeza no para: Manual de la noche difícil',
       short: 'Guía práctica para calmar la ansiedad nocturna paso a paso.',
@@ -155,7 +155,7 @@ export class ProductService {
     {
       id: 'duelo-migratorio',
       psychologistId: 'psy-natalia',
-      type: this.productTypes['producto'],
+      type: this.productTypes['libro'],
       image: 'https://images.unsplash.com/photo-1493836512294-502baa1986e2?w=600&h=400&fit=crop',
       name: 'Todo lo que nadie te dijo que ibas a sentir cuando te fuiste: Duelo migratorio',
       short: 'Ebook para comprender, nombrar y procesar el duelo migratorio.',
