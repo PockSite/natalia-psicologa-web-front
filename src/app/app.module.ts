@@ -20,6 +20,7 @@ import { TechComponent } from './tech/tech.component';
 import { ContactComponent } from './contact/contact.component';
 import { ChatbotComponent } from './chatbot/chatbot.component';
 import { ProductDetailComponent } from './product-detail/product-detail.component';
+import { CopCurrencyPipe } from './pipes/cop-currency.pipe';
 
 
 @NgModule({
@@ -38,6 +39,7 @@ import { ProductDetailComponent } from './product-detail/product-detail.componen
     ContactComponent,
     ChatbotComponent,
     ProductDetailComponent,
+    CopCurrencyPipe,
   ],
   imports: [
     BrowserModule,

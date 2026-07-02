@@ -45,7 +45,7 @@
           </span>
 
           <span class="pd-price-tag">
-            <span class="pd-price-currency">$</span>{{ product.price }}
+            {{ product.price | copCurrency }}
             <small *ngIf="isService">/ sesión</small>
           </span>
         </div>
@@ -116,27 +116,38 @@
             </button>
           </div>
 
-          <div class="pd-cal-grid">
+          <!-- Spinner mientras se carga la disponibilidad del mes -->
+          <div class="pd-cal-loading" *ngIf="monthLoading">
+            <span class="pd-spinner small"></span>
+            <span>Cargando disponibilidad...</span>
+          </div>
+
+          <div class="pd-cal-grid" *ngIf="!monthLoading">
             <span class="pd-cal-weekday" *ngFor="let w of weekdays">{{ w }}</span>
 
             <button type="button" *ngFor="let cell of calendarCells"
               class="pd-cal-cell"
               [class.out]="!cell.inMonth"
               [class.today]="isToday(cell)"
-              [class.available]="dayHasAvailability(cell.day)"
+              [class.available]="dayHasSlots(cell)"
               [class.selected]="isSelectedDay(cell)"
-              [disabled]="!dayHasAvailability(cell.day)"
+              [disabled]="!dayHasSlots(cell)"
               (click)="selectDay(cell)">
               {{ cell.date.getDate() }}
             </button>
           </div>
+
+          <p class="pd-schedule-error" *ngIf="monthLoadFailed && !monthLoading">
+            <i class="fas fa-circle-exclamation"></i>
+            No pudimos cargar la disponibilidad. Intenta más tarde o contáctanos por WhatsApp.
+          </p>
 
           <!-- Horarios del día seleccionado -->
           <div class="pd-slots" *ngIf="selectedDay">
             <p class="pd-slots-label">
               <i class="far fa-clock"></i> Horarios disponibles
             </p>
-            <div class="pd-slots-grid">
+            <div class="pd-slots-grid" *ngIf="selectedDay.appointments.length; else noSlots">
               <button type="button" *ngFor="let slot of selectedDay.appointments"
                 class="pd-slot"
                 [class.selected]="selectedAppointment?.id === slot.id"
@@ -145,9 +156,12 @@
                 {{ slot.startTime }}
               </button>
             </div>
+            <ng-template #noSlots>
+              <p class="pd-slots-empty">No hay horarios disponibles para este día.</p>
+            </ng-template>
           </div>
 
-          <p class="pd-slots-hint" *ngIf="!selectedDay">
+          <p class="pd-slots-hint" *ngIf="!selectedDay && !monthLoading">
             Selecciona un día disponible para ver los horarios.
           </p>
           </ng-container>
@@ -278,6 +292,27 @@
                   placeholder="Ej: 28" min="14" max="99">
                 <small class="pd-error" *ngIf="invalid('edad')">
                   Ingresa una edad entre 14 y 99 años.
+                </small>
+              </div>
+
+              <!-- Tipo de documento -->
+              <div class="pd-field" [class.has-error]="invalid('tipoDocumento')">
+                <label for="pd-tipo-documento">Tipo de documento</label>
+                <select id="pd-tipo-documento" formControlName="tipoDocumento">
+                  <option value="CC">Cédula de ciudadanía</option>
+                  <option value="CE">Cédula de extranjería</option>
+                  <option value="PA">Pasaporte</option>
+                  <option value="TI">Tarjeta de identidad</option>
+                </select>
+              </div>
+
+              <!-- Documento -->
+              <div class="pd-field" [class.has-error]="invalid('documento')">
+                <label for="pd-documento">Número de documento</label>
+                <input id="pd-documento" type="text" formControlName="documento"
+                  placeholder="Ej: 1020304050" autocomplete="off">
+                <small class="pd-error" *ngIf="invalid('documento')">
+                  Ingresa un número de documento válido.
                 </small>
               </div>
 

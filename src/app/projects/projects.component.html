@@ -17,7 +17,7 @@
 
         <!-- Precio pill -->
         <div class="detail-pricing">
-          <span class="detail-price-value">${{ selectedProject.price }}</span>
+          <span class="detail-price-value">{{ selectedProject.price | copCurrency }}</span>
           <span class="detail-price-label" *ngIf="selectedProject.type.name === 'servicio'">&nbsp;/ sesión</span>
         </div>
 

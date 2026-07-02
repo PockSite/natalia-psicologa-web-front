@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ProductService } from '../services/product.service';
+import { PaymentService } from '../services/payment.service';
 import { Product } from '../models/product.model';
 import { Psychologist } from '../models/psychologist.model';
 import { Appointment, Day } from '../models/agenda.model';
@@ -9,7 +10,6 @@ import { Appointment, Day } from '../models/agenda.model';
 interface CalendarCell {
   date: Date;
   inMonth: boolean;
-  day?: Day;
 }
 
 @Component({
@@ -31,7 +31,13 @@ export class ProductDetailComponent implements OnInit {
 
   /* ── Agenda (solo para type === 'servicio') ── */
   agendaLoading = false;
-  agendaDays: Day[] = [];
+  agendaWeekdays: Set<number> = new Set();
+  /** Caché de disponibilidad por mes: clave = "YYYY-MM" */
+  availabilityCache = new Map<string, Map<string, Day>>();
+  /** Días del mes actual ya cargados desde el backend */
+  currentMonthDays = new Map<string, Day>();
+  monthLoading = false;
+  monthLoadFailed = false;
   displayedMonth = new Date();
   calendarCells: CalendarCell[] = [];
   weekdays = ['L', 'M', 'X', 'J', 'V', 'S', 'D'];
@@ -49,7 +55,8 @@ export class ProductDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private fb: FormBuilder,
-    private productService: ProductService
+    private productService: ProductService,
+    private paymentService: PaymentService
   ) { }
 
   ngOnInit(): void {
@@ -58,6 +65,7 @@ export class ProductDetailComponent implements OnInit {
     // paramMap (y no snapshot) para reaccionar si se navega entre productos
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
+      console.log('[PD] paramMap id:', id);
       this.resetState();
 
       if (!id) {
@@ -66,20 +74,29 @@ export class ProductDetailComponent implements OnInit {
         return;
       }
 
-      this.productService.getProductById(id).subscribe(product => {
-        this.loading = false;
-        if (!product) {
+      this.productService.getProductById(id).subscribe({
+        next: product => {
+          console.log('[PD] getProductById OK:', product);
+          this.loading = false;
+          if (!product) {
+            this.notFound = true;
+            return;
+          }
+          this.product = product;
+          console.log('[PD] isService:', this.isService, 'product.type:', product.type);
+          this.loadPsychologists(product);
+        },
+        error: err => {
+          console.error('[PD] getProductById ERROR:', err);
+          this.loading = false;
           this.notFound = true;
-          return;
         }
-        this.product = product;
-        this.loadPsychologists(product);
       });
     });
   }
 
   get isService(): boolean {
-    return this.product?.type.name === 'servicio';
+    return this.product?.type.code === 'consulta';
   }
 
   get monthLabel(): string {
@@ -98,14 +115,21 @@ export class ProductDetailComponent implements OnInit {
   /* ── Psicólogas ─────────────────────────────────────────── */
 
   private loadPsychologists(product: Product): void {
-    this.productService.getPsychologistsByProduct(product.id).subscribe(psychologists => {
-      this.availablePsychologists = psychologists;
-      // Por defecto se selecciona la dueña / creadora del producto
-      this.selectedPsychologist = psychologists[0];
+    console.log('[PD] loadPsychologists for product:', product.id);
+    this.productService.getPsychologistsByProduct(product.id).subscribe({
+      next: psychologists => {
+        console.log('[PD] getPsychologistsByProduct OK:', psychologists);
+        this.availablePsychologists = psychologists;
+        this.selectedPsychologist = psychologists[0];
 
-      if (product.type.name === 'servicio' && this.selectedPsychologist) {
-        this.loadAgenda(this.selectedPsychologist.id);
-      }
+        if (this.isService && this.selectedPsychologist) {
+          console.log('[PD] Loading agenda for psychologist:', this.selectedPsychologist.id);
+          this.loadAgenda(this.selectedPsychologist.id);
+        } else {
+          console.log('[PD] No cargar agenda. isService:', this.isService, 'selectedPsy:', this.selectedPsychologist);
+        }
+      },
+      error: err => console.error('[PD] getPsychologistsByProduct ERROR:', err)
     });
   }
 
@@ -116,6 +140,8 @@ export class ProductDetailComponent implements OnInit {
     this.selectedDay = undefined;
     this.selectedAppointment = undefined;
     this.scheduleError = false;
+    this.availabilityCache = new Map();
+    this.currentMonthDays = new Map();
     if (this.isService) {
       this.loadAgenda(psychologist.id);
     }
@@ -124,18 +150,57 @@ export class ProductDetailComponent implements OnInit {
   /* ── Calendario ─────────────────────────────────────────── */
 
   private loadAgenda(psychologistId: string): void {
+    console.log('[PD] loadAgenda START', psychologistId);
     this.agendaLoading = true;
-    this.productService.getAgenda(psychologistId).subscribe(agenda => {
-      this.agendaLoading = false;
-      this.agendaDays = agenda.days;
-      const firstAvailable = agenda.days.find(d => this.dayHasAvailability(d));
-      this.displayedMonth = new Date(
-        (firstAvailable ?? agenda.days[0]).date.getFullYear(),
-        (firstAvailable ?? agenda.days[0]).date.getMonth(),
-        1
-      );
-      this.buildCalendar();
+    this.productService.getAgendaTemplate(psychologistId).subscribe({
+      next: weekdays => {
+        console.log('[PD] getAgendaTemplate OK, weekdays:', Array.from(weekdays));
+        this.agendaLoading = false;
+        this.agendaWeekdays = weekdays;
+        this.displayedMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+        this.buildCalendar();
+        console.log('[PD] calendarCells built:', this.calendarCells.length);
+        this.loadMonth();
+      },
+      error: err => {
+        console.error('[PD] getAgendaTemplate ERROR:', err);
+        this.agendaLoading = false;
+        this.displayedMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+        this.buildCalendar();
+      }
     });
+  }
+
+  private monthKey(date: Date = this.displayedMonth): string {
+    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;  // mes 1-12
+  }
+
+  loadMonth(): void {
+    const key = this.monthKey();
+    console.log('[PD] loadMonth START key=', key);
+    if (this.availabilityCache.has(key)) {
+      console.log('[PD] loadMonth cache HIT');
+      this.currentMonthDays = this.availabilityCache.get(key)!;
+      return;
+    }
+    this.monthLoading = true;
+    const { year, month } = { year: this.displayedMonth.getFullYear(), month: this.displayedMonth.getMonth() + 1 };
+    console.log('[PD] getMonthAvailability request:', { psychologistId: this.selectedPsychologist!.id, year, month });
+    this.productService.getMonthAvailability(this.selectedPsychologist!.id, year, month)
+      .subscribe({
+        next: days => {
+          console.log('[PD] getMonthAvailability OK, days:', Array.from(days.entries()));
+          this.availabilityCache.set(key, days);
+          this.currentMonthDays = days;
+          this.monthLoading = false;
+          this.monthLoadFailed = false;
+        },
+        error: err => {
+          console.error('[PD] getMonthAvailability ERROR:', err);
+          this.monthLoading = false;
+          this.monthLoadFailed = true;
+        }
+      });
   }
 
   private buildCalendar(): void {
@@ -143,25 +208,34 @@ export class ProductDetailComponent implements OnInit {
     const month = this.displayedMonth.getMonth();
     const firstOfMonth = new Date(year, month, 1);
     const start = new Date(firstOfMonth);
-    start.setDate(firstOfMonth.getDate() - ((firstOfMonth.getDay() + 6) % 7)); // lunes previo
+    start.setDate(firstOfMonth.getDate() - ((firstOfMonth.getDay() + 6) % 7));
 
     this.calendarCells = [];
     for (let i = 0; i < 42; i++) {
       const date = new Date(start.getFullYear(), start.getMonth(), start.getDate() + i);
-      this.calendarCells.push({
-        date,
-        inMonth: date.getMonth() === month,
-        day: this.agendaDays.find(d => this.sameDate(d.date, date))
-      });
+      this.calendarCells.push({ date, inMonth: date.getMonth() === month });
     }
   }
 
-  dayHasAvailability(day?: Day): boolean {
+  /** Día disponible: coincide con el horario de la agenda y no es pasado */
+  dayIsAvailable(cell: CalendarCell): boolean {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return cell.inMonth
+      && cell.date >= today
+      && this.agendaWeekdays.has(cell.date.getDay());
+  }
+
+  /** Un día es clickeable si está en el mes, no es pasado, coincide con la
+   *  agenda semanal, y (si tenemos data del backend) tiene slots disponibles. */
+  dayHasSlots(cell: CalendarCell): boolean {
+    if (!this.dayIsAvailable(cell)) { return false; }
+    const day = this.currentMonthDays.get(this.toIsoDate(cell.date));
     return !!day && day.appointments.some(a => a.available);
   }
 
   isSelectedDay(cell: CalendarCell): boolean {
-    return !!this.selectedDay && !!cell.day && cell.day.id === this.selectedDay.id;
+    return !!this.selectedDay && this.sameDate(this.selectedDay.date, cell.date);
   }
 
   isToday(cell: CalendarCell): boolean {
@@ -169,10 +243,15 @@ export class ProductDetailComponent implements OnInit {
   }
 
   selectDay(cell: CalendarCell): void {
-    if (!cell.day || !this.dayHasAvailability(cell.day)) { return; }
-    this.selectedDay = cell.day;
+    if (!this.dayHasSlots(cell)) { return; }
+    if (this.selectedDay && this.sameDate(this.selectedDay.date, cell.date)) { return; }
     this.selectedAppointment = undefined;
     this.scheduleError = false;
+    this.selectedDay = this.currentMonthDays.get(this.toIsoDate(cell.date));
+  }
+
+  private toIsoDate(date: Date): string {
+    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
   }
 
   selectAppointment(appointment: Appointment): void {
@@ -182,15 +261,13 @@ export class ProductDetailComponent implements OnInit {
   }
 
   get canGoPrevMonth(): boolean {
-    if (!this.agendaDays.length) { return false; }
-    const first = this.agendaDays[0].date;
-    return this.monthIndex(this.displayedMonth) > this.monthIndex(first);
+    const today = new Date();
+    return this.monthIndex(this.displayedMonth) > this.monthIndex(today);
   }
 
   get canGoNextMonth(): boolean {
-    if (!this.agendaDays.length) { return false; }
-    const last = this.agendaDays[this.agendaDays.length - 1].date;
-    return this.monthIndex(this.displayedMonth) < this.monthIndex(last);
+    const maxMonth = new Date(new Date().getFullYear(), new Date().getMonth() + 3, 1);
+    return this.monthIndex(this.displayedMonth) < this.monthIndex(maxMonth);
   }
 
   changeMonth(step: number): void {
@@ -200,7 +277,11 @@ export class ProductDetailComponent implements OnInit {
       this.displayedMonth.getMonth() + step,
       1
     );
+    this.selectedDay = undefined;
+    this.selectedAppointment = undefined;
+    this.monthLoadFailed = false;
     this.buildCalendar();
+    this.loadMonth();
   }
 
   /* ── Formulario ─────────────────────────────────────────── */
@@ -212,7 +293,9 @@ export class ProductDetailComponent implements OnInit {
       celular: ['', [Validators.required, Validators.pattern(/^\+?[0-9\s-]{7,15}$/)]],
       correo: ['', [Validators.required, Validators.email]],
       sexo: ['', Validators.required],
-      edad: [null, [Validators.required, Validators.min(14), Validators.max(99)]]
+      edad: [null, [Validators.required, Validators.min(14), Validators.max(99)]],
+      tipoDocumento: ['CC', Validators.required],
+      documento: ['', [Validators.required, Validators.minLength(5)]]
     });
   }
 
@@ -230,29 +313,46 @@ export class ProductDetailComponent implements OnInit {
       return;
     }
 
-    const payload = {
-      productId: this.product!.id,
-      psychologistId: this.selectedPsychologist?.id,
-      buyer: this.buyerForm.value,
-      appointment: this.selectedAppointment
-        ? { dayId: this.selectedDay!.id, appointmentId: this.selectedAppointment.id }
-        : null
-    };
-
+    const buyer = this.buyerForm.value;
     this.submitting = true;
-    const request$ = this.isService
-      ? this.productService.bookAppointment(payload)
-      : this.productService.createOrder(payload);
 
-    request$.subscribe({
-      next: () => {
-        this.submitting = false;
-        this.submitted = true;
+    this.paymentService.checkout({
+      productId: this.product!.id,
+      clientFullName: `${buyer.nombre} ${buyer.apellido}`,
+      clientEmail: buyer.correo,
+      clientWhatsappNumber: buyer.celular,
+      document: buyer.documento,
+      documentType: buyer.tipoDocumento,
+      startTime: this.selectedAppointmentStartTime()
+    }).subscribe({
+      next: (checkout) => {
+        const redirectUrl = `${window.location.origin}${this.router.url}`;
+        this.paymentService.openWompiWidget(checkout, redirectUrl)
+          .then((result) => {
+            console.log('[PD] Wompi widget result:', result);
+            this.submitting = false;
+            if (result?.transaction?.status === 'APPROVED') {
+              this.submitted = true;
+            }
+          })
+          .catch((err) => {
+            console.error('[PD] Wompi widget error:', err);
+            this.submitting = false;
+          });
       },
-      error: () => {
+      error: (err) => {
+        console.error('[PD] Payments checkout error:', err);
         this.submitting = false;
       }
     });
+  }
+
+  /** Fecha/hora real de la cita elegida (día del calendario + hora del slot). */
+  private selectedAppointmentStartTime(): Date | undefined {
+    if (!this.isService || !this.selectedDay || !this.selectedAppointment) { return undefined; }
+    const [h, m] = this.selectedAppointment.startTime.split(':').map(Number);
+    const date = this.selectedDay.date;
+    return new Date(date.getFullYear(), date.getMonth(), date.getDate(), h, m);
   }
 
   getWhatsappConfirmLink(): string {
@@ -278,7 +378,11 @@ export class ProductDetailComponent implements OnInit {
     this.availablePsychologists = [];
     this.selectedPsychologist = undefined;
     this.agendaLoading = false;
-    this.agendaDays = [];
+    this.agendaWeekdays = new Set();
+    this.availabilityCache = new Map();
+    this.currentMonthDays = new Map();
+    this.monthLoading = false;
+    this.monthLoadFailed = false;
     this.calendarCells = [];
     this.selectedDay = undefined;
     this.selectedAppointment = undefined;
