@@ -7,9 +7,12 @@ export interface CheckoutPayload {
   productId: string;
   clientFullName: string;
   clientEmail: string;
+  clientPhoneCountryCode?: string;
   clientWhatsappNumber: string;
   document: string;
   documentType: string;
+  sexId?: number | null;
+  birthDate?: string;
   startTime?: Date;
 }
 
@@ -36,9 +39,12 @@ export class PaymentService {
       product_id: payload.productId,
       client_full_name: payload.clientFullName,
       client_email: payload.clientEmail,
+      client_phone_country_code: payload.clientPhoneCountryCode ?? null,
       client_whatsapp_number: payload.clientWhatsappNumber,
       document: payload.document,
       document_type: payload.documentType,
+      sex_id: payload.sexId ?? null,
+      birth_date: payload.birthDate ?? null,
       start_time: payload.startTime ? payload.startTime.toISOString() : null,
     };
     return this.http.post<CheckoutResponse>(`${this.apiUrl}/payments/checkout`, body);
@@ -59,10 +65,14 @@ export class PaymentService {
         publicKey: checkout.public_key,
         signature: { integrity: checkout.signature },
       };
-      // El WAF de Wompi bloquea (403) redirect-url apuntando a localhost/127.0.0.1.
-      // En dev lo omitimos: el resultado del pago llega igual por el callback.
-      if (redirectUrl && !/^https?:\/\/(localhost|127\.0\.0\.1)/i.test(redirectUrl)) {
-        config.redirectUrl = redirectUrl;
+      if (redirectUrl) {
+        // El WAF de Wompi rechaza (403) redirect-url con localhost/127.0.0.1 y el
+        // widget se queda cargando. En dev lo reemplazamos por lvh.me, un dominio
+        // público que resuelve a 127.0.0.1, así el redirect vuelve al ng serve local.
+        config.redirectUrl = redirectUrl.replace(
+          /^(https?:\/\/)(localhost|127\.0\.0\.1)/i,
+          '$1lvh.me'
+        );
       }
       const widget = new WidgetCheckout(config);
       widget.open((result: any) => resolve(result));

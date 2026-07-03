@@ -1,0 +1,27 @@
+<section class="pr-page">
+  <div class="pr-blob pr-blob-one" aria-hidden="true"></div>
+  <div class="pr-blob pr-blob-two" aria-hidden="true"></div>
+
+  <div class="pr-card" *ngIf="!loading">
+
+    <span class="pr-icon">
+      <i class="fas fa-check-circle"></i>
+    </span>
+
+    <h1>¡Pago procesado!</h1>
+    <p class="pr-sub">
+      Tu transacción fue recibida por Wompi. Recibirás la confirmación de tu cita
+      y el enlace de la sesión por correo en los próximos minutos.
+    </p>
+
+    <div class="pr-ref" *ngIf="transactionId">
+      <span class="pr-ref-label">Referencia de pago</span>
+      <code>{{ transactionId }}</code>
+    </div>
+
+    <button type="button" class="pr-link-btn" (click)="goHome()">
+      <i class="fas fa-arrow-left"></i> Volver al inicio
+    </button>
+
+  </div>
+</section>

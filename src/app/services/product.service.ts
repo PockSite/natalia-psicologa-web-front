@@ -1,19 +1,26 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { Product } from '../models/product.model';
 import { Psychologist } from '../models/psychologist.model';
 import { Agenda, Appointment, Day } from '../models/agenda.model';
 
 /** Shapes devueltas por las APIs (snake_case), antes de mapear a los modelos del front. */
+interface ApiPsychologist {
+  id: string;
+  full_name: string;
+  email?: string;
+  whatsapp_number?: string;
+}
+
 interface ApiProduct {
   id: string;
-  psychologist_id: string;
   name: string;
   price: number;
   type: { id: number; code: string; name: string; description?: string };
+  psychologists: ApiPsychologist[];
   image?: string;
   short?: string;
   description?: string;
@@ -21,13 +28,6 @@ interface ApiProduct {
   format?: string;
   category?: string;
   language?: string;
-}
-
-interface ApiPsychologist {
-  id: string;
-  full_name: string;
-  email?: string;
-  whatsapp_number?: string;
 }
 
 interface ApiAppointment {
@@ -99,15 +99,10 @@ export class ProductService {
       .pipe(map(p => this.toPsychologist(p)));
   }
 
-  /** Psicóloga(s) que ofrecen un producto. Hoy cada producto tiene una sola autora. */
+  /** Psicóloga(s) que ofrecen un producto — vienen embebidas en el producto. */
   getPsychologistsByProduct(productId: string): Observable<Psychologist[]> {
     return this.getProductById(productId).pipe(
-      switchMap(product => {
-        if (!product) { return of([]); }
-        return this.getPsychologistById(product.psychologistId).pipe(
-          map(psychologist => psychologist ? [psychologist] : [])
-        );
-      })
+      map(product => product ? product.psychologists : [])
     );
   }
 
@@ -166,10 +161,10 @@ export class ProductService {
   private toProduct(p: ApiProduct): Product {
     return {
       id: p.id,
-      psychologistId: p.psychologist_id,
       name: p.name,
       price: p.price,
       type: { id: p.type.id, code: p.type.code, name: p.type.name, description: p.type.description },
+      psychologists: (p.psychologists ?? []).map(ps => this.toPsychologist(ps)),
       image: p.image ?? '',
       short: p.short ?? '',
       description: p.description ?? '',

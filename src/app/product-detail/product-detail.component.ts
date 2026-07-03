@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { ProductService } from '../services/product.service';
 import { PaymentService } from '../services/payment.service';
+import { ClientService, CountryCode, DocumentType, SexType } from '../services/client.service';
 import { Product } from '../models/product.model';
 import { Psychologist } from '../models/psychologist.model';
 import { Appointment, Day } from '../models/agenda.model';
@@ -50,17 +53,39 @@ export class ProductDetailComponent implements OnInit {
   submitAttempted = false;
   submitting = false;
   submitted = false;
+  /** Estado final del pago: null = no procesado, 'APPROVED' | 'PENDING' | 'DECLINED' | 'ERROR' */
+  paymentStatus: string | null = null;
+
+  /* ── Tipos de documento, sexo y códigos de país ── */
+  documentTypes: DocumentType[] = [];
+  sexTypes: SexType[] = [];
+  countryCodes: CountryCode[] = [];
+  readonly today = new Date();
+
+  /* ── Lookup de cliente por documento ── */
+  /** true = buscando, false = listo */
+  clientLookupLoading = false;
+  /** true = cliente encontrado y campos auto-rellenados */
+  clientFound = false;
+  /** true = documento consultado y no existe: formulario habilitado para llenar */
+  documentChecked = false;
+  private docLookup$ = new Subject<{ tipo: string; doc: string }>();
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private fb: FormBuilder,
     private productService: ProductService,
-    private paymentService: PaymentService
+    private paymentService: PaymentService,
+    private clientService: ClientService
   ) { }
 
   ngOnInit(): void {
     this.buildForm();
+    this.setupDocumentLookup();
+    this.clientService.getDocumentTypes().subscribe(types => this.documentTypes = types);
+    this.clientService.getSexTypes().subscribe(types => this.sexTypes = types);
+    this.clientService.getCountryCodes().subscribe(codes => this.countryCodes = codes);
 
     // paramMap (y no snapshot) para reaccionar si se navega entre productos
     this.route.paramMap.subscribe(params => {
@@ -288,15 +313,66 @@ export class ProductDetailComponent implements OnInit {
 
   private buildForm(): void {
     this.buyerForm = this.fb.group({
-      nombre: ['', [Validators.required, Validators.minLength(2)]],
-      apellido: ['', [Validators.required, Validators.minLength(2)]],
-      celular: ['', [Validators.required, Validators.pattern(/^\+?[0-9\s-]{7,15}$/)]],
-      correo: ['', [Validators.required, Validators.email]],
-      sexo: ['', Validators.required],
-      edad: [null, [Validators.required, Validators.min(14), Validators.max(99)]],
-      tipoDocumento: ['CC', Validators.required],
-      documento: ['', [Validators.required, Validators.minLength(5)]]
+      nombre:          ['', [Validators.required, Validators.minLength(2)]],
+      apellido:        ['', [Validators.required, Validators.minLength(2)]],
+      extensionPais:   ['+57', Validators.required],
+      celular:         ['', [Validators.required, Validators.pattern(/^\d{7,15}$/)]],
+      correo:          ['', [Validators.required, Validators.email]],
+      sexoId:          [null, Validators.required],
+      fechaNacimiento: ['', Validators.required],
+      tipoDocumento:   ['CC', Validators.required],
+      documento:       ['', [Validators.required, Validators.minLength(5)]]
     });
+  }
+
+  private setupDocumentLookup(): void {
+    this.docLookup$.pipe(
+      debounceTime(600),
+      distinctUntilChanged((a, b) => a.tipo === b.tipo && a.doc === b.doc),
+      switchMap(({ tipo, doc }) => {
+        if (doc.length < 5) { return [null]; }
+        this.clientLookupLoading = true;
+        return this.clientService.findByDocument(tipo, doc);
+      })
+    ).subscribe(client => {
+      this.clientLookupLoading = false;
+      this.documentChecked = true;
+      if (client) {
+        this.clientFound = true;
+        const spaceIdx = client.fullName.indexOf(' ');
+        const nombre   = spaceIdx > -1 ? client.fullName.slice(0, spaceIdx) : client.fullName;
+        const apellido = spaceIdx > -1 ? client.fullName.slice(spaceIdx + 1) : '';
+        this.buyerForm.patchValue({
+          nombre,
+          apellido,
+          correo:          client.email            ?? '',
+          extensionPais:   client.phoneCountryCode ?? '+57',
+          celular:         client.whatsappNumber   ?? '',
+          sexoId:          client.sexId            ?? null,
+          fechaNacimiento: client.birthDate        ?? '',
+        });
+      } else {
+        this.clientFound = false;
+        this.buyerForm.patchValue({
+          nombre: '', apellido: '', correo: '',
+          extensionPais: '+57', celular: '',
+          sexoId: null, fechaNacimiento: '',
+        });
+      }
+    });
+  }
+
+  onDocumentInput(): void {
+    const tipo = this.buyerForm.get('tipoDocumento')?.value;
+    const doc  = this.buyerForm.get('documento')?.value?.trim();
+    if (doc && doc.length >= 5) {
+      this.documentChecked = false;
+      this.clientFound = false;
+      this.docLookup$.next({ tipo, doc });
+    } else {
+      this.documentChecked = false;
+      this.clientFound = false;
+    }
   }
 
   invalid(field: string): boolean {
@@ -320,24 +396,29 @@ export class ProductDetailComponent implements OnInit {
       productId: this.product!.id,
       clientFullName: `${buyer.nombre} ${buyer.apellido}`,
       clientEmail: buyer.correo,
+      clientPhoneCountryCode: buyer.extensionPais,
       clientWhatsappNumber: buyer.celular,
       document: buyer.documento,
       documentType: buyer.tipoDocumento,
+      sexId: buyer.sexoId,
+      birthDate: buyer.fechaNacimiento || undefined,
       startTime: this.selectedAppointmentStartTime()
     }).subscribe({
       next: (checkout) => {
-        const redirectUrl = `${window.location.origin}${this.router.url}`;
+        const redirectUrl = `${window.location.origin}/pago-resultado?product_id=${this.product!.id}`;
         this.paymentService.openWompiWidget(checkout, redirectUrl)
           .then((result) => {
-            console.log('[PD] Wompi widget result:', result);
             this.submitting = false;
-            if (result?.transaction?.status === 'APPROVED') {
+            const status: string = result?.transaction?.status ?? 'ERROR';
+            this.paymentStatus = status;
+            if (status === 'APPROVED') {
               this.submitted = true;
             }
           })
           .catch((err) => {
             console.error('[PD] Wompi widget error:', err);
             this.submitting = false;
+            this.paymentStatus = 'ERROR';
           });
       },
       error: (err) => {
@@ -390,7 +471,11 @@ export class ProductDetailComponent implements OnInit {
     this.submitAttempted = false;
     this.submitting = false;
     this.submitted = false;
-    this.buyerForm.reset();
+    this.paymentStatus = null;
+    this.clientLookupLoading = false;
+    this.clientFound = false;
+    this.documentChecked = false;
+    this.buyerForm.reset({ tipoDocumento: 'CC', extensionPais: '+57' });
   }
 
   private sameDate(a: Date, b: Date): boolean {

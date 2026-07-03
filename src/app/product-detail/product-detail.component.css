@@ -826,6 +826,176 @@
   animation: pd-rise 0.25s ease both;
 }
 
+/* ── Lookup de documento ────────────────────────────────────── */
+.pd-form-step-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: var(--color-main);
+  margin: 0 0 14px;
+  opacity: 0.75;
+}
+
+.pd-field-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.pd-field-row input {
+  flex: 1;
+  padding-right: 36px;
+}
+
+.pd-doc-spinner,
+.pd-doc-ok {
+  position: absolute;
+  right: 12px;
+  font-size: 1rem;
+  pointer-events: none;
+}
+
+.pd-doc-spinner { color: var(--color-main); opacity: 0.6; }
+.pd-doc-ok      { color: #2e9e6e; }
+
+.pd-phone-row {
+  display: flex;
+  gap: 8px;
+}
+
+.pd-phone-ext-wrap {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.pd-phone-flag {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.15rem;
+  pointer-events: none;
+  line-height: 1;
+  z-index: 1;
+}
+
+.pd-phone-ext {
+  width: 110px;
+  padding-left: 34px;
+}
+
+.pd-phone-number {
+  flex: 1;
+}
+
+/* ── Sexo: botones pill ────────────────────────────────────── */
+.pd-field-full {
+  grid-column: 1 / -1;
+}
+
+.pd-sex-group {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+
+.pd-sex-btn {
+  padding: 9px 22px;
+  border-radius: 50px;
+  border: 1.5px solid var(--color-main, #c97b7b);
+  background: transparent;
+  color: var(--color-main, #c97b7b);
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s;
+}
+
+.pd-sex-btn:hover {
+  background: rgba(201, 123, 123, 0.08);
+}
+
+.pd-sex-btn.selected {
+  background: var(--color-main, #c97b7b);
+  color: #fff;
+}
+
+
+.pd-client-found {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  border-radius: 10px;
+  background: #edfaf4;
+  border: 1.5px solid #2e9e6e;
+  color: #1a6645;
+  font-size: 0.86rem;
+  font-weight: 600;
+  margin: 12px 0 0;
+  animation: pd-rise 0.25s ease both;
+}
+
+.pd-client-found i { font-size: 1.1rem; flex-shrink: 0; }
+
+/* ── Banners de resultado de pago ──────────────────────────── */
+.pd-payment-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 16px 20px;
+  border-radius: 14px;
+  margin-bottom: 20px;
+  font-size: 0.88rem;
+  animation: pd-rise 0.3s ease both;
+}
+
+.pd-payment-banner i {
+  font-size: 1.4rem;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.pd-payment-banner div {
+  flex: 1;
+}
+
+.pd-payment-banner strong {
+  display: block;
+  font-size: 0.96rem;
+  margin-bottom: 3px;
+}
+
+.pd-payment-banner p {
+  margin: 0;
+  opacity: 0.85;
+  line-height: 1.45;
+}
+
+.pd-payment-banner.pending {
+  background: #fff8e6;
+  border: 1.5px solid #f5c842;
+  color: #7a5c00;
+}
+
+.pd-payment-banner.declined {
+  background: #fff0f0;
+  border: 1.5px solid #e57373;
+  color: #8b1a1a;
+}
+
+.pd-payment-banner .pd-link-btn {
+  margin-top: 8px;
+  color: inherit;
+  font-size: 0.82rem;
+  opacity: 0.9;
+}
+
 /* ── CTA ────────────────────────────────────────────────────── */
 .pd-actions {
   display: flex;

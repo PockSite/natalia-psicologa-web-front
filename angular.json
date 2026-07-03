@@ -64,6 +64,9 @@
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "allowedHosts": ["lvh.me", ".lvh.me"]
+          },
           "configurations": {
             "production": {
               "browserTarget": "my-landing:build:production"
