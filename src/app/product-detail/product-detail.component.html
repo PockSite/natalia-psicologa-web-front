@@ -45,7 +45,7 @@
           </span>
 
           <span class="pd-price-tag">
-            <span class="pd-price-currency">$</span>{{ product.price }}
+            {{ product.price | copCurrency }}
             <small *ngIf="isService">/ sesión</small>
           </span>
         </div>
@@ -116,27 +116,38 @@
             </button>
           </div>
 
-          <div class="pd-cal-grid">
+          <!-- Spinner mientras se carga la disponibilidad del mes -->
+          <div class="pd-cal-loading" *ngIf="monthLoading">
+            <span class="pd-spinner small"></span>
+            <span>Cargando disponibilidad...</span>
+          </div>
+
+          <div class="pd-cal-grid" *ngIf="!monthLoading">
             <span class="pd-cal-weekday" *ngFor="let w of weekdays">{{ w }}</span>
 
             <button type="button" *ngFor="let cell of calendarCells"
               class="pd-cal-cell"
               [class.out]="!cell.inMonth"
               [class.today]="isToday(cell)"
-              [class.available]="dayHasAvailability(cell.day)"
+              [class.available]="dayHasSlots(cell)"
               [class.selected]="isSelectedDay(cell)"
-              [disabled]="!dayHasAvailability(cell.day)"
+              [disabled]="!dayHasSlots(cell)"
               (click)="selectDay(cell)">
               {{ cell.date.getDate() }}
             </button>
           </div>
+
+          <p class="pd-schedule-error" *ngIf="monthLoadFailed && !monthLoading">
+            <i class="fas fa-circle-exclamation"></i>
+            No pudimos cargar la disponibilidad. Intenta más tarde o contáctanos por WhatsApp.
+          </p>
 
           <!-- Horarios del día seleccionado -->
           <div class="pd-slots" *ngIf="selectedDay">
             <p class="pd-slots-label">
               <i class="far fa-clock"></i> Horarios disponibles
             </p>
-            <div class="pd-slots-grid">
+            <div class="pd-slots-grid" *ngIf="selectedDay.appointments.length; else noSlots">
               <button type="button" *ngFor="let slot of selectedDay.appointments"
                 class="pd-slot"
                 [class.selected]="selectedAppointment?.id === slot.id"
@@ -145,9 +156,12 @@
                 {{ slot.startTime }}
               </button>
             </div>
+            <ng-template #noSlots>
+              <p class="pd-slots-empty">No hay horarios disponibles para este día.</p>
+            </ng-template>
           </div>
 
-          <p class="pd-slots-hint" *ngIf="!selectedDay">
+          <p class="pd-slots-hint" *ngIf="!selectedDay && !monthLoading">
             Selecciona un día disponible para ver los horarios.
           </p>
           </ng-container>
@@ -193,7 +207,26 @@
       <!-- ════════ FORMULARIO ════════ -->
       <main class="pd-form-panel rise d2">
 
-        <ng-container *ngIf="!submitted; else successCard">
+        <!-- Banner pago pendiente -->
+        <div class="pd-payment-banner pending" *ngIf="paymentStatus === 'PENDING' && !submitted">
+          <i class="fas fa-clock"></i>
+          <div>
+            <strong>Pago en proceso</strong>
+            <p>Tu pago está siendo verificado. Te notificaremos por correo cuando se confirme.</p>
+          </div>
+        </div>
+
+        <!-- Banner pago rechazado / error -->
+        <div class="pd-payment-banner declined" *ngIf="paymentStatus === 'DECLINED' || paymentStatus === 'ERROR'">
+          <i class="fas fa-circle-xmark"></i>
+          <div>
+            <strong>{{ paymentStatus === 'DECLINED' ? 'Pago rechazado' : 'Error en el pago' }}</strong>
+            <p>Puedes intentarlo de nuevo con otro método de pago.</p>
+          </div>
+          <button type="button" class="pd-link-btn" (click)="paymentStatus = null">Reintentar</button>
+        </div>
+
+        <ng-container *ngIf="!submitted && paymentStatus !== 'PENDING'; else successCard">
           <h2 class="pd-form-title">Completa tus datos</h2>
           <p class="pd-form-sub">
             {{ isService
@@ -203,6 +236,54 @@
 
           <form class="pd-form" [formGroup]="buyerForm" (ngSubmit)="onSubmit()" novalidate>
 
+            <!-- ── Paso 1: Documento ── -->
+            <p class="pd-form-step-label">
+              <i class="fas fa-id-card"></i> Primero, ingresa tu documento
+            </p>
+            <div class="pd-form-grid">
+
+              <!-- Tipo de documento -->
+              <div class="pd-field" [class.has-error]="invalid('tipoDocumento')">
+                <label for="pd-tipo-documento">Tipo de documento</label>
+                <select id="pd-tipo-documento" formControlName="tipoDocumento"
+                  (change)="onDocumentInput()">
+                  <option *ngFor="let dt of documentTypes" [value]="dt.code">{{ dt.name }}</option>
+                </select>
+              </div>
+
+              <!-- Documento -->
+              <div class="pd-field" [class.has-error]="invalid('documento')">
+                <label for="pd-documento">Número de documento</label>
+                <div class="pd-field-row">
+                  <input id="pd-documento" type="text" formControlName="documento"
+                    placeholder="Ej: 1020304050" autocomplete="off"
+                    (input)="onDocumentInput()">
+                  <span class="pd-doc-spinner" *ngIf="clientLookupLoading">
+                    <i class="fas fa-circle-notch fa-spin"></i>
+                  </span>
+                  <span class="pd-doc-ok" *ngIf="!clientLookupLoading && clientFound">
+                    <i class="fas fa-circle-check"></i>
+                  </span>
+                </div>
+                <small class="pd-error" *ngIf="invalid('documento')">
+                  Ingresa un número de documento válido.
+                </small>
+              </div>
+
+            </div>
+
+            <!-- Banner cliente encontrado -->
+            <div class="pd-client-found" *ngIf="clientFound && !clientLookupLoading">
+              <i class="fas fa-circle-check"></i>
+              <span>¡Te encontramos! Revisamos tus datos y los completamos por ti.</span>
+            </div>
+
+            <!-- ── Paso 2: Resto del formulario (aparece tras consultar doc) ── -->
+            <ng-container *ngIf="documentChecked || clientFound">
+
+            <p class="pd-form-step-label" style="margin-top:24px">
+              <i class="fas fa-user"></i> Completa tus datos personales
+            </p>
             <div class="pd-form-grid">
 
               <!-- Nombre -->
@@ -226,12 +307,24 @@
               </div>
 
               <!-- Celular -->
-              <div class="pd-field" [class.has-error]="invalid('celular')">
+              <div class="pd-field" [class.has-error]="invalid('celular') || invalid('extensionPais')">
                 <label for="pd-celular">Número de celular</label>
-                <input id="pd-celular" type="tel" formControlName="celular"
-                  placeholder="+57 300 000 0000" autocomplete="tel">
+                <div class="pd-phone-row">
+                  <div class="pd-phone-ext-wrap">
+                    <span class="pd-phone-flag">
+                      {{ (countryCodes | countryFlag: buyerForm.get('extensionPais')?.value) }}
+                    </span>
+                    <select id="pd-extension" formControlName="extensionPais" class="pd-phone-ext">
+                      <option *ngFor="let c of countryCodes" [value]="c.dialCode">
+                        {{ c.dialCode }} — {{ c.name }}
+                      </option>
+                    </select>
+                  </div>
+                  <input id="pd-celular" type="tel" formControlName="celular"
+                    placeholder="300 000 0000" autocomplete="tel" class="pd-phone-number">
+                </div>
                 <small class="pd-error" *ngIf="invalid('celular')">
-                  Ingresa un número de celular válido (7 a 15 dígitos).
+                  Ingresa un número de celular válido (solo dígitos, 7 a 15).
                 </small>
               </div>
 
@@ -246,42 +339,31 @@
               </div>
 
               <!-- Sexo -->
-              <div class="pd-field pd-field-wide" [class.has-error]="invalid('sexo')">
+              <div class="pd-field pd-field-full" [class.has-error]="invalid('sexoId')">
                 <label>Sexo</label>
-                <div class="pd-pills" role="radiogroup" aria-label="Sexo">
-                  <label class="pd-pill">
-                    <input type="radio" formControlName="sexo" value="femenino">
-                    <span>Femenino</span>
-                  </label>
-                  <label class="pd-pill">
-                    <input type="radio" formControlName="sexo" value="masculino">
-                    <span>Masculino</span>
-                  </label>
-                  <label class="pd-pill">
-                    <input type="radio" formControlName="sexo" value="otro">
-                    <span>Otro</span>
-                  </label>
-                  <label class="pd-pill">
-                    <input type="radio" formControlName="sexo" value="prefiero-no-decir">
-                    <span>Prefiero no decir</span>
-                  </label>
+                <div class="pd-sex-group">
+                  <button type="button" *ngFor="let s of sexTypes"
+                    class="pd-sex-btn"
+                    [class.selected]="buyerForm.get('sexoId')?.value === s.id"
+                    (click)="buyerForm.get('sexoId')?.setValue(s.id)">
+                    {{ s.name }}
+                  </button>
                 </div>
-                <small class="pd-error" *ngIf="invalid('sexo')">
-                  Selecciona una opción.
-                </small>
+                <small class="pd-error" *ngIf="invalid('sexoId')">Selecciona una opción.</small>
               </div>
 
-              <!-- Edad -->
-              <div class="pd-field" [class.has-error]="invalid('edad')">
-                <label for="pd-edad">Edad</label>
-                <input id="pd-edad" type="number" formControlName="edad"
-                  placeholder="Ej: 28" min="14" max="99">
-                <small class="pd-error" *ngIf="invalid('edad')">
-                  Ingresa una edad entre 14 y 99 años.
+              <!-- Fecha de nacimiento -->
+              <div class="pd-field" [class.has-error]="invalid('fechaNacimiento')">
+                <label for="pd-fecha-nac">Fecha de nacimiento</label>
+                <input id="pd-fecha-nac" type="date" formControlName="fechaNacimiento"
+                  lang="es-CO" [max]="today | date:'yyyy-MM-dd'">
+                <small class="pd-error" *ngIf="invalid('fechaNacimiento')">
+                  Ingresa tu fecha de nacimiento.
                 </small>
               </div>
 
             </div>
+            </ng-container>
 
             <!-- Resumen de cita seleccionada -->
             <div class="pd-summary" *ngIf="isService && selectedSlotLabel">
