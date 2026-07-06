@@ -281,7 +281,7 @@
             <!-- ── Paso 2: Resto del formulario (aparece tras consultar doc) ── -->
             <ng-container *ngIf="documentChecked || clientFound">
 
-            <p class="pd-form-step-label" style="margin-top:24px">
+            <p class="pd-form-step-label pd-form-step-next">
               <i class="fas fa-user"></i> Completa tus datos personales
             </p>
             <div class="pd-form-grid">
@@ -311,10 +311,14 @@
                 <label for="pd-celular">Número de celular</label>
                 <div class="pd-phone-row">
                   <div class="pd-phone-ext-wrap">
-                    <span class="pd-phone-flag">
-                      {{ (countryCodes | countryFlag: buyerForm.get('extensionPais')?.value) }}
+                    <span class="pd-phone-ext-display" aria-hidden="true">
+                      <span class="pd-phone-flag">
+                        {{ (countryCodes | countryFlag: buyerForm.get('extensionPais')?.value) }}
+                      </span>
+                      {{ buyerForm.get('extensionPais')?.value }}
                     </span>
-                    <select id="pd-extension" formControlName="extensionPais" class="pd-phone-ext">
+                    <select id="pd-extension" formControlName="extensionPais" class="pd-phone-ext"
+                      aria-label="Indicativo de país">
                       <option *ngFor="let c of countryCodes" [value]="c.dialCode">
                         {{ c.dialCode }} — {{ c.name }}
                       </option>
@@ -356,7 +360,7 @@
               <div class="pd-field" [class.has-error]="invalid('fechaNacimiento')">
                 <label for="pd-fecha-nac">Fecha de nacimiento</label>
                 <input id="pd-fecha-nac" type="date" formControlName="fechaNacimiento"
-                  lang="es-CO" [max]="today | date:'yyyy-MM-dd'">
+                  lang="es-CO" required [max]="today | date:'yyyy-MM-dd'">
                 <small class="pd-error" *ngIf="invalid('fechaNacimiento')">
                   Ingresa tu fecha de nacimiento.
                 </small>

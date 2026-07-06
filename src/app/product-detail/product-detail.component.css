@@ -716,9 +716,12 @@
 .pd-field input[type="text"],
 .pd-field input[type="tel"],
 .pd-field input[type="email"],
-.pd-field input[type="number"] {
+.pd-field input[type="number"],
+.pd-field input[type="date"],
+.pd-field select {
   width: 100%;
   box-sizing: border-box;
+  min-height: 47px;
   padding: 13px 16px;
   border: 1.5px solid #ead9d6;
   border-radius: 13px;
@@ -730,19 +733,50 @@
   transition: border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
 }
 
+/* Selects con flecha propia, coherente con la estética */
+.pd-field select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding-right: 38px;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%238b4e5d' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  cursor: pointer;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.pd-field input[type="date"] {
+  cursor: pointer;
+}
+
+.pd-field input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 0.55;
+}
+
 .pd-field input::placeholder {
   color: #c3aeab;
 }
 
-.pd-field input:focus {
+/* Fecha sin valor: mismo tono que los placeholders */
+.pd-field input[type="date"]:invalid {
+  color: #c3aeab;
+}
+
+.pd-field input:focus,
+.pd-field select:focus {
   border-color: var(--color-main);
-  background: #fff;
+  background-color: #fff;
   box-shadow: 0 0 0 4px rgba(139, 78, 93, 0.13);
 }
 
-.pd-field.has-error input {
+.pd-field.has-error input,
+.pd-field.has-error select {
   border-color: var(--color-second);
-  background: #fff7f6;
+  background-color: #fff7f6;
 }
 
 .pd-error {
@@ -840,6 +874,13 @@
   opacity: 0.75;
 }
 
+/* Separación entre el paso 1 (documento) y el paso 2 (datos personales) */
+.pd-form-step-next {
+  margin-top: 28px;
+  padding-top: 22px;
+  border-top: 1px dashed rgba(139, 78, 93, 0.2);
+}
+
 .pd-field-row {
   position: relative;
   display: flex;
@@ -864,32 +905,51 @@
 
 .pd-phone-row {
   display: flex;
+  align-items: stretch;
   gap: 8px;
 }
 
 .pd-phone-ext-wrap {
   position: relative;
   flex-shrink: 0;
+  display: flex;
 }
 
-.pd-phone-flag {
+/* Cerrado muestra solo bandera + indicativo; el desplegable conserva la lista completa */
+.pd-phone-ext-display {
   position: absolute;
-  left: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 1.15rem;
+  inset: 0 26px 0 0;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding-left: 14px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: #4d2b35;
   pointer-events: none;
-  line-height: 1;
   z-index: 1;
 }
 
-.pd-phone-ext {
-  width: 110px;
-  padding-left: 34px;
+.pd-phone-flag {
+  font-size: 1.05rem;
+  line-height: 1;
+}
+
+.pd-field select.pd-phone-ext {
+  width: 118px;
+  padding-left: 14px;
+  padding-right: 30px;
+  background-position: right 10px center;
+  color: transparent;
+}
+
+.pd-field select.pd-phone-ext option {
+  color: #4d2b35;
 }
 
 .pd-phone-number {
   flex: 1;
+  min-width: 0;
 }
 
 /* ── Sexo: botones pill ────────────────────────────────────── */
@@ -905,24 +965,33 @@
 }
 
 .pd-sex-btn {
-  padding: 9px 22px;
-  border-radius: 50px;
-  border: 1.5px solid var(--color-main, #c97b7b);
-  background: transparent;
-  color: var(--color-main, #c97b7b);
-  font-size: 0.88rem;
+  padding: 10px 20px;
+  border-radius: 999px;
+  border: 1.5px solid #ead9d6;
+  background: #fdfaf9;
+  color: #80686b;
+  font-family: var(--font-text);
+  font-size: 0.86rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.18s, color 0.18s;
+  transition: all 0.25s ease;
 }
 
 .pd-sex-btn:hover {
-  background: rgba(201, 123, 123, 0.08);
+  border-color: var(--color-main);
+  transform: translateY(-1px);
+}
+
+.pd-sex-btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(139, 78, 93, 0.2);
 }
 
 .pd-sex-btn.selected {
-  background: var(--color-main, #c97b7b);
+  background: var(--color-main);
+  border-color: var(--color-main);
   color: #fff;
+  box-shadow: 0 7px 16px rgba(139, 78, 93, 0.35);
 }
 
 

@@ -2,7 +2,20 @@
 <div class="projects-section" id="proyectos">
   <div id="titulo-proyecto" class="section-title2">SERVICIOS</div>
 
-  <div class="projects-container">
+  <!-- Loader mientras se cargan los productos del backend -->
+  <div class="loader-wrapper" *ngIf="isLoading">
+    <div class="loader">
+      <div class="cup">
+        <div class="cup-handle"></div>
+        <div class="smoke one"></div>
+        <div class="smoke two"></div>
+        <div class="smoke three"></div>
+      </div>
+      <div class="load">..........................</div>
+    </div>
+  </div>
+
+  <div class="projects-container" *ngIf="!isLoading">
     <!-- Detalle del proyecto -->
     <div class="project-detail" *ngIf="selectedProject" [@projectTransition]="selectedProject">
 
