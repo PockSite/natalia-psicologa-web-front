@@ -42,6 +42,7 @@ export class ProjectsComponent implements AfterViewInit {
 
   projects: Product[] = [];
   selectedProject: Product | null = null;
+  isLoading = true;
 
   constructor(
     private el: ElementRef,
@@ -50,12 +51,18 @@ export class ProjectsComponent implements AfterViewInit {
   ) { }
 
   ngOnInit(): void {
-    this.productService.getProducts().subscribe(products => {
-      this.projects = products;
-      this.selectedProject = products[0] ?? null;
-      // Las cards se renderizan después de la respuesta del servicio,
-      // por eso el observer se conecta en el siguiente ciclo.
-      setTimeout(() => this.observeCards());
+    this.productService.getProducts().subscribe({
+      next: products => {
+        this.projects = products;
+        this.selectedProject = products[0] ?? null;
+        this.isLoading = false;
+        // Las cards se renderizan después de la respuesta del servicio,
+        // por eso el observer se conecta en el siguiente ciclo.
+        setTimeout(() => this.observeCards());
+      },
+      error: () => {
+        this.isLoading = false;
+      }
     });
   }
 
