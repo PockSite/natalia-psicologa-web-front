@@ -1,8 +1,8 @@
 export const environment = {
   production: false,
-  productsApiUrl: 'http://localhost:8001/api/v1',
-  reservationsApiUrl: 'http://localhost:8002/api/v1',
-  notificationsApiUrl: 'http://localhost:8003/api/v1',
-  clientsApiUrl: 'http://localhost:8004/api/v1',
-  paymentsApiUrl: 'http://localhost:8000/api/v1',
+  productsApiUrl: 'https://devnataliaproductsapi.pocksite.com/api/v1',
+  reservationsApiUrl: 'https://devnataliareservationssapi.pocksite.com/api/v1',
+  notificationsApiUrl: 'http://devnatalianotificationsapi.pocksite.com/api/v1',
+  clientsApiUrl: 'http://devnataliaclientsapi.pocksite.com/api/v1',
+  paymentsApiUrl: 'http://devnataliapayapi.pocksite.com/api/v1',
 };
