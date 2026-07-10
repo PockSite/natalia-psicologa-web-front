@@ -50,6 +50,11 @@ export class PaymentService {
     return this.http.post<CheckoutResponse>(`${this.apiUrl}/payments/checkout`, body);
   }
 
+  /** Obtiene el estado de una transacción por su ID. */
+  getTransaction(transactionId: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/payments/transactions/${transactionId}`);
+  }
+
   /** Abre el widget de Wompi con los datos firmados por el backend. */
   openWompiWidget(checkout: CheckoutResponse, redirectUrl?: string): Promise<any> {
     return new Promise((resolve, reject) => {

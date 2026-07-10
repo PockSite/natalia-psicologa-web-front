@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { PaymentService } from '../services/payment.service';
 
 @Component({
   selector: 'app-payment-result',
@@ -9,17 +10,49 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class PaymentResultComponent implements OnInit {
 
   loading = true;
-  /** ID de transacción que Wompi añade como ?id= a la redirect-url */
   transactionId: string | null = null;
-  /** ID del producto para el botón "Volver" */
   productId: string | null = null;
+  status: 'success' | 'rejected' | 'pending' | 'unknown' = 'unknown';
 
-  constructor(private route: ActivatedRoute, private router: Router) {}
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private paymentService: PaymentService,
+  ) {}
 
   ngOnInit(): void {
     this.transactionId = this.route.snapshot.queryParamMap.get('id');
     this.productId     = this.route.snapshot.queryParamMap.get('product_id');
-    this.loading = false;
+
+    if (!this.transactionId) {
+      this.loading = false;
+      this.status = 'unknown';
+      return;
+    }
+
+    this.paymentService.getTransaction(this.transactionId).subscribe({
+      next: (res) => {
+        this.loading = false;
+        const txStatus: string = res?.data?.transaction?.status ?? res?.data?.status ?? res?.status ?? '';
+        this.status = this.mapStatus(txStatus);
+      },
+      error: () => {
+        this.loading = false;
+        this.status = 'unknown';
+      },
+    });
+  }
+
+  private mapStatus(txStatus: string): 'success' | 'rejected' | 'pending' | 'unknown' {
+    switch (txStatus) {
+      case 'APPROVED':     return 'success';
+      case 'DECLINED':
+      case 'REJECTED':
+      case 'VOIDED':
+      case 'ERROR':        return 'rejected';
+      case 'PENDING':      return 'pending';
+      default:             return 'unknown';
+    }
   }
 
   goHome(): void {
