@@ -721,31 +721,34 @@
 .pd-field select {
   width: 100%;
   box-sizing: border-box;
-  min-height: 47px;
-  padding: 13px 16px;
-  border: 1.5px solid #ead9d6;
-  border-radius: 13px;
-  background: #fdfaf9;
+  padding: 0.875rem;
+  font-size: 1rem;
+  border: 1.5px solid #000;
+  border-radius: 0.5rem;
+  box-shadow: 2.5px 3px 0 #000;
+  background: #fff;
   font-family: var(--font-text);
-  font-size: 0.92rem;
-  color: #4d2b35;
+  color: #000;
   outline: none;
-  transition: border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+  transition: ease 0.25s;
 }
 
-/* Selects con flecha propia, coherente con la estética */
+/* Selects con flecha propia */
 .pd-field select {
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
   padding-right: 38px;
-  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%238b4e5d' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 14px center;
   cursor: pointer;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
+}
+
+.pd-field select {
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
 }
 
 .pd-field input[type="date"] {
@@ -768,15 +771,18 @@
 
 .pd-field input:focus,
 .pd-field select:focus {
-  border-color: var(--color-main);
-  background-color: #fff;
-  box-shadow: 0 0 0 4px rgba(139, 78, 93, 0.13);
+  box-shadow: 5.5px 7px 0 #000;
 }
 
 .pd-field.has-error input,
 .pd-field.has-error select {
-  border-color: var(--color-second);
-  background-color: #fff7f6;
+  border-color: #e57373;
+  box-shadow: 2.5px 3px 0 #e57373;
+}
+
+.pd-field.has-error input:focus,
+.pd-field.has-error select:focus {
+  box-shadow: 5.5px 7px 0 #e57373;
 }
 
 .pd-error {
@@ -786,48 +792,7 @@
   animation: pd-rise 0.25s ease both;
 }
 
-/* Pills de selección (sexo) */
-.pd-pills {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 9px;
-}
 
-.pd-pill input {
-  position: absolute;
-  opacity: 0;
-  pointer-events: none;
-}
-
-.pd-pill span {
-  display: inline-block;
-  padding: 9px 18px;
-  border-radius: 999px;
-  border: 1.5px solid #ead9d6;
-  background: #fdfaf9;
-  color: #80686b;
-  font-size: 0.84rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.25s ease;
-  user-select: none;
-}
-
-.pd-pill span:hover {
-  border-color: var(--color-main);
-  transform: translateY(-1px);
-}
-
-.pd-pill input:checked + span {
-  background: var(--color-main);
-  border-color: var(--color-main);
-  color: #fff;
-  box-shadow: 0 7px 16px rgba(139, 78, 93, 0.35);
-}
-
-.pd-pill input:focus-visible + span {
-  box-shadow: 0 0 0 4px rgba(139, 78, 93, 0.2);
-}
 
 /* Resumen de cita */
 .pd-summary {
@@ -952,46 +917,63 @@
   min-width: 0;
 }
 
-/* ── Sexo: botones pill ────────────────────────────────────── */
+/* ── Sexo: selector de opciones estilo mydict ──────────────── */
 .pd-field-full {
   grid-column: 1 / -1;
 }
 
-.pd-sex-group {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
+.mydict {
   margin-top: 4px;
 }
 
-.pd-sex-btn {
-  padding: 10px 20px;
-  border-radius: 999px;
-  border: 1.5px solid #ead9d6;
-  background: #fdfaf9;
-  color: #80686b;
-  font-family: var(--font-text);
-  font-size: 0.86rem;
-  font-weight: 600;
+.mydict div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+}
+
+.mydict input[type="radio"] {
+  clip: rect(0 0 0 0);
+  clip-path: inset(100%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
+.mydict input[type="radio"]:checked + span {
+  box-shadow: 0 0 0 0.0625em #0043ed;
+  background-color: #dee7ff;
+  z-index: 1;
+  color: #0043ed;
+}
+
+.mydict label span {
+  display: block;
   cursor: pointer;
-  transition: all 0.25s ease;
+  background-color: #fff;
+  padding: 0.5em 1em;
+  position: relative;
+  margin-left: 0;
+  box-shadow: 2.5px 3px 0 #000;
+  border: 1.5px solid #000;
+  letter-spacing: 0.05em;
+  color: #000;
+  text-align: center;
+  transition: background-color 0.5s ease;
 }
 
-.pd-sex-btn:hover {
-  border-color: var(--color-main);
-  transform: translateY(-1px);
+.mydict label:first-child span {
+  border-radius: 0.5rem 0 0 0.5rem;
 }
 
-.pd-sex-btn:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 4px rgba(139, 78, 93, 0.2);
+.mydict label:last-child span {
+  border-radius: 0 0.5rem 0.5rem 0;
 }
 
-.pd-sex-btn.selected {
-  background: var(--color-main);
-  border-color: var(--color-main);
-  color: #fff;
-  box-shadow: 0 7px 16px rgba(139, 78, 93, 0.35);
+.mydict label:not(:first-child) span {
+  margin-left: -1.5px;
 }
 
 
@@ -1075,58 +1057,62 @@
 .pd-cta {
   display: inline-flex;
   align-items: center;
-  gap: 14px;
-  padding: 10px 12px 10px 30px;
+  gap: 0;
   border: none;
-  border-radius: 999px;
-  background: var(--color-main);
-  color: #fff;
-  font-family: var(--font-text);
-  font-size: 0.92rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 1.6px;
-  text-decoration: none;
+  background: none;
   cursor: pointer;
-  box-shadow: 0 14px 30px -8px rgba(94, 53, 64, 0.55);
+  font-family: var(--font-text);
   transition: all 0.3s ease;
 }
 
-.pd-cta-arrow {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  background: var(--color-main2);
-  color: var(--color-main);
-  font-size: 0.95rem;
-  transition: transform 0.3s ease;
+.pd-cta .hover-underline-animation {
+  position: relative;
+  padding-bottom: 7px;
+  letter-spacing: 4px;
+  font-size: 14px;
+  padding-right: 15px;
+  text-transform: uppercase;
+  color: #000;
 }
 
-.pd-cta:hover:not(:disabled) {
-  transform: translateY(-3px);
-  box-shadow: 0 20px 38px -8px rgba(94, 53, 64, 0.6);
+.pd-cta .hover-underline-animation::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  transform: scaleX(0);
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: #000;
+  transform-origin: bottom right;
+  transition: transform 0.25s ease-out;
 }
 
-.pd-cta:hover:not(:disabled) .pd-cta-arrow {
-  transform: translateX(4px);
+.pd-cta:hover .hover-underline-animation::after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
+}
+
+.pd-cta svg {
+  transform: translateX(-8px);
+  transition: all 0.3s ease;
+}
+
+.pd-cta:hover svg {
+  transform: translateX(0);
+}
+
+.pd-cta:active svg {
+  transform: scale(0.9);
 }
 
 .pd-cta:disabled {
-  opacity: 0.7;
-  cursor: wait;
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
-.pd-cta.whatsapp {
-  background: #1faa53;
-  box-shadow: 0 14px 30px -8px rgba(31, 170, 83, 0.5);
-}
-
-.pd-cta.whatsapp .pd-cta-arrow {
-  background: #ffffff;
-  color: #1faa53;
+.pd-cta:disabled svg {
+  opacity: 0.4;
 }
 
 /* ── Confirmación ───────────────────────────────────────────── */

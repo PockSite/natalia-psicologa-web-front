@@ -345,13 +345,13 @@
               <!-- Sexo -->
               <div class="pd-field pd-field-full" [class.has-error]="invalid('sexoId')">
                 <label>Sexo</label>
-                <div class="pd-sex-group">
-                  <button type="button" *ngFor="let s of sexTypes"
-                    class="pd-sex-btn"
-                    [class.selected]="buyerForm.get('sexoId')?.value === s.id"
-                    (click)="buyerForm.get('sexoId')?.setValue(s.id)">
-                    {{ s.name }}
-                  </button>
+                <div class="mydict">
+                  <div>
+                    <label *ngFor="let s of sexTypes">
+                      <input type="radio" name="sexoId" [value]="s.id" formControlName="sexoId">
+                      <span>{{ s.name }}</span>
+                    </label>
+                  </div>
                 </div>
                 <small class="pd-error" *ngIf="invalid('sexoId')">Selecciona una opción.</small>
               </div>
@@ -383,11 +383,13 @@
             <!-- CTA -->
             <div class="pd-actions">
               <button type="submit" class="pd-cta" [disabled]="submitting">
-                <span *ngIf="!submitting">{{ isService ? 'Agendar' : 'Comprar' }}</span>
-                <span *ngIf="submitting">Enviando...</span>
-                <span class="pd-cta-arrow">
-                  <i class="fas" [ngClass]="submitting ? 'fa-circle-notch fa-spin' : 'fa-arrow-right'"></i>
-                </span>
+                <ng-container *ngIf="!submitting">
+                  <span class="hover-underline-animation">{{ isService ? 'Agendar' : 'Comprar' }}</span>
+                  <svg id="arrow-horizontal" xmlns="http://www.w3.org/2000/svg" width="30" height="10" viewBox="0 0 46 16">
+                    <path id="Path_10" data-name="Path 10" d="M8,0,6.545,1.455l5.506,5.506H-30V9.039H12.052L6.545,14.545,8,16l8-8Z" transform="translate(30)"></path>
+                  </svg>
+                </ng-container>
+                <span *ngIf="submitting"><i class="fas fa-circle-notch fa-spin"></i> Enviando...</span>
               </button>
             </div>
           </form>
