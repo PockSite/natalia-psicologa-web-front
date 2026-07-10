@@ -161,9 +161,10 @@
 
 /* ════════ FICHA ════════ */
 .pd-ficha {
+  position: relative;
   background: #ffffff;
   border: 1px solid rgba(139, 78, 93, 0.12);
-  border-radius: 26px;
+  border-radius: 10px;
   padding: 16px 16px 22px;
   box-shadow:
     0 24px 50px -22px rgba(94, 53, 64, 0.35),
@@ -173,7 +174,7 @@
 /* Foto */
 .pd-photo-wrap {
   position: relative;
-  border-radius: 20px;
+  border-radius: 8px;
   overflow: hidden;
 }
 
@@ -183,10 +184,6 @@
   height: 250px;
   object-fit: cover;
   transition: transform 0.6s ease;
-}
-
-.pd-photo-wrap:hover .pd-photo {
-  transform: scale(1.04);
 }
 
 .pd-type-chip {
@@ -208,35 +205,60 @@
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
 }
 
-/* Etiqueta de precio estilo "tag" */
+/* Etiqueta de precio estilo sticker 3D */
 .pd-price-tag {
   position: absolute;
-  bottom: 14px;
-  right: -6px;
-  padding: 10px 22px 10px 18px;
+  top: calc(16px + 190px);
+  right: 5px;
+  padding: 0.2rem 1.2rem;
   background: var(--color-main);
   color: #fff;
   font-family: var(--font-title);
-  font-size: 1.45rem;
-  letter-spacing: 0.5px;
-  border-radius: 14px 4px 4px 14px;
-  box-shadow: 0 10px 24px rgba(94, 53, 64, 0.45);
-  transform: rotate(-2deg);
+  font-size: 1.9rem;
+  font-weight: 500;
+  border-radius: 5px 0 0 5px;
+  z-index: 10;
+  box-shadow:
+    8px 12px 30px -6px rgba(0,0,0,0.4),
+    0 2px 6px rgba(0,0,0,0.2);
+  transform: perspective(600px) rotateY(-3deg);
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.35s ease;
 }
 
-.pd-price-currency {
-  font-size: 0.95rem;
-  vertical-align: top;
-  margin-right: 2px;
-  opacity: 0.85;
+.pd-price-tag:hover {
+  transform: perspective(400px) rotateY(-8deg) translateY(-5px) translateX(-3px);
+  box-shadow:
+    14px 20px 40px -8px rgba(0,0,0,0.5),
+    0 6px 14px rgba(0,0,0,0.3);
+}
+
+.pd-price-tag::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.pd-price-tag::after {
+  content: '';
+  position: absolute;
+  bottom: -23px;
+  right: 0;
+  width: 0;
+  height: 0;
+  border-top: 13px solid #6e3d49;
+  border-bottom: 10px solid transparent;
+  border-right: 13px solid transparent;
+  z-index: -6;
 }
 
 .pd-price-tag small {
-  font-family: var(--font-text);
-  font-size: 0.68rem;
-  font-weight: 500;
-  opacity: 0.8;
-  margin-left: 3px;
+  font-size: 15px;
+  font-weight: 300;
+  margin-left: 5px;
+  opacity: 0.85;
 }
 
 /* Badges */

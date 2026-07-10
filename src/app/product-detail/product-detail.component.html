@@ -43,12 +43,12 @@
             <i class="fas" [ngClass]="isService ? 'fa-calendar-check' : 'fa-shopping-bag'"></i>
             {{ isService ? 'Sesión virtual' : 'Producto digital' }}
           </span>
-
-          <span class="pd-price-tag">
-            {{ product.price | copCurrency }}
-            <small *ngIf="isService">/ sesión</small>
-          </span>
         </div>
+
+        <span class="pd-price-tag">
+          {{ product.price | copCurrency }}
+          <small *ngIf="isService">/ sesión</small>
+        </span>
 
         <!-- Badges -->
         <div class="pd-badges">
