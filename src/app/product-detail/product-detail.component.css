@@ -462,41 +462,86 @@
   aspect-ratio: 1;
   border: none;
   border-radius: 10px;
-  background: transparent;
-  color: #c4b0ad;
   font-family: var(--font-text);
   font-size: 0.82rem;
   font-weight: 600;
   cursor: default;
-  transition: all 0.2s ease;
+  position: relative;
+  perspective: 400px;
+  transform-style: preserve-3d;
+  padding: 0;
 }
 
-.pd-cal-cell.out {
+.pd-cal-cell span {
+  display: grid;
+  place-items: center;
+  inset: 0;
+  position: absolute;
+  border-radius: inherit;
+  background: transparent;
+  color: #c4b0ad;
+  transform: rotateX(0deg);
+  transform-origin: top center;
+  transition: 0.2s;
+}
+
+.pd-cal-cell.out span {
   opacity: 0.25;
 }
 
-.pd-cal-cell.today {
+.pd-cal-cell.today span {
   outline: 1.5px dashed rgba(139, 78, 93, 0.5);
   outline-offset: -1.5px;
 }
 
-.pd-cal-cell.available {
+.pd-cal-cell.available span {
   background: rgba(243, 210, 209, 0.6);
   color: #6e4450;
   cursor: pointer;
 }
 
-.pd-cal-cell.available:hover {
-  background: #ecbdbd;
-  transform: translateY(-1px);
+.pd-cal-cell.available:hover span {
+  transform: rotateX(35deg);
 }
 
-.pd-cal-cell.selected,
-.pd-cal-cell.selected:hover {
+.pd-cal-cell.selected span,
+.pd-cal-cell.selected:hover span {
   background: var(--color-main);
   color: #fff;
   box-shadow: 0 6px 14px rgba(139, 78, 93, 0.4);
-  transform: scale(1.06);
+  transform: none !important;
+}
+
+.pd-cal-cell::before,
+.pd-cal-cell::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  z-index: -1;
+}
+
+.pd-cal-cell::before {
+  background: rgba(0,0,0,0.06);
+}
+
+.pd-cal-cell::after {
+  background: rgba(0,0,0,0.1);
+  width: 0;
+}
+
+.pd-cal-cell.available:hover::after {
+  animation: pd-progress-bar 1.2s;
+}
+
+@keyframes pd-progress-bar {
+  0%   { opacity: 1; width: 0; }
+  10%  { opacity: 1; width: 15%; }
+  25%  { opacity: 1; width: 25%; }
+  40%  { opacity: 1; width: 35%; }
+  55%  { opacity: 1; width: 75%; }
+  60%  { opacity: 1; width: 100%; }
+  to   { opacity: 0; width: 100%; }
 }
 
 /* Horarios */

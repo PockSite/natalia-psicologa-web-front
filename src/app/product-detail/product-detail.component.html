@@ -133,7 +133,7 @@
               [class.selected]="isSelectedDay(cell)"
               [disabled]="!dayHasSlots(cell)"
               (click)="selectDay(cell)">
-              {{ cell.date.getDate() }}
+              <span>{{ cell.date.getDate() }}</span>
             </button>
           </div>
 
