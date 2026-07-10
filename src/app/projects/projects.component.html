@@ -26,13 +26,12 @@
 
       <img [src]="selectedProject.image" alt="Detalle proyecto">
 
-      <div class="detail-inner">
+      <div class="detail-pricing">
+        <span class="detail-price-value">{{ selectedProject.price | copCurrency }}</span>
+        <span class="detail-price-label" *ngIf="selectedProject.type.name === 'servicio'">&nbsp;/ sesión</span>
+      </div>
 
-        <!-- Precio pill -->
-        <div class="detail-pricing">
-          <span class="detail-price-value">{{ selectedProject.price | copCurrency }}</span>
-          <span class="detail-price-label" *ngIf="selectedProject.type.name === 'servicio'">&nbsp;/ sesión</span>
-        </div>
+      <div class="detail-inner">
 
         <!-- Header: tipo + título -->
         <div class="detail-header">
