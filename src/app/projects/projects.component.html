@@ -20,24 +20,24 @@
     <div class="project-detail" *ngIf="selectedProject" [@projectTransition]="selectedProject">
 
       <!-- Icono tipo (sesión o producto) — posición absoluta sobre la imagen -->
-      <div class="type-badge big" [ngClass]="selectedProject.type.name">
-        <i class="fas" [ngClass]="selectedProject.type.name === 'producto' ? 'fa-shopping-bag' : 'fa-calendar-check'"></i>
+      <div class="type-badge big" [ngClass]="selectedProject.type.code">
+        <i class="fas" [ngClass]="selectedProject.type.code === 'libro' ? 'fa-shopping-bag' : 'fa-calendar-check'"></i>
       </div>
 
       <img [src]="selectedProject.image" alt="Detalle proyecto">
 
       <div class="detail-pricing">
         <span class="detail-price-value">{{ selectedProject.price | copCurrency }}</span>
-        <span class="detail-price-label" *ngIf="selectedProject.type.name === 'servicio'">&nbsp;/ sesión</span>
+        <span class="detail-price-label" *ngIf="selectedProject.type.code === 'consulta'">&nbsp;/ sesión</span>
       </div>
 
       <div class="detail-inner">
 
         <!-- Header: tipo + título -->
         <div class="detail-header">
-          <span class="detail-type-badge" [ngClass]="selectedProject.type.name">
-            <i class="fas" [ngClass]="selectedProject.type.name === 'producto' ? 'fa-shopping-bag' : 'fa-calendar-check'"></i>
-            {{ selectedProject.type.name === 'producto' ? 'Producto digital' : 'Sesión virtual' }}
+          <span class="detail-type-badge" [ngClass]="selectedProject.type.code">
+            <i class="fas" [ngClass]="selectedProject.type.code === 'libro' ? 'fa-shopping-bag' : 'fa-calendar-check'"></i>
+            {{ selectedProject.type.code === 'libro' ? 'Producto digital' : 'Sesión virtual' }}
           </span>
           <h3 class="detail-title">{{ selectedProject.name }}</h3>
           <p class="detail-short">{{ selectedProject.short }}</p>
@@ -66,8 +66,8 @@
             Preguntar por WhatsApp
           </a>
           <a href="#" (click)="viewProductDetail(selectedProject, $event)" class="detail-btn">
-            <i class="fas" [ngClass]="selectedProject.type.name === 'producto' ? 'fa-shopping-cart' : 'fa-calendar-check'"></i>
-            {{ selectedProject.type.name === 'producto' ? 'Comprar ahora' : 'Agendar sesión' }}
+            <i class="fas" [ngClass]="selectedProject.type.code === 'libro' ? 'fa-shopping-cart' : 'fa-calendar-check'"></i>
+            {{ selectedProject.type.code === 'libro' ? 'Comprar ahora' : 'Agendar sesión' }}
           </a>
         </div>
 
@@ -100,8 +100,8 @@
         <div class="project-image">
           <img [src]="project.image" alt="proyecto">
 
-          <div class="type-badge" [ngClass]="project.type.name">
-            <i class="fas" [ngClass]="project.type.name === 'producto' ? 'fa-shopping-bag' : 'fa-calendar-check'"></i>
+          <div class="type-badge" [ngClass]="project.type.code">
+            <i class="fas" [ngClass]="project.type.code === 'libro' ? 'fa-shopping-bag' : 'fa-calendar-check'"></i>
           </div>
 
           <div class="overlay">
