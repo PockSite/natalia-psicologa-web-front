@@ -790,9 +790,9 @@
   box-sizing: border-box;
   padding: 0.875rem;
   font-size: 1rem;
-  border: 1.5px solid #000;
+  border: 1.5px solid #6e4450;
   border-radius: 0.5rem;
-  box-shadow: 2.5px 3px 0 #000;
+  box-shadow: 2.5px 3px 0 #6e4450;
   background: #fff;
   font-family: var(--font-text);
   color: #000;
@@ -838,7 +838,7 @@
 
 .pd-field input:focus,
 .pd-field select:focus {
-  box-shadow: 5.5px 7px 0 #000;
+  box-shadow: 5.5px 7px 0 #6e4450;
 }
 
 .pd-field.has-error input,
@@ -1010,10 +1010,10 @@
 }
 
 .mydict input[type="radio"]:checked + span {
-  box-shadow: 0 0 0 0.0625em #0043ed;
+  box-shadow: 0 0 0 0.0625em #4d2b35;
   background-color: #dee7ff;
   z-index: 1;
-  color: #0043ed;
+  color: #4d2b35;
 }
 
 .mydict label span {
@@ -1023,8 +1023,8 @@
   padding: 0.5em 1em;
   position: relative;
   margin-left: 0;
-  box-shadow: 2.5px 3px 0 #000;
-  border: 1.5px solid #000;
+  box-shadow: 2.5px 3px 0 #4d2b35;
+  border: 1.5px solid #4d2b35;
   letter-spacing: 0.05em;
   color: #000;
   text-align: center;
