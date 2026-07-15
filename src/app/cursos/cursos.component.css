@@ -7,7 +7,6 @@
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
-  background-attachment: scroll;
   padding: 80px 20px;
   text-align: center;
   position: relative;
@@ -26,9 +25,8 @@
   max-width: 1300px;
   position: relative;
   margin-left: 70px;
-  margin-right: 70px ;
-  gap: 5px;
-  touch-action: pan-y; /* allow vertical page scroll while capturing horizontal swipes */
+  margin-right: 70px;
+  touch-action: pan-y;
   -webkit-user-select: none;
   user-select: none;
 }
@@ -37,51 +35,6 @@
   display: flex;
   transition: transform 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   will-change: transform;
-}
-
-.carousel-container {
-  position: relative;
-  overflow: hidden;
-  width: 100%;
-  display: flex;
-  justify-content: center; /* Centrar */
-}
-
-
-
-.carousel-card {
-  flex: 0 0 calc(100% / var(--color-main, 1));
-  box-sizing: border-box;
-  margin: 0 10px; /* espacio entre tarjetas */
-}
-
-/* Botones de navegación */
-.carousel-container button {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: var(--color-main);
-  border: none;
-  color: var(--color-title);
-  font-size: 2rem;
-  padding: 10px;
-  cursor: pointer;
-  z-index: 2;
-  transition: background 0.3s ease;
-}
-
-.carousel-container button:hover {
-  background: var(--color-main);
-}
-
-/* Flecha izquierda afuera */
-.carousel-container .prev {
-  left: -50px; /* fuera del carrusel */
-}
-
-/* Flecha derecha afuera */
-.carousel-container .next {
-  right: -50px;
 }
 
 /* From Uiverse.io by Saad3092003 */ 
@@ -98,109 +51,6 @@ button {
   font-size: inherit;
   font-family: inherit;
 }
-
-button.learn-more {
-  width: 12rem;
-  height: auto;
-}
-
-button.learn-more .circle {
-  transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
-  box-shadow: 0 0 5px 1px var(--color-title);
-  position: relative;
-  display: block;
-  margin: 0;
-  width: 3rem;
-  height: 3rem;
-  background: var(--color-main2);
-  border-radius: 1.625rem;
-}
-
-button.learn-more .circle .icon {
-  transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  margin: auto;
-  background: var(--color-title);
-}
-
-button.learn-more .circle .icon.arrow {
-  transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
-  left: 0.625rem;
-  width: 1.125rem;
-  height: 0.125rem;
-  background: none;
-}
-
-button.learn-more .circle .icon.arrow::before {
-  position: absolute;
-  content: "";
-  top: -0.29rem;
-  right: 0.0625rem;
-  width: 0.625rem;
-  height: 0.625rem;
-  border-top: 0.125rem solid var(--color-title);
-  border-right: 0.125rem solid var(--color-title);
-  transform: rotate(45deg);
-}
-
-button.learn-more .button-text {
-  transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  padding: 0.75rem 0;
-  margin: 0 0 0 1.85rem;
-  color: var(--color-second);
-  font-weight: 700;
-  line-height: 1.6;
-  text-align: center;
-  text-transform: uppercase;
-}
-
-button:hover .circle {
-  width: 100%;
-  box-shadow: 0 0 10px 2px var(--color-text2);
-}
-
-button:hover .button-text {
-  transform: translate(-1.7rem, 0);
-}
-
-button:hover .circle .icon.arrow {
-  background: var(--color-text2);
-  transform: translate(8.7rem, 0);
-}
-
-button:active .circle .icon.arrow {
-  transform: translate(9.5rem, 0);
-  transition: all 0.3s;
-}
-
-button:active .circle {
-  transform: scale(0.9);
-  transition: all 0.3s;
-  box-shadow: 0 0 5px 0.5px var(--color-text2);
-}
-
-button:hover .button-text {
-  color: var(--color-text2);
-}
-
-button:active .button-text {
-  color: var(--color-second);
-}
-
-/* En móviles ocultar flechas */
-@media (max-width: 768px) {
-  .carousel-container button {
-    display: none;
-  }
-}
-
 
 /* ============================= */
 /* NUEVO DISEÑO DE TARJETAS */
@@ -294,34 +144,6 @@ button:active .button-text {
   background: rgba(255, 255, 255, 0.6);
   padding: 6px 10px;
   border-radius: 20px;
-}
-
-.card .bottom-section .row {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 20px;
-}
-
-.card .bottom-section .row .item {
-  flex: 30%;
-  text-align: center;
-  padding: 5px;
-  color: var(--color-title);
-}
-
-.card .bottom-section .row .item .big-text {
-  font-size: 12px;
-  display: block;
-  font-weight: bold;
-}
-
-.card .bottom-section .row .item .regular-text {
-  font-size: 9px;
-}
-
-.card .bottom-section .row .item:nth-child(2) {
-  border-left: 1px solid rgba(255, 255, 255, 0.126);
-  border-right: 1px solid rgba(255, 255, 255, 0.126);
 }
 
 /* Botón base (posición y hover ya la tienes definida) */

@@ -20,42 +20,12 @@
   pointer-events: none;
 }
 
-/* Logo Styles */
-.logo-container {
-  position: absolute;
-  top: 7.5rem;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 49;
-  /* Below navbar if they overlap, but usually separate */
-  transition: all 0.3s ease;
-}
-
-.lion-logo {
-  width: 100px;
-  /* Elegant size for mobile */
-  height: auto;
-  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3));
-}
-
 @media (min-width: 770px) {
   .tubelight-navbar {
     top: 2rem;
     bottom: auto;
     margin-bottom: 0;
     padding-top: 1.5rem;
-  }
-
-  .logo-container {
-    top: 1.5rem;
-    left: 2rem;
-    /* Side positioning for desktop */
-    transform: none;
-  }
-
-  .lion-logo {
-    width: 100px;
-    /* Slightly larger for desktop */
   }
 
   .diamond-shape {
