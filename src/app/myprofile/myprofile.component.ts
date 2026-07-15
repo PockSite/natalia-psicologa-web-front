@@ -1,11 +1,11 @@
-import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit, HostListener } from '@angular/core';
 
 @Component({
   selector: 'app-myprofile',
   templateUrl: './myprofile.component.html',
   styleUrls: ['./myprofile.component.css']
 })
-export class MyprofileComponent implements OnInit, OnDestroy {
+export class MyprofileComponent implements OnInit, OnDestroy, AfterViewInit {
   
 
   // 🌟 Palabras dinámicas
@@ -18,49 +18,29 @@ export class MyprofileComponent implements OnInit, OnDestroy {
   ];
   currentWord: string = this.words[0];
   private wordIndex: number = 0;
-  private wordIntervalId: any;
+  private wordIntervalId: ReturnType<typeof setInterval> | null = null;
+  private fadeTimeoutId: ReturnType<typeof setTimeout> | null = null;
 
-  isMobile: boolean = window.innerWidth <= 768;
   showFloatingBtn: boolean = false;
   private consultationBtnObserver: IntersectionObserver | null = null;
 
   ngOnInit(): void {
     this.startWordAnimation();
+  }
 
-    // 🌟 Detectar viewport (animaciones móviles)
-    if (this.isMobile) {
-      const target = document.querySelector('.myprofile');
-      if (target) {
-        const observer = new IntersectionObserver(
-          (entries) => {
-            entries.forEach((entry) => {
-              if (entry.isIntersecting) {
-                target.classList.add('visible');
-              }
-            });
-          },
-          { threshold: 0.3 }
-        );
-        observer.observe(target);
-      }
+  ngAfterViewInit(): void {
+    const consultationBtn = document.querySelector('.consultation-btn');
+    if (consultationBtn) {
+      this.consultationBtnObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            this.showFloatingBtn = !entry.isIntersecting;
+          });
+        },
+        { threshold: 0.1 }
+      );
+      this.consultationBtnObserver.observe(consultationBtn);
     }
-
-    // 🔵 Observar botón de consulta original para mostrar/ocultar botón flotante
-    setTimeout(() => {
-      const consultationBtn = document.querySelector('.consultation-btn');
-      if (consultationBtn) {
-        this.consultationBtnObserver = new IntersectionObserver(
-          (entries) => {
-            entries.forEach((entry) => {
-              // Mostrar botón flotante cuando el botón original NO está visible
-              this.showFloatingBtn = !entry.isIntersecting;
-            });
-          },
-          { threshold: 0.1 }
-        );
-        this.consultationBtnObserver.observe(consultationBtn);
-      }
-    }, 100);
   }
 
   /**
@@ -69,24 +49,18 @@ export class MyprofileComponent implements OnInit, OnDestroy {
   startWordAnimation() {
     this.wordIntervalId = setInterval(() => {
       const highlightEl = document.querySelector('.highlight');
-      if (highlightEl) {
-        // Fade out
-        highlightEl.classList.add('fade-out');
+      if (!highlightEl) return;
 
-        setTimeout(() => {
-          // Cambiar palabra
-          this.wordIndex = (this.wordIndex + 1) % this.words.length;
-          this.currentWord = this.words[this.wordIndex];
+      highlightEl.classList.add('fade-out');
 
-          // Fade in
-          highlightEl.classList.remove('fade-out');
-          highlightEl.classList.add('fade-in');
-
-          // Quitar clase después de animación
-          setTimeout(() => highlightEl.classList.remove('fade-in'), 800);
-        }, 600); // tiempo para que termine el fade-out
-      }
-    }, 3500); // cada 3.5 segundos cambia
+      this.fadeTimeoutId = setTimeout(() => {
+        this.wordIndex = (this.wordIndex + 1) % this.words.length;
+        this.currentWord = this.words[this.wordIndex];
+        highlightEl.classList.remove('fade-out');
+        highlightEl.classList.add('fade-in');
+        setTimeout(() => highlightEl.classList.remove('fade-in'), 800);
+      }, 600);
+    }, 3500);
   }
 
   /**
@@ -102,18 +76,10 @@ export class MyprofileComponent implements OnInit, OnDestroy {
     }
   }
 
-  @HostListener('window:resize')
-  onResize() {
-    this.isMobile = window.innerWidth <= 768;
-  }
-
   ngOnDestroy(): void {
-    if (this.wordIntervalId) {
-      clearInterval(this.wordIntervalId);
-    }
-    if (this.consultationBtnObserver) {
-      this.consultationBtnObserver.disconnect();
-    }
+    clearInterval(this.wordIntervalId!);
+    clearTimeout(this.fadeTimeoutId!);
+    this.consultationBtnObserver?.disconnect();
   }
 
   /**

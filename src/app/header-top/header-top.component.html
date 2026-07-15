@@ -2,7 +2,7 @@
   <div class="navbar-container">
     <!-- Left Nav Items -->
     <div class="nav-group nav-left">
-      <a *ngFor="let item of getLeftNavItems()" [href]="item.url" (click)="setActiveTab(item.name, $event)" class="nav-item"
+      <a *ngFor="let item of leftNavItems" [href]="item.url" (click)="setActiveTab(item.name, $event)" class="nav-item"
         [class.active]="activeTab === item.name">
         <span class="nav-text d-none d-md-inline">{{ item.name }}</span>
         <span class="nav-icon d-md-none">
@@ -27,7 +27,7 @@
 
     <!-- Right Nav Items -->
     <div class="nav-group nav-right">
-      <a *ngFor="let item of getRightNavItems()" [href]="item.url" (click)="setActiveTab(item.name, $event)" class="nav-item"
+      <a *ngFor="let item of rightNavItems" [href]="item.url" (click)="setActiveTab(item.name, $event)" class="nav-item"
         [class.active]="activeTab === item.name">
         <span class="nav-text d-none d-md-inline">{{ item.name }}</span>
         <span class="nav-icon d-md-none">

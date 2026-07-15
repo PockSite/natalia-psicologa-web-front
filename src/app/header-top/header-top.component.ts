@@ -1,11 +1,11 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit, OnDestroy } from '@angular/core';
 
 @Component({
   selector: 'app-header-top',
   templateUrl: './header-top.component.html',
   styleUrls: ['./header-top.component.css']
 })
-export class HeaderTopComponent implements OnInit {
+export class HeaderTopComponent implements OnInit, OnDestroy {
 
   navItems = [
     { name: 'Portada', url: '#', icon: 'fas fa-home' },
@@ -18,29 +18,29 @@ export class HeaderTopComponent implements OnInit {
 
   activeTab = 'Portada';
   isMobile = false;
+  leftNavItems: { name: string; url: string; icon: string }[] = [];
+  rightNavItems: { name: string; url: string; icon: string }[] = [];
+  private sectionElements: (HTMLElement | null)[] | null = null;
+  private onResize = () => this.updateNavItems();
 
   ngOnInit() {
-    this.checkScreenSize();
-    window.addEventListener('resize', () => this.checkScreenSize());
-    this.onWindowScroll(); // Check initial position
+    this.updateNavItems();
+    window.addEventListener('resize', this.onResize);
+    this.onWindowScroll();
   }
 
-  checkScreenSize() {
+  ngOnDestroy() {
+    window.removeEventListener('resize', this.onResize);
+  }
+
+  private updateNavItems() {
     this.isMobile = window.innerWidth < 768;
-  }
-
-  getLeftNavItems() {
-    if (this.isMobile) {
-      return this.navItems.slice(1, 3);
-    }
-    return this.navItems.slice(0, 3);
-  }
-
-  getRightNavItems() {
-    if (this.isMobile) {
-      return this.navItems.slice(3, 5);
-    }
-    return this.navItems.slice(3);
+    this.leftNavItems = this.isMobile
+      ? this.navItems.slice(1, 3)
+      : this.navItems.slice(0, 3);
+    this.rightNavItems = this.isMobile
+      ? this.navItems.slice(3, 5)
+      : this.navItems.slice(3);
   }
 
   goHome(event: Event) {
@@ -80,33 +80,27 @@ export class HeaderTopComponent implements OnInit {
   onWindowScroll() {
     const st = window.pageYOffset || document.documentElement.scrollTop;
 
-    // Determine scroll direction
     if (st > this.lastScrollTop && st > 100) {
-      // Scrolling Down
       this.isHidden = true;
     } else {
-      // Scrolling Up
       this.isHidden = false;
     }
-    this.lastScrollTop = st <= 0 ? 0 : st; // For Mobile or negative scrolling
+    this.lastScrollTop = st <= 0 ? 0 : st;
 
-    const sections = this.navItems.map(item => {
-      const id = item.url.replace('#', '');
-      // Handle 'Home' which might be top of page or specific section
-      if (id === '') return document.body;
-      return document.getElementById(id);
-    });
+    if (!this.sectionElements || this.sectionElements.includes(null)) {
+      this.sectionElements = this.navItems.map(item => {
+        const id = item.url.replace('#', '');
+        if (id === '') return document.body;
+        return document.getElementById(id);
+      });
+    }
 
-    const scrollPosition = window.scrollY + 100; // Offset for header height
-
-    for (let i = sections.length - 1; i >= 0; i--) {
-      const section = sections[i];
-      if (section) {
-        const offsetTop = section.offsetTop || 0; // Body might not have offsetTop in some contexts, usually 0
-        if (scrollPosition >= offsetTop) {
-          this.activeTab = this.navItems[i].name;
-          break;
-        }
+    const scrollPosition = window.scrollY + 100;
+    for (let i = this.sectionElements.length - 1; i >= 0; i--) {
+      const section = this.sectionElements[i];
+      if (section && scrollPosition >= section.offsetTop) {
+        this.activeTab = this.navItems[i].name;
+        break;
       }
     }
   }

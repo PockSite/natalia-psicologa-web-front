@@ -14,17 +14,14 @@ export class HabilidadesComponent implements AfterViewInit, OnDestroy {
   ngAfterViewInit(): void {
     const cards = this.el.nativeElement.querySelectorAll('.card-modern');
 
-    this.observer = new IntersectionObserver((entries) => {
+    const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-        } else {
-          entry.target.classList.remove('visible');
-        }
+        entry.target.classList.toggle('visible', entry.isIntersecting);
       });
     }, { threshold: 0.2 });
 
-    cards.forEach((card: Element) => this.observer!.observe(card));
+    cards.forEach((card: Element) => observer.observe(card));
+    this.observer = observer;
   }
 
   ngOnDestroy(): void {
