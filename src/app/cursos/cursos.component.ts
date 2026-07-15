@@ -20,7 +20,7 @@ export class CursosComponent implements OnInit, OnDestroy, AfterViewInit {
   currentIndex = 0;
   visibleCards = 3; // 🌟 número de tarjetas visibles (depende del ancho de pantalla)
   slides: any[] = []; // includes clones for infinite looping
-  private carouselIntervalId: any;
+  private carouselIntervalId: ReturnType<typeof setInterval> | null = null;
   currentTranslate = 0; // px translate for the track
 
   // Variables para swipe
@@ -50,8 +50,6 @@ export class CursosComponent implements OnInit, OnDestroy, AfterViewInit {
     this.carouselIntervalId = setInterval(() => {
       this.nextSlide();
     }, 4000);
-    // prefer pointer events if present
-    this.supportsPointer = typeof window !== 'undefined' && 'PointerEvent' in window;
   }
 
   ngAfterViewInit(): void {
@@ -61,9 +59,10 @@ export class CursosComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnDestroy(): void {
-    if (this.carouselIntervalId) {
-      clearInterval(this.carouselIntervalId);
-    }
+    clearInterval(this.carouselIntervalId!);
+    this.globalMoveUnlisten?.();
+    this.globalUpUnlisten?.();
+    this.globalCancelUnlisten?.();
   }
 
   // 🔥 Navegación del carrusel
@@ -296,19 +295,6 @@ export class CursosComponent implements OnInit, OnDestroy, AfterViewInit {
 
     // allow next navigation
     this.isTransitioning = false;
-  }
-
-  private disableTransitionTemporarily(): void {
-    // when we need to jump without animation, temporarily remove transition on track
-    if (!this.trackRef) return;
-    const track = this.trackRef.nativeElement;
-    track.style.transition = 'none';
-    // force reflow
-    void track.offsetWidth;
-    // restore transition after a short delay (match CSS transition time)
-    setTimeout(() => {
-      track.style.transition = '';
-    }, 50);
   }
 
   private updateTranslate(animate = true): void {
