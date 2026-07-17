@@ -5,4 +5,5 @@ export const environment = {
   notificationsApiUrl: 'https://devnatalianotificationsapi.pocksite.com/api/v1',
   clientsApiUrl: 'https://devnataliaclientsapi.pocksite.com/api/v1',
   paymentsApiUrl: 'https://devnataliapayapi.pocksite.com/api/v1',
+  psychologistsApiUrl: 'https://devnataliapsychologistsapi.pocksite.com/api/v1',
 };

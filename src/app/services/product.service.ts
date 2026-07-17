@@ -12,7 +12,9 @@ interface ApiPsychologist {
   id: string;
   full_name: string;
   email?: string;
+  whatsapp_country_code?: string;
   whatsapp_number?: string;
+  photo?: string;
 }
 
 interface ApiProduct {
@@ -32,13 +34,11 @@ interface ApiProduct {
 
 interface ApiAppointment {
   id: string;
-  day_id: number;
   start_time: string;
 }
 
 interface ApiDay {
   id: number;
-  agenda_id: string;
   week_day: string;
   appointments: ApiAppointment[];
 }
@@ -61,7 +61,12 @@ interface ApiAvailability {
   slots: ApiAvailabilitySlot[];
 }
 
-/** Mapeo de días en español (DB) a número JS (0=domingo…6=sábado) */
+/** Normaliza un día de la semana quitando acentos y pasando a minúscula */
+function normalizeWeekDay(raw: string): string {
+  return raw.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
+}
+
+/** Mapeo de días en español (sin acentos, minúscula) a número JS (0=domingo…6=sábado) */
 const WEEKDAY_ES: Record<string, number> = {
   domingo: 0, lunes: 1, martes: 2, miercoles: 3,
   jueves: 4, viernes: 5, sabado: 6
@@ -87,18 +92,6 @@ export class ProductService {
       .pipe(map(p => this.toProduct(p)));
   }
 
-  /** Todas las psicólogas registradas */
-  getPsychologists(): Observable<Psychologist[]> {
-    return this.http.get<ApiPsychologist[]>(`${this.productsApiUrl}/psychologists/`)
-      .pipe(map(list => list.map(p => this.toPsychologist(p))));
-  }
-
-  /** Psicóloga puntual por id */
-  getPsychologistById(id: string): Observable<Psychologist | undefined> {
-    return this.http.get<ApiPsychologist>(`${this.productsApiUrl}/psychologists/${id}`)
-      .pipe(map(p => this.toPsychologist(p)));
-  }
-
   /** Psicóloga(s) que ofrecen un producto — vienen embebidas en el producto. */
   getPsychologistsByProduct(productId: string): Observable<Psychologist[]> {
     return this.getProductById(productId).pipe(
@@ -114,7 +107,7 @@ export class ProductService {
   getAgendaTemplate(psychologistId: string): Observable<Set<number>> {
     return this.http.get<ApiAgenda>(`${this.reservationsApiUrl}/agendas/psychologist/${psychologistId}`).pipe(
       map(apiAgenda => new Set(
-        apiAgenda.days.map(d => WEEKDAY_ES[d.week_day.toLowerCase()] ?? -1).filter(n => n >= 0)
+        (apiAgenda.days ?? []).map(d => WEEKDAY_ES[normalizeWeekDay(d.week_day)] ?? -1).filter(n => n >= 0)
       ))
     );
   }
@@ -180,7 +173,9 @@ export class ProductService {
       id: p.id,
       fullName: p.full_name,
       email: p.email,
+      whatsappCountryCode: p.whatsapp_country_code,
       whatsappNumber: p.whatsapp_number,
+      photo: p.photo,
     };
   }
 
