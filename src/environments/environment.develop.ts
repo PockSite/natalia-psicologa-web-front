@@ -5,4 +5,5 @@ export const environment = {
   notificationsApiUrl: 'http://localhost:8003/api/v1',
   clientsApiUrl: 'http://localhost:8004/api/v1',
   paymentsApiUrl: 'http://localhost:8000/api/v1',
+  psychologistsApiUrl: 'http://localhost:8007/api/v1',
 };

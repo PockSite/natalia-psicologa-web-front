@@ -76,7 +76,7 @@
               class="pd-psy-option"
               [class.selected]="selectedPsychologist?.id === psy.id"
               (click)="selectPsychologist(psy)">
-              <img [src]="psy.photo" [alt]="psy.fullName">
+              <img [src]="psy.photo" [alt]="psy.fullName" onerror="this.style.visibility='hidden'">
               <span class="pd-psy-option-info">
                 <span class="pd-psy-option-name">{{ psy.fullName }}</span>
                 <span class="pd-psy-option-sub">
@@ -182,19 +182,17 @@
           <p *ngIf="product.rating"><i class="fas fa-star"></i> {{ product.rating }}</p>
         </div>
 
-        <!-- Autores (solo productos digitales) -->
-        <div class="pd-authors" *ngIf="!isService && availablePsychologists.length">
-          <div class="pd-psy" *ngFor="let author of availablePsychologists">
-            <img class="pd-psy-photo" [src]="author.photo" [alt]="author.fullName">
-            <div class="pd-psy-info">
-              <span class="pd-psy-name">{{ author.fullName }}</span>
-              <span class="pd-psy-sub">
-                {{ author.headline }}
-                <ng-container *ngIf="author.yearsExperience">
-                  · {{ author.yearsExperience }} años de experiencia
-                </ng-container>
-              </span>
-            </div>
+        <!-- Autora (solo productos digitales: el producto es único de su creadora) -->
+        <div class="pd-psy" *ngIf="!isService && selectedPsychologist">
+          <img class="pd-psy-photo" [src]="selectedPsychologist.photo" [alt]="selectedPsychologist.fullName" onerror="this.style.visibility='hidden'">
+          <div class="pd-psy-info">
+            <span class="pd-psy-name">{{ selectedPsychologist.fullName }}</span>
+            <span class="pd-psy-sub">
+              {{ selectedPsychologist.headline }}
+              <ng-container *ngIf="selectedPsychologist.yearsExperience">
+                · {{ selectedPsychologist.yearsExperience }} años de experiencia
+              </ng-container>
+            </span>
           </div>
         </div>
 
