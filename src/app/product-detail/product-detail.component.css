@@ -686,14 +686,21 @@
   margin-right: 5px;
 }
 
-/* ── Psicóloga ──────────────────────────────────────────────── */
+/* ── Autores (productos digitales) ──────────────────────────── */
+.pd-authors {
+  margin: 0 8px 14px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(139, 78, 93, 0.14);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ── Psicóloga / Autor ─────────────────────────────────────── */
 .pd-psy {
   display: flex;
   align-items: center;
   gap: 13px;
-  margin: 0 8px 14px;
-  padding-top: 16px;
-  border-top: 1px solid rgba(139, 78, 93, 0.14);
 }
 
 .pd-psy-photo {
