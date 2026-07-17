@@ -182,17 +182,19 @@
           <p *ngIf="product.rating"><i class="fas fa-star"></i> {{ product.rating }}</p>
         </div>
 
-        <!-- Autora (solo productos digitales: el producto es único de su creadora) -->
-        <div class="pd-psy" *ngIf="!isService && selectedPsychologist">
-          <img class="pd-psy-photo" [src]="selectedPsychologist.photo" [alt]="selectedPsychologist.fullName">
-          <div class="pd-psy-info">
-            <span class="pd-psy-name">{{ selectedPsychologist.fullName }}</span>
-            <span class="pd-psy-sub">
-              {{ selectedPsychologist.headline }}
-              <ng-container *ngIf="selectedPsychologist.yearsExperience">
-                · {{ selectedPsychologist.yearsExperience }} años de experiencia
-              </ng-container>
-            </span>
+        <!-- Autores (solo productos digitales) -->
+        <div class="pd-authors" *ngIf="!isService && availablePsychologists.length">
+          <div class="pd-psy" *ngFor="let author of availablePsychologists">
+            <img class="pd-psy-photo" [src]="author.photo" [alt]="author.fullName">
+            <div class="pd-psy-info">
+              <span class="pd-psy-name">{{ author.fullName }}</span>
+              <span class="pd-psy-sub">
+                {{ author.headline }}
+                <ng-container *ngIf="author.yearsExperience">
+                  · {{ author.yearsExperience }} años de experiencia
+                </ng-container>
+              </span>
+            </div>
           </div>
         </div>
 

@@ -13,6 +13,9 @@ interface ApiPsychologist {
   full_name: string;
   email?: string;
   whatsapp_number?: string;
+  photo?: string;
+  headline?: string;
+  years_experience?: number;
 }
 
 interface ApiProduct {
@@ -181,6 +184,9 @@ export class ProductService {
       fullName: p.full_name,
       email: p.email,
       whatsappNumber: p.whatsapp_number,
+      photo: p.photo,
+      headline: p.headline,
+      yearsExperience: p.years_experience,
     };
   }
 
