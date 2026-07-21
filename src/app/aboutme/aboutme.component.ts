@@ -13,9 +13,8 @@ export class AboutmeComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('aboutContainer', { static: false }) aboutContainer!: ElementRef;
   @ViewChild('aboutLeft', { static: false }) aboutLeft!: ElementRef;
   @ViewChild('aboutRight', { static: false }) aboutRight!: ElementRef;
-  private resizeTimeout: any;
+  private resizeTimeout: ReturnType<typeof setTimeout> | undefined;
 
-  // Logros destacados
   logros = [
     { image: 'assets/images/fotografia1.jpeg' },
     { image: 'assets/images/fotografia2.jpeg' },
@@ -24,15 +23,12 @@ export class AboutmeComponent implements OnInit, AfterViewInit, OnDestroy {
     { image: 'assets/images/fotografia5.jpeg' },
   ];
 
-  // Duplicamos logros para crear efecto infinito en el carrusel
-  get logrosDuplicados() {
-    return [...this.logros, ...this.logros];
-  }
+  logrosDuplicados: { image: string }[] = [];
 
   constructor(private el: ElementRef, private renderer: Renderer2) {}
 
   ngOnInit() {
-    // Activamos animación solo cuando la sección está visible
+    this.logrosDuplicados = [...this.logros, ...this.logros];
     this.observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {

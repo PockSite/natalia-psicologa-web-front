@@ -1,0 +1,431 @@
+<section class="pd-page">
+
+  <!-- Fondo decorativo -->
+  <div class="pd-blob pd-blob-one" aria-hidden="true"></div>
+  <div class="pd-blob pd-blob-two" aria-hidden="true"></div>
+
+  <div class="pd-container">
+
+    <!-- Volver -->
+    <button type="button" class="pd-back" (click)="goBack()">
+      <i class="fas fa-arrow-left"></i>
+      Volver a servicios
+    </button>
+
+    <!-- Cargando -->
+    <div class="pd-loading" *ngIf="loading">
+      <span class="pd-spinner"></span>
+      <p>Cargando detalle...</p>
+    </div>
+
+    <!-- Producto no encontrado -->
+    <div class="pd-notfound" *ngIf="!loading && notFound">
+      <i class="fas fa-heart-crack"></i>
+      <h2>No encontramos este producto</h2>
+      <p>Es posible que el enlace haya cambiado. Vuelve al catálogo para ver todos los servicios disponibles.</p>
+      <button type="button" class="pd-cta" (click)="goBack()">
+        <span>Ver servicios</span>
+        <span class="pd-cta-arrow"><i class="fas fa-arrow-right"></i></span>
+      </button>
+    </div>
+
+    <!-- Detalle -->
+    <div class="pd-grid" *ngIf="!loading && product">
+
+      <!-- ════════ FICHA DEL PRODUCTO / SESIÓN ════════ -->
+      <aside class="pd-ficha rise d1">
+
+        <!-- Foto + precio -->
+        <div class="pd-photo-wrap">
+          <img class="pd-photo" [src]="product.image" [alt]="product.name">
+
+          <span class="pd-type-chip" [ngClass]="product.type">
+            <i class="fas" [ngClass]="isService ? 'fa-calendar-check' : 'fa-shopping-bag'"></i>
+            {{ isService ? 'Sesión virtual' : 'Producto digital' }}
+          </span>
+        </div>
+
+        <span class="pd-price-tag">
+          {{ product.price | copCurrency }}
+          <small *ngIf="isService">/ sesión</small>
+        </span>
+
+        <!-- Badges -->
+        <div class="pd-badges">
+          <span class="pd-badge" *ngIf="product.rating">
+            <i class="fas fa-thumbs-up"></i> Mejor evaluado
+          </span>
+          <span class="pd-badge" *ngIf="isService">
+            <i class="fas fa-video"></i> 100% virtual
+          </span>
+          <span class="pd-badge">
+            <i class="fas fa-globe-americas"></i> {{ product.language || 'Español' }}
+          </span>
+        </div>
+
+        <h1 class="pd-title">{{ product.name }}</h1>
+        <p class="pd-short">{{ product.short }}</p>
+
+        <!-- ── Profesional que atiende (solo sesiones) ── -->
+        <div class="pd-psy-select" *ngIf="isService && availablePsychologists.length">
+          <p class="pd-psy-select-label">
+            <i class="fas fa-user-doctor"></i> Tu sesión será con
+          </p>
+          <div class="pd-psy-options">
+            <button type="button" *ngFor="let psy of availablePsychologists"
+              class="pd-psy-option"
+              [class.selected]="selectedPsychologist?.id === psy.id"
+              (click)="selectPsychologist(psy)">
+              <img [src]="psy.photo" [alt]="psy.fullName" onerror="this.style.visibility='hidden'">
+              <span class="pd-psy-option-info">
+                <span class="pd-psy-option-name">{{ psy.fullName }}</span>
+                <span class="pd-psy-option-sub">
+                  {{ psy.headline }}
+                  <ng-container *ngIf="psy.yearsExperience">
+                    · {{ psy.yearsExperience }} años
+                  </ng-container>
+                </span>
+              </span>
+              <i class="fas fa-circle-check pd-psy-option-check"></i>
+            </button>
+          </div>
+          <p class="pd-psy-select-hint" *ngIf="availablePsychologists.length > 1">
+            Puedes cambiar de profesional: cada una tiene su propia disponibilidad.
+          </p>
+        </div>
+
+        <!-- ── Calendario (solo sesiones) ── -->
+        <div class="pd-calendar" *ngIf="isService">
+
+          <!-- Cargando la agenda de la profesional seleccionada -->
+          <div class="pd-cal-loading" *ngIf="agendaLoading">
+            <span class="pd-spinner small"></span>
+            <span>Cargando disponibilidad...</span>
+          </div>
+
+          <ng-container *ngIf="!agendaLoading">
+          <div class="pd-cal-header">
+            <button type="button" class="pd-cal-nav" (click)="changeMonth(-1)"
+              [disabled]="!canGoPrevMonth" aria-label="Mes anterior">
+              <i class="fas fa-chevron-left"></i>
+            </button>
+            <span class="pd-cal-month">{{ monthLabel }}</span>
+            <button type="button" class="pd-cal-nav" (click)="changeMonth(1)"
+              [disabled]="!canGoNextMonth" aria-label="Mes siguiente">
+              <i class="fas fa-chevron-right"></i>
+            </button>
+          </div>
+
+          <!-- Spinner mientras se carga la disponibilidad del mes -->
+          <div class="pd-cal-loading" *ngIf="monthLoading">
+            <span class="pd-spinner small"></span>
+            <span>Cargando disponibilidad...</span>
+          </div>
+
+          <div class="pd-cal-grid" *ngIf="!monthLoading">
+            <span class="pd-cal-weekday" *ngFor="let w of weekdays">{{ w }}</span>
+
+            <button type="button" *ngFor="let cell of calendarCells"
+              class="pd-cal-cell"
+              [class.out]="!cell.inMonth"
+              [class.today]="isToday(cell)"
+              [class.available]="dayHasSlots(cell)"
+              [class.selected]="isSelectedDay(cell)"
+              [disabled]="!dayHasSlots(cell)"
+              (click)="selectDay(cell)">
+              <span>{{ cell.date.getDate() }}</span>
+            </button>
+          </div>
+
+          <p class="pd-schedule-error" *ngIf="monthLoadFailed && !monthLoading">
+            <i class="fas fa-circle-exclamation"></i>
+            No pudimos cargar la disponibilidad. Intenta más tarde o contáctanos por WhatsApp.
+          </p>
+
+          <!-- Horarios del día seleccionado -->
+          <div class="pd-slots" *ngIf="selectedDay">
+            <p class="pd-slots-label">
+              <i class="far fa-clock"></i> Horarios disponibles
+            </p>
+            <div class="pd-slots-grid" *ngIf="selectedDay.appointments.length; else noSlots">
+              <button type="button" *ngFor="let slot of selectedDay.appointments"
+                class="pd-slot"
+                [class.selected]="selectedAppointment?.id === slot.id"
+                [disabled]="!slot.available"
+                (click)="selectAppointment(slot)">
+                {{ slot.startTime }}
+              </button>
+            </div>
+            <ng-template #noSlots>
+              <p class="pd-slots-empty">No hay horarios disponibles para este día.</p>
+            </ng-template>
+          </div>
+
+          <p class="pd-slots-hint" *ngIf="!selectedDay && !monthLoading">
+            Selecciona un día disponible para ver los horarios.
+          </p>
+          </ng-container>
+        </div>
+
+        <!-- ── Features ── -->
+        <ul class="pd-features">
+          <li *ngFor="let feature of product.features">
+            <span class="pd-feature-icon"><i class="fas fa-check"></i></span>
+            <span>{{ feature }}</span>
+          </li>
+        </ul>
+
+        <!-- Meta -->
+        <div class="pd-meta">
+          <p *ngIf="product.format"><strong>Formato:</strong> {{ product.format }}</p>
+          <p *ngIf="product.category"><strong>Categoría:</strong> {{ product.category }}</p>
+          <p *ngIf="product.rating"><i class="fas fa-star"></i> {{ product.rating }}</p>
+        </div>
+
+        <!-- Autores (solo productos digitales) -->
+        <div class="pd-authors" *ngIf="!isService && availablePsychologists.length">
+          <div class="pd-psy" *ngFor="let psy of availablePsychologists">
+            <img class="pd-psy-photo" [src]="psy.photo" [alt]="psy.fullName" onerror="this.style.visibility='hidden'">
+            <div class="pd-psy-info">
+              <span class="pd-psy-name">{{ psy.fullName }}</span>
+              <span class="pd-psy-sub">
+                {{ psy.headline }}
+                <ng-container *ngIf="psy.yearsExperience">
+                  · {{ psy.yearsExperience }} años de experiencia
+                </ng-container>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <p class="pd-footnote" *ngIf="!isService">
+          Al comprar el producto, recibirás las instrucciones de acceso por email.
+        </p>
+        <p class="pd-footnote" *ngIf="isService">
+          Recibirás el enlace de la videollamada por email y WhatsApp antes de tu sesión.
+        </p>
+      </aside>
+
+      <!-- ════════ FORMULARIO ════════ -->
+      <main class="pd-form-panel rise d2">
+
+        <!-- Banner pago pendiente -->
+        <div class="pd-payment-banner pending" *ngIf="paymentStatus === 'PENDING' && !submitted">
+          <i class="fas fa-clock"></i>
+          <div>
+            <strong>Pago en proceso</strong>
+            <p>Tu pago está siendo verificado. Te notificaremos por correo cuando se confirme.</p>
+          </div>
+        </div>
+
+        <!-- Banner pago rechazado / error -->
+        <div class="pd-payment-banner declined" *ngIf="paymentStatus === 'DECLINED' || paymentStatus === 'ERROR'">
+          <i class="fas fa-circle-xmark"></i>
+          <div>
+            <strong>{{ paymentStatus === 'DECLINED' ? 'Pago rechazado' : 'Error en el pago' }}</strong>
+            <p>Puedes intentarlo de nuevo con otro método de pago.</p>
+          </div>
+          <button type="button" class="pd-link-btn" (click)="paymentStatus = null">Reintentar</button>
+        </div>
+
+        <ng-container *ngIf="!submitted && paymentStatus !== 'PENDING'; else successCard">
+          <h2 class="pd-form-title">Completa tus datos</h2>
+          <p class="pd-form-sub">
+            {{ isService
+              ? 'Con estos datos confirmamos tu cita y te enviamos el enlace de la sesión.'
+              : 'Con estos datos te enviamos el acceso a tu producto digital.' }}
+          </p>
+
+          <form class="pd-form" [formGroup]="buyerForm" (ngSubmit)="onSubmit()" novalidate>
+
+            <!-- ── Paso 1: Documento ── -->
+            <p class="pd-form-step-label">
+              <i class="fas fa-id-card"></i> Primero, ingresa tu documento
+            </p>
+            <div class="pd-form-grid">
+
+              <!-- Tipo de documento -->
+              <div class="pd-field" [class.has-error]="invalid('tipoDocumento')">
+                <label for="pd-tipo-documento">Tipo de documento</label>
+                <select id="pd-tipo-documento" formControlName="tipoDocumento"
+                  (change)="onDocumentInput()">
+                  <option *ngFor="let dt of documentTypes" [value]="dt.code">{{ dt.name }}</option>
+                </select>
+              </div>
+
+              <!-- Documento -->
+              <div class="pd-field" [class.has-error]="invalid('documento')">
+                <label for="pd-documento">Número de documento</label>
+                <div class="pd-field-row">
+                  <input id="pd-documento" type="text" formControlName="documento"
+                    placeholder="Ej: 1020304050" autocomplete="off"
+                    (input)="onDocumentInput()">
+                  <span class="pd-doc-spinner" *ngIf="clientLookupLoading">
+                    <i class="fas fa-circle-notch fa-spin"></i>
+                  </span>
+                  <span class="pd-doc-ok" *ngIf="!clientLookupLoading && clientFound">
+                    <i class="fas fa-circle-check"></i>
+                  </span>
+                </div>
+                <small class="pd-error" *ngIf="invalid('documento')">
+                  Ingresa un número de documento válido.
+                </small>
+              </div>
+
+            </div>
+
+            <!-- Banner cliente encontrado -->
+            <div class="pd-client-found" *ngIf="clientFound && !clientLookupLoading">
+              <i class="fas fa-circle-check"></i>
+              <span>¡Te encontramos! Revisamos tus datos y los completamos por ti.</span>
+            </div>
+
+            <!-- ── Paso 2: Resto del formulario (aparece tras consultar doc) ── -->
+            <ng-container *ngIf="documentChecked || clientFound">
+
+            <p class="pd-form-step-label pd-form-step-next">
+              <i class="fas fa-user"></i> Completa tus datos personales
+            </p>
+            <div class="pd-form-grid">
+
+              <!-- Nombre -->
+              <div class="pd-field" [class.has-error]="invalid('nombre')">
+                <label for="pd-nombre">Nombre</label>
+                <input id="pd-nombre" type="text" formControlName="nombre"
+                  placeholder="Tu nombre" autocomplete="given-name">
+                <small class="pd-error" *ngIf="invalid('nombre')">
+                  Ingresa tu nombre (mínimo 2 letras).
+                </small>
+              </div>
+
+              <!-- Apellido -->
+              <div class="pd-field" [class.has-error]="invalid('apellido')">
+                <label for="pd-apellido">Apellido</label>
+                <input id="pd-apellido" type="text" formControlName="apellido"
+                  placeholder="Tu apellido" autocomplete="family-name">
+                <small class="pd-error" *ngIf="invalid('apellido')">
+                  Ingresa tu apellido (mínimo 2 letras).
+                </small>
+              </div>
+
+              <!-- Celular -->
+              <div class="pd-field" [class.has-error]="invalid('celular') || invalid('extensionPais')">
+                <label for="pd-celular">Número de celular</label>
+                <div class="pd-phone-row">
+                  <div class="pd-phone-ext-wrap">
+                    <span class="pd-phone-ext-display" aria-hidden="true">
+                      <span class="pd-phone-flag">
+                        {{ (countryCodes | countryFlag: buyerForm.get('extensionPais')?.value) }}
+                      </span>
+                      {{ buyerForm.get('extensionPais')?.value }}
+                    </span>
+                    <select id="pd-extension" formControlName="extensionPais" class="pd-phone-ext"
+                      aria-label="Indicativo de país">
+                      <option *ngFor="let c of countryCodes" [value]="c.dialCode">
+                        {{ c.dialCode }} — {{ c.name }}
+                      </option>
+                    </select>
+                  </div>
+                  <input id="pd-celular" type="tel" formControlName="celular"
+                    placeholder="300 000 0000" autocomplete="tel" class="pd-phone-number">
+                </div>
+                <small class="pd-error" *ngIf="invalid('celular')">
+                  Ingresa un número de celular válido (solo dígitos, 7 a 15).
+                </small>
+              </div>
+
+              <!-- Correo -->
+              <div class="pd-field" [class.has-error]="invalid('correo')">
+                <label for="pd-correo">Correo electrónico</label>
+                <input id="pd-correo" type="email" formControlName="correo"
+                  placeholder="tucorreo@ejemplo.com" autocomplete="email">
+                <small class="pd-error" *ngIf="invalid('correo')">
+                  Ingresa un correo electrónico válido.
+                </small>
+              </div>
+
+              <!-- Sexo -->
+              <div class="pd-field pd-field-full" [class.has-error]="invalid('sexoId')">
+                <label>Sexo</label>
+                <div class="mydict">
+                  <div>
+                    <label *ngFor="let s of sexTypes">
+                      <input type="radio" name="sexoId" [value]="s.id" formControlName="sexoId">
+                      <span>{{ s.name }}</span>
+                    </label>
+                  </div>
+                </div>
+                <small class="pd-error" *ngIf="invalid('sexoId')">Selecciona una opción.</small>
+              </div>
+
+              <!-- Fecha de nacimiento -->
+              <div class="pd-field" [class.has-error]="invalid('fechaNacimiento')">
+                <label for="pd-fecha-nac">Fecha de nacimiento</label>
+                <input id="pd-fecha-nac" type="date" formControlName="fechaNacimiento"
+                  lang="es-CO" required [max]="today | date:'yyyy-MM-dd'">
+                <small class="pd-error" *ngIf="invalid('fechaNacimiento')">
+                  Ingresa tu fecha de nacimiento.
+                </small>
+              </div>
+
+            </div>
+            </ng-container>
+
+            <!-- Resumen de cita seleccionada -->
+            <div class="pd-summary" *ngIf="isService && selectedSlotLabel">
+              <i class="fas fa-calendar-check"></i>
+              <span>Tu cita: <strong>{{ selectedSlotLabel }}</strong></span>
+            </div>
+
+            <p class="pd-schedule-error" *ngIf="scheduleError">
+              <i class="fas fa-circle-exclamation"></i>
+              Selecciona un día y un horario en el calendario para agendar tu sesión.
+            </p>
+
+            <!-- CTA -->
+            <div class="pd-actions">
+              <button type="submit" class="pd-cta" [disabled]="submitting">
+                <ng-container *ngIf="!submitting">
+                  <span class="hover-underline-animation">{{ isService ? 'Agendar' : 'Comprar' }}</span>
+                  <svg id="arrow-horizontal" xmlns="http://www.w3.org/2000/svg" width="30" height="10" viewBox="0 0 46 16">
+                    <path id="Path_10" data-name="Path 10" d="M8,0,6.545,1.455l5.506,5.506H-30V9.039H12.052L6.545,14.545,8,16l8-8Z" transform="translate(30)"></path>
+                  </svg>
+                </ng-container>
+                <span *ngIf="submitting"><i class="fas fa-circle-notch fa-spin"></i> Enviando...</span>
+              </button>
+            </div>
+          </form>
+        </ng-container>
+
+        <!-- ── Confirmación ── -->
+        <ng-template #successCard>
+          <div class="pd-success">
+            <span class="pd-success-icon"><i class="fas fa-check"></i></span>
+            <h2>{{ isService ? '¡Tu sesión quedó agendada!' : '¡Gracias por tu compra!' }}</h2>
+            <p *ngIf="isService">
+              Reservamos <strong>{{ selectedSlotLabel }}</strong>
+              <ng-container *ngIf="selectedPsychologist">
+                con <strong>{{ selectedPsychologist.fullName }}</strong>
+              </ng-container>
+              para ti. Te enviaremos la confirmación y el enlace de la videollamada a tu correo.
+            </p>
+            <p *ngIf="!isService">
+              En unos minutos recibirás en tu correo las instrucciones de acceso a
+              <strong>{{ product.name }}</strong>.
+            </p>
+            <div class="pd-success-actions">
+              <a class="pd-cta whatsapp" [href]="getWhatsappConfirmLink()" target="_blank">
+                <span>Confirmar por WhatsApp</span>
+                <span class="pd-cta-arrow"><i class="fab fa-whatsapp"></i></span>
+              </a>
+              <button type="button" class="pd-link-btn" (click)="goBack()">
+                Volver a los servicios
+              </button>
+            </div>
+          </div>
+        </ng-template>
+
+      </main>
+    </div>
+  </div>
+</section>

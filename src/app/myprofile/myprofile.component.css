@@ -105,16 +105,11 @@
 
 /* ✨ Palabra dinámica con color */
 .highlight {
-  background: linear-gradient(135deg, var(--color-second), var(--color-second));
-  background-size: 200% auto;
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: var(--color-second);
   -webkit-text-stroke: 0.2px var(--color-text2);
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
   font-weight: 900;
   display: inline-block;
-  animation: gradientShift 6s linear infinite;
   transition: opacity 0.8s ease, transform 0.8s ease;
   opacity: 1;
   position: relative;
@@ -129,16 +124,6 @@
 .fade-in {
   opacity: 1;
   transform: translateY(0);
-}
-
-/* 🌈 Animación del gradiente */
-@keyframes gradientShift {
-  0% {
-    background-position: 0% 50%;
-  }
-  100% {
-    background-position: 100% 50%;
-  }
 }
 
 /* 🔘 BOTÓN DE CONSULTA */

@@ -10,7 +10,6 @@
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
-  background-attachment: scroll;
   padding: 80px;
 }
 
@@ -34,7 +33,6 @@
   background-size: 100% 100%;
   background-position: center top;
   background-repeat: no-repeat;
-  background-attachment: scroll;
   margin-top: -450px;
   z-index: 1;
   animation: waveScrollAppear 1s ease forwards;
@@ -43,30 +41,6 @@
 }
 
 @keyframes waveScrollAppear {
-  from {
-    opacity: 0;
-    transform: translateY(-30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* === TÍTULO DE SECCIÓN === */
-.section-title2 {
-  font-size: 2.5rem;
-  font-weight: 900;
-  color: var(--color-second);
-  margin-top: 200px;
-  text-transform: uppercase;
-  text-align: center;
-  letter-spacing: 3px;
-  animation: titleSlideIn 0.8s ease-out;
-  font-family: var(--font-title);
-}
-
-@keyframes titleSlideIn {
   from {
     opacity: 0;
     transform: translateY(-30px);
@@ -116,7 +90,6 @@
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
-  background-attachment: scroll;
   z-index: 0;
 }
 
@@ -142,19 +115,6 @@
   max-width: none;
 }
 
-/* === TAMAÑOS DE TARJETAS === */
-.card-small {
-  grid-column: span 1;
-  grid-row: span 1;
-  min-height: 280px;
-}
-
-.card-large {
-  grid-column: 2;
-  grid-row: 1 / 3;
-  min-height: 400px;
-}
-
 .card-horizontal {
   grid-column: span 1;
   grid-row: 1;
@@ -162,11 +122,6 @@
 }
 
 /* === POSICIONAMIENTO EN GRID === */
-.card-1 {
-  grid-column: 1;
-  grid-row: 1;
-}
-
 .card-2 {
   grid-column: 1;
   grid-row: 1;
@@ -180,11 +135,6 @@
 .card-4 {
   grid-column: 3;
   grid-row: 1;
-}
-
-.card-5 {
-  grid-column: 1;
-  grid-row: 2;
 }
 
 /* === AJUSTES ESPECÍFICOS POR TARJETA === */
@@ -219,10 +169,6 @@
   filter: blur(0);
 }
 
-.card-1.visible {
-  animation: popIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-}
-
 .card-2.visible {
   animation: popIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
@@ -233,10 +179,6 @@
 
 .card-4.visible {
   animation: popIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.4s forwards;
-}
-
-.card-5.visible {
-  animation: popIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.8s forwards;
 }
 
 @keyframes popIn {
@@ -353,17 +295,6 @@
     grid-row: auto;
   }
 
-  .card-large {
-    grid-column: 1;
-    grid-row: auto;
-    min-height: clamp(340px, 62vw, 430px);
-  }
-
-  .card-small {
-    grid-column: 1;
-    min-height: clamp(300px, 58vw, 390px);
-  }
-
   .card-2 .card-inner {
     justify-content: flex-start;
     padding-top: 48%;
@@ -445,17 +376,6 @@
     max-width: 460px;
   }
 
-  .card-large {
-    grid-column: 1;
-    grid-row: auto;
-    min-height: clamp(290px, 92vw, 390px);
-  }
-
-  .card-small {
-    grid-column: 1;
-    min-height: clamp(280px, 88vw, 360px);
-  }
-
   .card-2 .card-inner {
     padding-top: 50%;
     padding-left: 11%;
@@ -477,11 +397,6 @@
     padding-right: 11%;
     padding-bottom: 10%;
     transform: translate(-30px, 20px);
-  }
-
-  .section-title2 {
-    font-size: 1.8rem;
-    margin-bottom: 40px;
   }
 
   .heading {
@@ -511,11 +426,6 @@
 
   .grid-wrapper {
     padding: 40px 15px;
-  }
-
-  .section-title2 {
-    font-size: 1.5rem;
-    margin-bottom: 30px;
   }
 
   .card-modern {

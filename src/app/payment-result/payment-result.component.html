@@ -1,0 +1,76 @@
+<section class="pr-page">
+  <div class="pr-blob pr-blob-one" aria-hidden="true"></div>
+  <div class="pr-blob pr-blob-two" aria-hidden="true"></div>
+
+  <div class="pr-card" *ngIf="!loading; else spinner">
+
+    <ng-container [ngSwitch]="status">
+
+      <ng-container *ngSwitchCase="'success'">
+        <span class="pr-icon pr-icon--success">
+          <i class="fas fa-check-circle"></i>
+        </span>
+        <h1>¡Pago procesado!</h1>
+        <p class="pr-sub">
+          Tu transacción fue recibida por Wompi. Recibirás la confirmación de tu cita
+          y el enlace de la sesión por correo en los próximos minutos.
+        </p>
+      </ng-container>
+
+      <ng-container *ngSwitchCase="'rejected'">
+        <span class="pr-icon pr-icon--error">
+          <i class="fas fa-times-circle"></i>
+        </span>
+        <h1 class="pr-title--error">Pago rechazado</h1>
+        <p class="pr-sub">
+          El pago no pudo procesarse. Verifica tus datos e intenta de nuevo.
+          Si el problema persiste, contacta con tu entidad bancaria.
+        </p>
+        <button type="button" class="pr-cta pr-cta--error" (click)="goProduct()">
+          <span>Volver a intentar</span>
+          <span class="pr-cta-arrow"><i class="fas fa-arrow-right"></i></span>
+        </button>
+      </ng-container>
+
+      <ng-container *ngSwitchCase="'pending'">
+        <span class="pr-icon pr-icon--pending">
+          <i class="fas fa-clock"></i>
+        </span>
+        <h1 class="pr-title--pending">Verificando pago</h1>
+        <p class="pr-sub">
+          Estamos verificando el estado de tu transacción. Te notificaremos por correo
+          en cuanto se confirme.
+        </p>
+      </ng-container>
+
+      <ng-container *ngSwitchDefault>
+        <span class="pr-icon">
+          <i class="fas fa-question-circle"></i>
+        </span>
+        <h1>Estado desconocido</h1>
+        <p class="pr-sub">
+          No pudimos verificar el estado de tu pago. Si ya realizaste la transacción,
+          revisa tu correo para la confirmación.
+        </p>
+      </ng-container>
+
+    </ng-container>
+
+    <div class="pr-ref" *ngIf="transactionId">
+      <span class="pr-ref-label">Referencia de pago</span>
+      <code>{{ transactionId }}</code>
+    </div>
+
+    <button type="button" class="pr-link-btn" (click)="goHome()">
+      <i class="fas fa-arrow-left"></i> Volver al inicio
+    </button>
+
+  </div>
+</section>
+
+<ng-template #spinner>
+  <div class="pr-card pr-card--loading">
+    <span class="pr-spinner"></span>
+    <p class="pr-sub">Verificando estado del pago...</p>
+  </div>
+</ng-template>

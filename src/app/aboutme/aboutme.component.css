@@ -17,8 +17,6 @@
   height: 160vh;
 }
 
-
-
 .about-sidebar {
   position: sticky;
   top: 0px;
@@ -54,14 +52,10 @@
   min-width: 0;
 }
 
-.about-container.visible .about-main {
-  transition: transform 0.8s ease;
-}
-
 /* ---- LADO IZQUIERDO ---- */
 .section-title {
   font-size: 2.5rem;
-  font-weight: 900px;
+  font-weight: 900;
   color: var(--color-border);
   margin-bottom: 30px;
   text-transform: uppercase;
@@ -206,10 +200,7 @@
   display: block;
 }
 
-
 /* --- Responsive --- */
-
-
 
 /* Tablets */
 @media (max-width: 1024px) {

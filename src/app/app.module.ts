@@ -3,8 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -20,6 +19,10 @@ import { ExperiencesComponent } from './experiences/experiences.component';
 import { TechComponent } from './tech/tech.component';
 import { ContactComponent } from './contact/contact.component';
 import { ChatbotComponent } from './chatbot/chatbot.component';
+import { ProductDetailComponent } from './product-detail/product-detail.component';
+import { PaymentResultComponent } from './payment-result/payment-result.component';
+import { CopCurrencyPipe } from './pipes/cop-currency.pipe';
+import { CountryFlagPipe } from './pipes/country-flag.pipe';
 
 
 @NgModule({
@@ -37,6 +40,10 @@ import { ChatbotComponent } from './chatbot/chatbot.component';
     TechComponent,
     ContactComponent,
     ChatbotComponent,
+    ProductDetailComponent,
+    PaymentResultComponent,
+    CopCurrencyPipe,
+    CountryFlagPipe,
   ],
   imports: [
     BrowserModule,
@@ -44,8 +51,8 @@ import { ChatbotComponent } from './chatbot/chatbot.component';
     CommonModule,
     HttpClientModule,
     FormsModule,
-    BrowserAnimationsModule,
-    RouterModule.forRoot([])
+    ReactiveFormsModule,
+    BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

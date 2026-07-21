@@ -2,32 +2,44 @@
 <div class="projects-section" id="proyectos">
   <div id="titulo-proyecto" class="section-title2">SERVICIOS</div>
 
-  <div class="projects-container">
+  <!-- Loader mientras se cargan los productos del backend -->
+  <div class="loader-wrapper" *ngIf="isLoading">
+    <div class="loader">
+      <div class="cup">
+        <div class="cup-handle"></div>
+        <div class="smoke one"></div>
+        <div class="smoke two"></div>
+        <div class="smoke three"></div>
+      </div>
+      <div class="load">..........................</div>
+    </div>
+  </div>
+
+  <div class="projects-container" *ngIf="!isLoading">
     <!-- Detalle del proyecto -->
     <div class="project-detail" *ngIf="selectedProject" [@projectTransition]="selectedProject">
 
       <!-- Icono tipo (sesión o producto) — posición absoluta sobre la imagen -->
-      <div class="type-badge big" [ngClass]="selectedProject.type">
-        <i class="fas" [ngClass]="selectedProject.type === 'producto' ? 'fa-shopping-bag' : 'fa-calendar-check'"></i>
+      <div class="type-badge big" [ngClass]="selectedProject.type.code">
+        <i class="fas" [ngClass]="selectedProject.type.code === 'libro' ? 'fa-shopping-bag' : 'fa-calendar-check'"></i>
       </div>
 
       <img [src]="selectedProject.image" alt="Detalle proyecto">
 
-      <div class="detail-inner">
+      <div class="detail-pricing">
+        <span class="detail-price-value">{{ selectedProject.price | copCurrency }}</span>
+        <span class="detail-price-label" *ngIf="selectedProject.type.code === 'consulta'">&nbsp;/ sesión</span>
+      </div>
 
-        <!-- Precio pill -->
-        <div class="detail-pricing">
-          <span class="detail-price-value">{{ selectedProject.price }}</span>
-          <span class="detail-price-label" *ngIf="selectedProject.type === 'servicio'">&nbsp;/ sesión</span>
-        </div>
+      <div class="detail-inner">
 
         <!-- Header: tipo + título -->
         <div class="detail-header">
-          <span class="detail-type-badge" [ngClass]="selectedProject.type">
-            <i class="fas" [ngClass]="selectedProject.type === 'producto' ? 'fa-shopping-bag' : 'fa-calendar-check'"></i>
-            {{ selectedProject.type === 'producto' ? 'Producto digital' : 'Sesión virtual' }}
+          <span class="detail-type-badge" [ngClass]="selectedProject.type.code">
+            <i class="fas" [ngClass]="selectedProject.type.code === 'libro' ? 'fa-shopping-bag' : 'fa-calendar-check'"></i>
+            {{ selectedProject.type.code === 'libro' ? 'Producto digital' : 'Sesión virtual' }}
           </span>
-          <h3 class="detail-title">{{ selectedProject.title }}</h3>
+          <h3 class="detail-title">{{ selectedProject.name }}</h3>
           <p class="detail-short">{{ selectedProject.short }}</p>
         </div>
 
@@ -49,9 +61,13 @@
 
         <!-- Acción -->
         <div class="detail-action">
-          <a [href]="getWhatsappLink(selectedProject)" target="_blank" class="detail-btn">
-            <i class="fas" [ngClass]="selectedProject.type === 'producto' ? 'fa-shopping-cart' : 'fa-calendar-check'"></i>
-            {{ selectedProject.type === 'producto' ? 'Comprar ahora' : 'Agendar sesión' }}
+          <a [href]="getWhatsappLink(selectedProject)" target="_blank" class="detail-btn-secondary">
+            <i class="fab fa-whatsapp"></i>
+            Preguntar por WhatsApp
+          </a>
+          <a href="#" (click)="viewProductDetail(selectedProject, $event)" class="detail-btn">
+            <i class="fas" [ngClass]="selectedProject.type.code === 'libro' ? 'fa-shopping-cart' : 'fa-calendar-check'"></i>
+            {{ selectedProject.type.code === 'libro' ? 'Comprar ahora' : 'Agendar sesión' }}
           </a>
         </div>
 
@@ -84,12 +100,12 @@
         <div class="project-image">
           <img [src]="project.image" alt="proyecto">
 
-          <div class="type-badge" [ngClass]="project.type">
-            <i class="fas" [ngClass]="project.type === 'producto' ? 'fa-shopping-bag' : 'fa-calendar-check'"></i>
+          <div class="type-badge" [ngClass]="project.type.code">
+            <i class="fas" [ngClass]="project.type.code === 'libro' ? 'fa-shopping-bag' : 'fa-calendar-check'"></i>
           </div>
 
           <div class="overlay">
-            <h3>{{ project.title | slice:0:30 }}{{ project.title.length > 30 ? '...' : '' }}</h3>
+            <h3>{{ project.name | slice:0:30 }}{{ project.name.length > 30 ? '...' : '' }}</h3>
             <p>{{ project.short }}</p>
           </div>
         </div>
