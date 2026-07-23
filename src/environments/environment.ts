@@ -1,9 +1,9 @@
 export const environment = {
   production: false,
-  productsApiUrl: 'https://devnataliaproductsapi.pocksite.com/api/v1',
-  reservationsApiUrl: 'https://devnataliaressapi.pocksite.com/api/v1',
-  notificationsApiUrl: 'https://devnatalianotificationsapi.pocksite.com/api/v1',
-  clientsApiUrl: 'https://devnataliaclientsapi.pocksite.com/api/v1',
-  paymentsApiUrl: 'https://devnataliapayapi.pocksite.com/api/v1',
-  psychologistsApiUrl: 'https://devnataliapsychologistsapi.pocksite.com/api/v1',
+  productsApiUrl: 'https://nataliaproductsapi.pocksite.com/api/v1',
+  reservationsApiUrl: 'https://nataliareservationsapi.pocksite.com/api/v1',
+  notificationsApiUrl: 'https://natalianotificationsapi.pocksite.com/api/v1',
+  clientsApiUrl: 'https://nataliaclientsapi.pocksite.com/api/v1',
+  paymentsApiUrl: 'https://nataliapaymentsapi.pocksite.com/api/v1',
+  psychologistsApiUrl: 'https://nataliapsychologistsapi.pocksite.com/api/v1',
 };
