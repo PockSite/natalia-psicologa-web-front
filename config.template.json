@@ -1,0 +1,9 @@
+{
+  "production": ${PRODUCTION},
+  "productsApiUrl": "${PRODUCTS_API_URL}",
+  "reservationsApiUrl": "${RESERVATIONS_API_URL}",
+  "notificationsApiUrl": "${NOTIFICATIONS_API_URL}",
+  "clientsApiUrl": "${CLIENTS_API_URL}",
+  "paymentsApiUrl": "${PAYMENTS_API_URL}",
+  "psychologistsApiUrl": "${PSYCHOLOGISTS_API_URL}"
+}
