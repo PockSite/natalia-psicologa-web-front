@@ -9,11 +9,10 @@
   "main": "index.js",
   "scripts": {
     "ng": "ng",
-    "prestart": "node --env-file=.env generate-env.js",
     "start": "ng serve",
     "backend": "node app.js",
     "backend:dev": "nodemon app.js",
-    "build": "node generate-env.js && ng build",
+    "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
