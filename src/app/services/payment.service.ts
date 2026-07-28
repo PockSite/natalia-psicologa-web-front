@@ -14,7 +14,7 @@ export interface CheckoutPayload {
   sexId?: number | null;
   birthDate?: string;
   startTime?: Date;
-  psychologistId?: string;
+  psychologist_id?: string;
 }
 
 export interface CheckoutResponse {
@@ -47,7 +47,7 @@ export class PaymentService {
       sex_id: payload.sexId ?? null,
       birth_date: payload.birthDate ?? null,
       start_time: payload.startTime ? payload.startTime.toISOString() : null,
-      psychologist_id: payload.psychologistId ?? null,
+      psychologist_id: payload.psychologist_id ?? null,
     };
     return this.http.post<CheckoutResponse>(`${this.apiUrl}/payments/checkout`, body);
   }

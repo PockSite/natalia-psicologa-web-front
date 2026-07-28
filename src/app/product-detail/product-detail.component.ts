@@ -403,7 +403,7 @@ export class ProductDetailComponent implements OnInit {
       sexId: buyer.sexoId,
       birthDate: buyer.fechaNacimiento || undefined,
       startTime: this.selectedAppointmentStartTime(),
-      psychologistId: this.isService ? this.selectedPsychologist?.id : undefined
+      psychologist_id: this.isService ? this.selectedPsychologist?.id : undefined
     }).subscribe({
       next: (checkout) => {
         const redirectUrl = `${window.location.origin}/pago-resultado?product_id=${this.product!.id}`;
