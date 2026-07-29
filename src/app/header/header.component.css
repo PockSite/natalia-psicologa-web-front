@@ -26,7 +26,7 @@
   width: 100%;
   height: auto;
   margin-top: 0;
-  padding: 30px 20px 60px 30px;
+  padding: 30px 20px 20px 30px;
   border-radius: 20px;
   background-color: transparent;
   border: none;
@@ -44,12 +44,56 @@
   transition: opacity 0.8s ease, transform 0.8s ease;
 }
 
-:host-context(.about-sidebar.visible) :host(.aboutme-sidebar) .sidebar {
+:host-context(.about-sidebar.visible) .sidebar {
   opacity: 1;
   transform: translateX(0);
 }
 
-/* Ilustración de fondo separada */
+/* ── Animacion de entrada escalonada ──────────────────────────
+   Cada bloque de la tarjeta entra con un pequeño retraso. Funciona
+   igual en desktop, tablet y celular porque depende de la clase
+   .visible que pone el IntersectionObserver de "sobre mi".
+   Se usan las propiedades independientes translate/scale para no pisar
+   el transform del hover de los botones. */
+:host(.aboutme-sidebar) .profile-pic,
+:host(.aboutme-sidebar) .name,
+:host(.aboutme-sidebar) .role,
+:host(.aboutme-sidebar) .contact-info p,
+:host(.aboutme-sidebar) .action-buttons .btn {
+  opacity: 0;
+  translate: 0 16px;
+  transition: opacity 0.55s ease,
+              translate 0.55s cubic-bezier(0.22, 0.9, 0.3, 1),
+              scale 0.55s cubic-bezier(0.22, 0.9, 0.3, 1);
+}
+
+:host(.aboutme-sidebar) .profile-pic {
+  translate: 0 12px;
+  scale: 0.9;
+}
+
+:host-context(.about-sidebar.visible) .profile-pic,
+:host-context(.about-sidebar.visible) .name,
+:host-context(.about-sidebar.visible) .role,
+:host-context(.about-sidebar.visible) .contact-info p,
+:host-context(.about-sidebar.visible) .action-buttons .btn {
+  opacity: 1;
+  translate: 0;
+  scale: 1;
+}
+
+:host-context(.about-sidebar.visible) .profile-pic      { transition-delay: 0.15s; }
+:host-context(.about-sidebar.visible) .name             { transition-delay: 0.24s; }
+:host-context(.about-sidebar.visible) .role             { transition-delay: 0.30s; }
+:host-context(.about-sidebar.visible) .contact-info p:nth-child(1) { transition-delay: 0.38s; }
+:host-context(.about-sidebar.visible) .contact-info p:nth-child(2) { transition-delay: 0.44s; }
+:host-context(.about-sidebar.visible) .contact-info p:nth-child(3) { transition-delay: 0.50s; }
+:host-context(.about-sidebar.visible) .action-buttons .btn:nth-child(1) { transition-delay: 0.58s; }
+:host-context(.about-sidebar.visible) .action-buttons .btn:nth-child(2) { transition-delay: 0.66s; }
+:host-context(.about-sidebar.visible) .action-buttons .btn:nth-child(3) { transition-delay: 0.74s; }
+:host-context(.about-sidebar.visible) .action-buttons .btn:nth-child(4) { transition-delay: 0.82s; }
+
+/* Ilustración de fondo separada (encuadre original de escritorio) */
 :host(.aboutme-sidebar) .sidebar::before {
   content: '';
   position: absolute;
@@ -93,7 +137,6 @@
   align-self: center;
   width: 100%;
   margin-right: 70px;
-
 }
 
 .profile-pic {
@@ -216,14 +259,6 @@
   transition: transform 0.4s ease, color 0.4s ease;
 }
 
-.btn .btn-labelm {
-  display: inline-block;
-  position: relative;
-  left: 0;
-  transition: transform 0.4s ease, color 0.4s ease;
-  font-weight: 50px;
-}
-
 
 
 .btn i {
@@ -263,111 +298,39 @@
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
 }
 
+/* En pantallas táctiles no existe hover: en vez de dejar el botón
+   "siempre presionado" (se veía plano y pesado), se conserva el mismo
+   diseño del escritorio con el icono ya visible y se anima al tocar. */
 @media (hover: none) and (pointer: coarse) {
   .btn {
-    background-color: var(--btn-color);
-    color: #ffffff;
-    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   }
 
-  .btn .btn-label,
-  .btn .btn-labelm {
+  .btn .btn-label {
     transform: translateX(-6px);
-    color: #ffffff;
   }
 
   .btn i {
     opacity: 1;
     transform: translateY(-50%) translateX(0);
+    color: var(--btn-color);
+  }
+
+  .btn:active {
+    background-color: var(--btn-color);
+    color: #ffffff;
+    transform: scale(0.98);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.28);
+  }
+
+  .btn:active .btn-label {
+    color: #ffffff;
+  }
+
+  .btn:active i {
+    color: #ffffff;
   }
 }
-
-/* === ESTILOS CELULAR (Navbar) === */
-.mobile-header {
-  width: 100%;
-  background: var(--color-main);
-  color: var(--color-text2);
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 200;
-  padding: 30px;
-  height: 1000px ;
-  margin-top: 100px;
-}
-
-/* Mobile layout when embedded inside About Me */
-:host(.aboutme-sidebar) .mobile-header {
-  position: static;
-  height: auto;
-  margin-top: 0;
-  padding: 20px 16px;
-  border-radius: 18px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-:host(.aboutme-sidebar) .profile-sectionmov {
-  margin-top: 0;
-}
-
-:host(.aboutme-sidebar) .contact-infomov,
-:host(.aboutme-sidebar) .action-buttonsmov {
-  margin-left: 0;
-  width: 100%;
-}
-
-.profile-sectionmov {
-  text-align: center;
-  margin-bottom: 25px;
-  margin-top: 100px;
-}
-
-.profile-picmov {
-  width: 110px;
-  height: 110px;
-  border-radius: 50%;
-  overflow: hidden;
-  margin: 0 auto 15px auto;
-  border: 3px solid var(--color-text2);
-}
-
-.profile-picmov img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.contact-infomov {
-  font-size: 13px;
-  color: var(--color-text2);
-  margin-bottom: 22px;
-  margin-left: 25px;
-}
-
-.contact-infomov p {
-  margin: 8px 0;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.contact-infomov i {
-  color: var(--color-title);
-  font-size: 14px;
-}
-
-.action-buttonsmov {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  width: 100%;
-  text-align: center;
-  margin: 0 auto;
-  padding: 0 20px;
-  box-sizing: border-box;
-}
-
 
 .top-bar {
   display: flex;
@@ -425,7 +388,10 @@
   }
 }
 
-/* Tablets */
+/* === TABLET ================================================
+   La tarjeta deja de estirarse a lo ancho: se centra con un ancho
+   parecido al de la columna de escritorio para que la ilustración de
+   fondo y la foto conserven la misma proporción. */
 @media (max-width: 1024px) {
   .sidebar {
     width: 320px;
@@ -443,41 +409,113 @@
     width: 80%;
   }
 
+  :host(.aboutme-sidebar) .sidebar {
+    max-width: 420px;
+    margin-inline: auto;
+    /* sin border-box el padding se suma al 100% y la tarjeta
+       desborda su columna en pantallas angostas */
+    box-sizing: border-box;
+    padding: 30px 26px 24px 26px;
+  }
 
+  /* Encuadre de la hoja calculado a partir del PNG: la hoja ocupa
+     0.217→0.762 en horizontal y 0.062→0.965 en vertical del lienzo.
+     Con estos valores sus bordes coinciden con los de la tarjeta sea
+     cual sea el ancho, y el recuadro sobresale un 4% por arriba para
+     que se siga viendo la cinta adhesiva. */
+  :host(.aboutme-sidebar) .sidebar::before {
+    top: -4.1%;
+    height: 104.1%;
+    background-size: 183.5% 106.4%;
+    background-position: 47.7% 41.7%;
+  }
+
+  /* la cinta queda centrada arriba, así que foto y botones se centran */
+  :host(.aboutme-sidebar) .profile-section {
+    margin-right: 0;
+  }
+
+  :host(.aboutme-sidebar) .action-buttons {
+    align-self: center;
+    max-width: 300px;
+  }
 }
 
-/* Mobile */
-@media (max-width: 768px) {
-  .sidebar {
-    display: none;
+/* === CELULAR =============================================== */
+@media (max-width: 600px) {
+  /* el tope de 420px del bloque anterior se mantiene: en pantallas más
+     angostas la tarjeta ya se ajusta sola al ancho disponible */
+  :host(.aboutme-sidebar) .sidebar {
+    padding: 26px 20px 22px 20px;
+    gap: 16px;
   }
 
-  .mobile-header {
-    position: static;
-    height: auto;
-    margin-top: 0;
-    padding: 20px 16px;
+  :host(.aboutme-sidebar) .profile-pic {
+    width: 120px;
+    height: 120px;
+    border-width: 3px;
   }
 
-  .profile-sectionmov {
-    margin-top: 0;
-    margin-bottom: 20px;
+  :host(.aboutme-sidebar) .profile-section {
+    margin-bottom: 10px;
   }
 
-  .contact-infomov {
-    margin-left: 0;
-    width: 100%;
+  :host(.aboutme-sidebar) .name {
+    font-size: 1.3rem;
   }
 
-  
-
-  .action-buttonsmov .btn {
-    width: min(86%, 600px);
-    margin: 0 auto;
-    padding: 8px 14px;
-    transform: translateX(-20px);
+  :host(.aboutme-sidebar) .role {
+    font-size: 1rem;
   }
 
+  :host(.aboutme-sidebar) .contact-info {
+    font-size: 0.85rem;
+    margin-bottom: 14px;
+  }
+
+  /* el correo es largo: que se ajuste en vez de desbordar la tarjeta */
+  :host(.aboutme-sidebar) .contact-info p {
+    align-items: flex-start;
+    word-break: break-word;
+  }
+
+  :host(.aboutme-sidebar) .contact-info i {
+    margin-top: 3px;
+    flex: 0 0 auto;
+  }
+
+  :host(.aboutme-sidebar) .btn {
+    padding: 11px 16px;
+    font-size: 0.9rem;
+  }
+}
+
+/* Celulares muy angostos: el correo es lo primero que aprieta */
+@media (max-width: 360px) {
+  :host(.aboutme-sidebar) .contact-info {
+    font-size: 0.78rem;
+  }
+
+  :host(.aboutme-sidebar) .profile-pic {
+    width: 110px;
+    height: 110px;
+  }
+}
+
+/* Respeta la preferencia de menos movimiento del sistema */
+@media (prefers-reduced-motion: reduce) {
+  :host(.aboutme-sidebar) .sidebar,
+  :host(.aboutme-sidebar) .profile-pic,
+  :host(.aboutme-sidebar) .name,
+  :host(.aboutme-sidebar) .role,
+  :host(.aboutme-sidebar) .contact-info p,
+  :host(.aboutme-sidebar) .action-buttons .btn {
+    transition-duration: 0.01ms;
+    transition-delay: 0ms;
+    translate: none;
+    scale: none;
+    transform: none;
+  }
 }
 
 

@@ -1,5 +1,6 @@
-<!-- 🌐 Sidebar (Desktop/Tablet) -->
-<header class="header sidebar" *ngIf="!isMobile">
+<!-- 🌐 Tarjeta de perfil (mismo marcado en desktop, tablet y celular:
+     el diseño y las animaciones se ajustan por CSS en cada breakpoint) -->
+<header class="header sidebar">
   <!-- Foto de perfil -->
   <section class="profile-section">
     <div class="profile-pic">
@@ -36,42 +37,3 @@
     </a>
   </nav>
 </header>
-
-<!-- 📱 Navbar (Celulares) -->
-<nav class="mobile-header" *ngIf="isMobile">
-  <!-- Foto de perfil -->
-  <section class="profile-sectionmov">
-    <div class="profile-picmov">
-      <img src="assets/images/fotografia4.jpeg" alt="Foto de perfil">
-    </div>
-    <h2 class="name">Natalia Güechá</h2>
-    <h3 class="role">Psicóloga Clínica</h3>
-  </section>
-
-  <!-- Info de contacto -->
-  <section class="contact-infomov">
-    <p><i class="fas fa-map-marker-alt"></i> Bogotá, Colombia</p>
-    <p><i class="fas fa-phone"></i> +57 310 4671284</p>
-    <p><i class="fas fa-envelope"></i> psicologanataliagnieto@gmail.com</p>
-  </section>
-
-  <!-- Botones de acción -->
-  <nav class="action-buttonsmov">
-    <a href="https://www.instagram.com/psicologa.nataliaguecha/" target="_blank" class="btn contact-btn">
-      <i class="fab fa-instagram"></i>
-      <span class="btn-labelm">Instagram</span>
-    </a>
-    <a href="" target="_blank" class="btn linkedin-btn">
-      <i class="fab fa-linkedin"></i>
-      <span class="btn-labelm">LinkedIn</span>
-    </a>
-     <a href="https://wa.me/573104671284" target="_blank" class="btn whatsapp-btn">
-      <i class="fab fa-whatsapp"></i>
-      <span class="btn-labelm">Whatsapp</span>
-    </a>
-    <a href="https://www.tiktok.com/@psicologa.nataliaguecha" target="_blank" class="btn tiktok-btn">
-      <i class="fab fa-tiktok"></i>
-      <span class="btn-labelm">Tiktok</span>
-    </a>
-  </nav>
-</nav>

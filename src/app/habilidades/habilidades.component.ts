@@ -1,33 +1,40 @@
-import { Component, AfterViewInit, ElementRef, OnDestroy } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  NgZone,
+  OnDestroy
+} from '@angular/core';
 
 @Component({
   selector: 'app-habilidades',
   templateUrl: './habilidades.component.html',
-  styleUrls: ['./habilidades.component.css']
+  styleUrls: ['./habilidades.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HabilidadesComponent implements AfterViewInit, OnDestroy {
 
-  private observer: IntersectionObserver | null = null;
+  private observer?: IntersectionObserver;
 
-  constructor(private el: ElementRef) {}
+  constructor(private el: ElementRef<HTMLElement>, private zone: NgZone) {}
 
   ngAfterViewInit(): void {
-    const cards = this.el.nativeElement.querySelectorAll('.card-modern');
+    // Fuera de la zona de Angular: el scroll no dispara change detection.
+    this.zone.runOutsideAngular(() => {
+      this.observer = new IntersectionObserver(entries => {
+        for (const entry of entries) {
+          entry.target.classList.toggle('visible', entry.isIntersecting);
+        }
+      }, { threshold: 0.2 });
 
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        entry.target.classList.toggle('visible', entry.isIntersecting);
-      });
-    }, { threshold: 0.2 });
-
-    cards.forEach((card: Element) => observer.observe(card));
-    this.observer = observer;
+      this.el.nativeElement
+        .querySelectorAll('.card-modern')
+        .forEach(card => this.observer!.observe(card));
+    });
   }
 
   ngOnDestroy(): void {
-    if (this.observer) {
-      this.observer.disconnect();
-      this.observer = null;
-    }
+    this.observer?.disconnect();
   }
 }

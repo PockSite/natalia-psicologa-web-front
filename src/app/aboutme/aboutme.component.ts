@@ -62,8 +62,9 @@ export class AboutmeComponent implements OnInit, AfterViewInit, OnDestroy {
       const aboutRightEl = this.aboutRight?.nativeElement as HTMLElement | undefined;
       if (!viewportEl || !trackEl) return;
 
-      // On desktop (where we use vertical scrolling) ensure viewport height matches tallest card
-      const desktop = window.innerWidth >= 1024;
+      // On desktop (where we use vertical scrolling) ensure viewport height matches tallest card.
+      // A partir de 1025px es donde el CSS aplica el layout de dos columnas.
+      const desktop = window.innerWidth > 1024;
       if (!desktop) {
         // remove any explicit height on smaller screens
         this.renderer.removeStyle(viewportEl, 'height');

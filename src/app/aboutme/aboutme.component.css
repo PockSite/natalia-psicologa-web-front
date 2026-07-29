@@ -14,7 +14,9 @@
   margin: 0 auto;
   width: 100%;
   box-sizing: border-box;
-  height: 160vh;
+  /* La altura la define el contenido: una altura fija en vh dejaba un
+     hueco enorme en la parte inferior en pantallas altas. */
+  height: auto;
 }
 
 .about-sidebar {
@@ -27,13 +29,14 @@
   width: 20px;
   overflow: hidden;
   pointer-events: none;
-  margin-bottom: 100px;
-  padding-bottom: 100px;
+  margin-bottom: 0;
+  /* Solo el respiro necesario para no cortar la sombra de la tarjeta */
+  padding-bottom: 10px;
 }
 
 .aboutme-sidebar{
   margin-top: -200px;
-  padding: 20px;
+  padding: 20px 20px 0;
 }
 
 .about-container.visible .about-sidebar {
@@ -227,6 +230,12 @@
   .about-main {
     grid-template-columns: 1fr;
     gap: 24px;
+  }
+
+  /* Aqui el carrusel es horizontal: la altura fija de escritorio (500px)
+     dejaba un hueco vacio debajo de las tarjetas. */
+  .about-right {
+    height: auto;
   }
 
   .about-sidebar {
