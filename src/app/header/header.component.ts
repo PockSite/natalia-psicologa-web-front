@@ -1,4 +1,4 @@
-import { Component, HostListener, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-header',
@@ -8,16 +8,9 @@ import { Component, HostListener, Input } from '@angular/core';
 export class HeaderComponent {
   @Input() forceSidebar: boolean = false; // nuevo input
 
-  isMobile: boolean = window.innerWidth <= 1024;
+  // La tarjeta usa el mismo marcado en todos los tamaños; el diseño
+  // responsive se resuelve por CSS, sin cambiar de plantilla.
   menuOpen: boolean = false;
-
-  @HostListener('window:resize')
-  onResize() {
-    this.isMobile = window.innerWidth <= 1024;
-    if (!this.isMobile) {
-      this.menuOpen = false;
-    }
-  }
 
   toggleMenu() {
     this.menuOpen = !this.menuOpen;
