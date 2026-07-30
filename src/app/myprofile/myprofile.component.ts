@@ -1,12 +1,12 @@
-import { Component, OnInit, OnDestroy, AfterViewInit, HostListener } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 
 @Component({
   selector: 'app-myprofile',
   templateUrl: './myprofile.component.html',
   styleUrls: ['./myprofile.component.css']
 })
-export class MyprofileComponent implements OnInit, OnDestroy, AfterViewInit {
-  
+export class MyprofileComponent implements OnInit, OnDestroy {
+
 
   // 🌟 Palabras dinámicas
   words: string[] = [
@@ -21,26 +21,8 @@ export class MyprofileComponent implements OnInit, OnDestroy, AfterViewInit {
   private wordIntervalId: ReturnType<typeof setInterval> | null = null;
   private fadeTimeoutId: ReturnType<typeof setTimeout> | null = null;
 
-  showFloatingBtn: boolean = false;
-  private consultationBtnObserver: IntersectionObserver | null = null;
-
   ngOnInit(): void {
     this.startWordAnimation();
-  }
-
-  ngAfterViewInit(): void {
-    const consultationBtn = document.querySelector('.consultation-btn');
-    if (consultationBtn) {
-      this.consultationBtnObserver = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            this.showFloatingBtn = !entry.isIntersecting;
-          });
-        },
-        { threshold: 0.1 }
-      );
-      this.consultationBtnObserver.observe(consultationBtn);
-    }
   }
 
   /**
@@ -79,7 +61,6 @@ export class MyprofileComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnDestroy(): void {
     clearInterval(this.wordIntervalId!);
     clearTimeout(this.fadeTimeoutId!);
-    this.consultationBtnObserver?.disconnect();
   }
 
   /**

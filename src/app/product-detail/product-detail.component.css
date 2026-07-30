@@ -948,42 +948,153 @@
   gap: 8px;
 }
 
+/* El indicativo es un combobox: se puede escribir o desplegar la lista.
+   El marco lo dibuja el wrapper para que bandera + input + flecha se vean
+   como un solo control, igual que el resto de campos del formulario. */
 .pd-phone-ext-wrap {
   position: relative;
   flex-shrink: 0;
   display: flex;
-}
-
-/* Cerrado muestra solo bandera + indicativo; el desplegable conserva la lista completa */
-.pd-phone-ext-display {
-  position: absolute;
-  inset: 0 26px 0 0;
-  display: flex;
   align-items: center;
   gap: 7px;
-  padding-left: 14px;
-  font-size: 0.92rem;
-  font-weight: 600;
-  color: #4d2b35;
-  pointer-events: none;
-  z-index: 1;
+  width: 132px;
+  box-sizing: border-box;
+  padding: 0 6px 0 12px;
+  border: 1.5px solid #6e4450;
+  border-radius: 0.5rem;
+  box-shadow: 2.5px 3px 0 #6e4450;
+  background: #fff;
+  transition: ease 0.25s;
+}
+
+.pd-phone-ext-wrap:focus-within {
+  box-shadow: 5.5px 7px 0 #6e4450;
+}
+
+.pd-field.has-error .pd-phone-ext-wrap {
+  border-color: #e57373;
+  box-shadow: 2.5px 3px 0 #e57373;
+}
+
+.pd-field.has-error .pd-phone-ext-wrap:focus-within {
+  box-shadow: 5.5px 7px 0 #e57373;
 }
 
 .pd-phone-flag {
   font-size: 1.05rem;
   line-height: 1;
+  flex-shrink: 0;
 }
 
-.pd-field select.pd-phone-ext {
-  width: 118px;
-  padding-left: 14px;
-  padding-right: 30px;
-  background-position: right 10px center;
-  color: transparent;
-}
-
-.pd-field select.pd-phone-ext option {
+.pd-field input.pd-phone-ext-input[type="text"] {
+  flex: 1;
+  min-width: 0;
+  width: auto;
+  padding: 0.875rem 0;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  background: transparent;
+  font-size: 0.95rem;
+  font-weight: 600;
   color: #4d2b35;
+  letter-spacing: 0.3px;
+}
+
+.pd-phone-ext-toggle {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: #6e4450;
+  font-size: 0.7rem;
+  cursor: pointer;
+  transition: ease 0.2s;
+}
+
+.pd-phone-ext-toggle:hover {
+  background: rgba(243, 210, 209, 0.6);
+}
+
+.pd-phone-ext-toggle i {
+  transition: transform 0.2s ease;
+}
+
+.pd-phone-ext-wrap.is-open .pd-phone-ext-toggle i {
+  transform: rotate(180deg);
+}
+
+/* Desplegable con la lista completa de países */
+.pd-phone-ext-list {
+  position: absolute;
+  top: calc(100% + 9px);
+  left: 0;
+  z-index: 30;
+  width: 268px;
+  max-width: calc(100vw - 64px);
+  max-height: 244px;
+  overflow-y: auto;
+  margin: 0;
+  padding: 6px;
+  list-style: none;
+  background: #fff;
+  border: 1.5px solid #6e4450;
+  border-radius: 0.75rem;
+  box-shadow: 4px 6px 0 rgba(110, 68, 80, 0.35);
+  animation: pd-rise 0.18s ease both;
+}
+
+.pd-phone-ext-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 11px;
+  border-radius: 8px;
+  font-size: 0.87rem;
+  color: #4d2b35;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.pd-phone-ext-option.is-active {
+  background: rgba(243, 210, 209, 0.55);
+}
+
+.pd-phone-ext-option.is-current {
+  font-weight: 700;
+  color: var(--color-main);
+}
+
+.pd-phone-ext-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pd-phone-ext-code {
+  flex-shrink: 0;
+  font-weight: 700;
+  font-size: 0.83rem;
+  color: #8b6a73;
+}
+
+.pd-phone-ext-option.is-current .pd-phone-ext-code {
+  color: var(--color-main);
+}
+
+.pd-phone-ext-empty {
+  padding: 12px 11px;
+  font-size: 0.82rem;
+  color: #8b6a73;
+  text-align: center;
 }
 
 .pd-phone-number {
