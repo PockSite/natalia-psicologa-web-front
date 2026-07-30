@@ -53,8 +53,12 @@ export class ProjectsComponent implements AfterViewInit {
   ngOnInit(): void {
     this.productService.getProducts().subscribe({
       next: products => {
-        this.projects = products;
-        this.selectedProject = products[0] ?? null;
+        // Mostrar primero las citas (consultas), conservando el orden dentro de cada grupo
+        const ordered = [...products].sort(
+          (a, b) => (a.type?.code === 'consulta' ? 0 : 1) - (b.type?.code === 'consulta' ? 0 : 1)
+        );
+        this.projects = ordered;
+        this.selectedProject = ordered[0] ?? null;
         this.isLoading = false;
         // Las cards se renderizan después de la respuesta del servicio,
         // por eso el observer se conecta en el siguiente ciclo.
