@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subject } from 'rxjs';
@@ -62,6 +62,13 @@ export class ProductDetailComponent implements OnInit {
   countryCodes: CountryCode[] = [];
   readonly today = new Date();
 
+  /* ── Indicativo de país: se puede escribir o elegir de la lista ── */
+  @ViewChild('extWrap') extWrapRef?: ElementRef<HTMLElement>;
+  extOpen = false;
+  /** Índice resaltado dentro de filteredCountryCodes (-1 = ninguno) */
+  extHighlight = -1;
+  filteredCountryCodes: CountryCode[] = [];
+
   /* ── Lookup de cliente por documento ── */
   /** true = buscando, false = listo */
   clientLookupLoading = false;
@@ -85,7 +92,10 @@ export class ProductDetailComponent implements OnInit {
     this.setupDocumentLookup();
     this.clientService.getDocumentTypes().subscribe(types => this.documentTypes = types);
     this.clientService.getSexTypes().subscribe(types => this.sexTypes = types);
-    this.clientService.getCountryCodes().subscribe(codes => this.countryCodes = codes);
+    this.clientService.getCountryCodes().subscribe(codes => {
+      this.countryCodes = codes;
+      this.filteredCountryCodes = codes;
+    });
 
     // paramMap (y no snapshot) para reaccionar si se navega entre productos
     this.route.paramMap.subscribe(params => {
@@ -315,7 +325,7 @@ export class ProductDetailComponent implements OnInit {
     this.buyerForm = this.fb.group({
       nombre:          ['', [Validators.required, Validators.minLength(2)]],
       apellido:        ['', [Validators.required, Validators.minLength(2)]],
-      extensionPais:   ['+57', Validators.required],
+      extensionPais:   ['+57', [Validators.required, Validators.pattern(/^\+\d{1,4}$/)]],
       celular:         ['', [Validators.required, Validators.pattern(/^\d{7,15}$/)]],
       correo:          ['', [Validators.required, Validators.email]],
       sexoId:          [null, Validators.required],
@@ -373,6 +383,106 @@ export class ProductDetailComponent implements OnInit {
       this.documentChecked = false;
       this.clientFound = false;
     }
+  }
+
+  /* ── Indicativo de país ─────────────────────────────────── */
+
+  openExtension(): void {
+    this.filterExtension(this.buyerForm.get('extensionPais')?.value ?? '');
+    this.extOpen = true;
+  }
+
+  toggleExtension(): void {
+    if (this.extOpen) {
+      this.closeExtension();
+      return;
+    }
+    this.openExtension();
+  }
+
+  closeExtension(): void {
+    this.extOpen = false;
+    this.extHighlight = -1;
+  }
+
+  /** Al escribir solo dejamos "+" seguido de dígitos y filtramos la lista. */
+  onExtensionInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const clean = this.sanitizeDialCode(input.value);
+    if (clean !== input.value) {
+      input.value = clean;
+    }
+    const control = this.buyerForm.get('extensionPais');
+    if (control && control.value !== clean) {
+      // emitModelToViewChange: false → el DOM ya tiene el valor, así no salta el cursor
+      control.setValue(clean, { emitModelToViewChange: false });
+    }
+    this.filterExtension(clean);
+    this.extOpen = true;
+  }
+
+  selectExtension(country: CountryCode): void {
+    const control = this.buyerForm.get('extensionPais');
+    control?.setValue(country.dialCode);
+    control?.markAsTouched();
+    this.closeExtension();
+  }
+
+  onExtensionKeydown(event: KeyboardEvent): void {
+    if (event.key === 'Escape' || event.key === 'Tab') {
+      this.closeExtension();
+      return;
+    }
+
+    if (event.key === 'Enter') {
+      if (!this.extOpen) { return; }
+      event.preventDefault();   // no enviar el formulario con la lista abierta
+      if (this.extHighlight > -1) {
+        this.selectExtension(this.filteredCountryCodes[this.extHighlight]);
+      } else {
+        this.closeExtension();
+      }
+      return;
+    }
+
+    if (event.key !== 'ArrowDown' && event.key !== 'ArrowUp') { return; }
+    event.preventDefault();
+    if (!this.extOpen) { this.openExtension(); }
+    const total = this.filteredCountryCodes.length;
+    if (!total) { return; }
+    const step = event.key === 'ArrowDown' ? 1 : -1;
+    this.extHighlight = (this.extHighlight + step + total) % total;
+    this.scrollHighlightIntoView();
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    if (!this.extOpen) { return; }
+    const wrap = this.extWrapRef?.nativeElement;
+    if (wrap && !wrap.contains(event.target as Node)) {
+      this.closeExtension();
+    }
+  }
+
+  private sanitizeDialCode(raw: string): string {
+    const digits = (raw ?? '').replace(/\D/g, '').slice(0, 4);
+    return digits ? `+${digits}` : '';
+  }
+
+  private filterExtension(term: string): void {
+    const digits = (term ?? '').replace(/\D/g, '');
+    this.filteredCountryCodes = digits
+      ? this.countryCodes.filter(c => c.dialCode.slice(1).startsWith(digits))
+      : this.countryCodes;
+    const current = this.buyerForm.get('extensionPais')?.value;
+    this.extHighlight = this.filteredCountryCodes.findIndex(c => c.dialCode === current);
+  }
+
+  private scrollHighlightIntoView(): void {
+    setTimeout(() => {
+      const options = this.extWrapRef?.nativeElement.querySelectorAll('.pd-phone-ext-option');
+      (options?.[this.extHighlight] as HTMLElement | undefined)?.scrollIntoView({ block: 'nearest' });
+    });
   }
 
   invalid(field: string): boolean {
@@ -476,6 +586,8 @@ export class ProductDetailComponent implements OnInit {
     this.clientLookupLoading = false;
     this.clientFound = false;
     this.documentChecked = false;
+    this.closeExtension();
+    this.filteredCountryCodes = this.countryCodes;
     this.buyerForm.reset({ tipoDocumento: 'CC', extensionPais: '+57' });
   }
 
