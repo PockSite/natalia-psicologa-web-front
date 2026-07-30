@@ -312,23 +312,49 @@
               <div class="pd-field" [class.has-error]="invalid('celular') || invalid('extensionPais')">
                 <label for="pd-celular">Número de celular</label>
                 <div class="pd-phone-row">
-                  <div class="pd-phone-ext-wrap">
-                    <span class="pd-phone-ext-display" aria-hidden="true">
-                      <span class="pd-phone-flag">
-                        {{ (countryCodes | countryFlag: buyerForm.get('extensionPais')?.value) }}
-                      </span>
-                      {{ buyerForm.get('extensionPais')?.value }}
+                  <!-- Indicativo: se puede escribir o elegir de la lista -->
+                  <div class="pd-phone-ext-wrap" #extWrap [class.is-open]="extOpen">
+                    <span class="pd-phone-flag" aria-hidden="true">
+                      {{ (countryCodes | countryFlag: buyerForm.get('extensionPais')?.value) }}
                     </span>
-                    <select id="pd-extension" formControlName="extensionPais" class="pd-phone-ext"
-                      aria-label="Indicativo de país">
-                      <option *ngFor="let c of countryCodes" [value]="c.dialCode">
-                        {{ c.dialCode }} — {{ c.name }}
-                      </option>
-                    </select>
+                    <input id="pd-extension" type="text" class="pd-phone-ext-input"
+                      formControlName="extensionPais" placeholder="+57" maxlength="5"
+                      inputmode="tel" autocomplete="tel-country-code" spellcheck="false"
+                      role="combobox" aria-label="Indicativo de país" aria-autocomplete="list"
+                      aria-controls="pd-extension-list" [attr.aria-expanded]="extOpen"
+                      (input)="onExtensionInput($event)"
+                      (focus)="openExtension()"
+                      (keydown)="onExtensionKeydown($event)">
+                    <button type="button" class="pd-phone-ext-toggle" tabindex="-1"
+                      [attr.aria-label]="extOpen ? 'Ocultar indicativos' : 'Ver indicativos'"
+                      (click)="toggleExtension()">
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+
+                    <ul class="pd-phone-ext-list" id="pd-extension-list" role="listbox"
+                      *ngIf="extOpen">
+                      <li *ngFor="let c of filteredCountryCodes; let i = index"
+                        class="pd-phone-ext-option" role="option"
+                        [class.is-active]="i === extHighlight"
+                        [class.is-current]="c.dialCode === buyerForm.get('extensionPais')?.value"
+                        [attr.aria-selected]="c.dialCode === buyerForm.get('extensionPais')?.value"
+                        (mouseenter)="extHighlight = i"
+                        (click)="selectExtension(c)">
+                        <span class="pd-phone-flag">{{ c.flag }}</span>
+                        <span class="pd-phone-ext-name">{{ c.name }}</span>
+                        <span class="pd-phone-ext-code">{{ c.dialCode }}</span>
+                      </li>
+                      <li class="pd-phone-ext-empty" *ngIf="!filteredCountryCodes.length">
+                        Sin coincidencias. Puedes escribir tu indicativo.
+                      </li>
+                    </ul>
                   </div>
                   <input id="pd-celular" type="tel" formControlName="celular"
                     placeholder="300 000 0000" autocomplete="tel" class="pd-phone-number">
                 </div>
+                <small class="pd-error" *ngIf="invalid('extensionPais')">
+                  Escribe o elige un indicativo válido (ej: +57).
+                </small>
                 <small class="pd-error" *ngIf="invalid('celular')">
                   Ingresa un número de celular válido (solo dígitos, 7 a 15).
                 </small>

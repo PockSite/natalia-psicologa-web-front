@@ -1,10 +1,6 @@
-import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-
-interface ChatMessage {
-  text: string;
-  sender: 'user' | 'bot';
-}
+import { Component, ElementRef, ViewChild } from '@angular/core';
+import { ChatService } from './service';
+import { ChatMessage } from './models';
 
 @Component({
   selector: 'app-chatbot',
@@ -12,48 +8,80 @@ interface ChatMessage {
   styleUrls: ['./chatbot.component.css']
 })
 export class ChatbotComponent {
+
+  @ViewChild('messagesArea') private messagesArea?: ElementRef<HTMLElement>;
+
   isOpen = false;
-  messages: ChatMessage[] = [
-    { text: '¡Hola! 👋 Soy el asistente virtual de Daniel. ¿En qué puedo ayudarte hoy?', sender: 'bot' }
-  ];
   userMessage = '';
   isLoading = false;
 
-  userId = Date.now() + Math.floor(Math.random() + 111 * 5000);
+  messages: ChatMessage[] = [
+    {
+      text: '¡Hola! 👋 Soy el asistente virtual de Natalia Güechá. ¿En qué puedo ayudarte hoy?',
+      sender: 'bot'
+    }
+  ];
 
-  constructor(private http: HttpClient) { }
+  constructor(private chatService: ChatService) { }
 
-  toggleChat() {
-    this.isOpen = !this.isOpen;
+  /** Mientras no exista la API respondemos localmente en vez de fallar. */
+  get isConfigured(): boolean {
+    return this.chatService.isConfigured;
   }
 
-  sendMessage() {
-    if (!this.userMessage.trim() || this.isLoading) return;
+  toggleChat(): void {
+    this.isOpen = !this.isOpen;
+    if (this.isOpen) { this.scrollToBottom(); }
+  }
 
-    const messageToSend = this.userMessage.trim();
-    this.messages.push({ text: messageToSend, sender: 'user' });
+  sendMessage(): void {
+    const text = this.userMessage.trim();
+    if (!text || this.isLoading) { return; }
 
+    this.push({ text, sender: 'user' });
     this.userMessage = '';
+
+    if (!this.isConfigured) {
+      this.push({
+        text: 'Por ahora estoy en construcción 🛠️ Mientras tanto puedes escribirle a '
+            + 'Natalia por WhatsApp con el botón verde y te responde directamente.',
+        sender: 'bot'
+      });
+      return;
+    }
+
     this.isLoading = true;
 
-    this.http.post<{ answer: string }>('https://asistente-de-ia-portafolio.onrender.com/api/chat', {
-      userId: this.userId,
-      message: messageToSend
-    }).subscribe({
-      next: (response) => {
-        const reply = response?.answer || 'No pude responder en este momento 😕';
-        this.messages.push({ text: reply, sender: 'bot' });
+    this.chatService.sendMessage(text).subscribe({
+      next: response => {
         this.isLoading = false;
-      },
-      error: (error) => {
-        console.error('Chatbot error:', error);
-        this.messages.push({
-          text: 'Lo siento, ocurrió un error al conectar con el servidor.',
+        this.push({
+          text: response?.response?.trim() || 'No pude responder en este momento 😕',
           sender: 'bot'
         });
+      },
+      error: error => {
+        console.error('[Chatbot] Error al consultar la API:', error);
         this.isLoading = false;
+        this.push({
+          text: 'Lo siento, ocurrió un error al conectar con el servidor. '
+              + 'Intenta de nuevo en un momento.',
+          sender: 'bot'
+        });
       }
     });
   }
 
+  private push(message: ChatMessage): void {
+    this.messages.push(message);
+    this.scrollToBottom();
+  }
+
+  /** setTimeout para leer scrollHeight después de que Angular pinte el mensaje. */
+  private scrollToBottom(): void {
+    setTimeout(() => {
+      const area = this.messagesArea?.nativeElement;
+      if (area) { area.scrollTop = area.scrollHeight; }
+    });
+  }
 }
