@@ -23,11 +23,7 @@ export class ChatService {
 
   sendMessage(message: string): Observable<ChatResponse> {
 
-    let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-
-    if (environment.chatbotApiKey) {
-      headers = headers.set('Authorization', environment.chatbotApiKey);
-    }
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
     const body: ChatRequest = { message };
 

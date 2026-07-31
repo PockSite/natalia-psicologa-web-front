@@ -7,7 +7,6 @@ export const environment = {
   paymentsApiUrl: 'http://localhost:8000/api/v1',
   psychologistsApiUrl: 'http://localhost:8007/api/v1',
 
-  /* Chatbot — pendiente de desplegar. Apuntar al puerto local cuando exista. */
-  chatbotApiUrl: '',
-  chatbotApiKey: '',
+  /* Chatbot — ajusta el puerto al que uses localmente (ver README de chatbot-api). */
+  chatbotApiUrl: 'http://localhost:8008/api/v1/chatbot',
 };
