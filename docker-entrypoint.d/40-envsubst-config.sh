@@ -11,11 +11,10 @@ set -e
 : "${PAYMENTS_API_URL:=}"
 : "${PSYCHOLOGISTS_API_URL:=}"
 : "${CHATBOT_API_URL:=}"
-: "${CHATBOT_API_KEY:=}"
 
 export PRODUCTION PRODUCTS_API_URL RESERVATIONS_API_URL NOTIFICATIONS_API_URL \
        CLIENTS_API_URL PAYMENTS_API_URL PSYCHOLOGISTS_API_URL \
-       CHATBOT_API_URL CHATBOT_API_KEY
+       CHATBOT_API_URL
 
 TEMPLATE=/usr/share/nginx/html/assets/config.template.json
 OUTPUT=/usr/share/nginx/html/assets/config.json

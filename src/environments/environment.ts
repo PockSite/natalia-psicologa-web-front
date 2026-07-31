@@ -7,10 +7,8 @@ export const environment = {
   paymentsApiUrl: 'https://devnataliapayapi.pocksite.com/api/v1',
   psychologistsApiUrl: 'https://devnataliapsychologistsapi.pocksite.com/api/v1',
 
-  /* Chatbot — pendiente de desplegar.
-     Se puede llenar aquí o inyectar en runtime con CHATBOT_API_URL (config.json).
-     Vacío = el chat funciona pero avisa que aún no está conectado.
-     Ojo: todo lo que va aquí viaja al navegador, así que la llave debe ser pública. */
-  chatbotApiUrl: '',
-  chatbotApiKey: '',
+  /* Chatbot — se puede llenar aquí o inyectar en runtime con CHATBOT_API_URL (config.json).
+     Vacío = el widget de chat queda desactivado.
+     El endpoint no usa API key: se protege con CORS + rate limit por IP. */
+  chatbotApiUrl: 'https://devnataliachatbotapi.pocksite.com/api/v1/chatbot',
 };

@@ -6,6 +6,5 @@
   "clientsApiUrl": "${CLIENTS_API_URL}",
   "paymentsApiUrl": "${PAYMENTS_API_URL}",
   "psychologistsApiUrl": "${PSYCHOLOGISTS_API_URL}",
-  "chatbotApiUrl": "${CHATBOT_API_URL}",
-  "chatbotApiKey": "${CHATBOT_API_KEY}"
+  "chatbotApiUrl": "${CHATBOT_API_URL}"
 }
