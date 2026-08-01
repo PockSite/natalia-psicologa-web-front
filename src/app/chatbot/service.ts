@@ -28,7 +28,7 @@ export class ChatService {
     const body: ChatRequest = { message };
 
     return this.http.post<ChatResponse>(
-      `${this.baseUrl}/chat`,
+      `${this.baseUrl}/chatbot/chat`,
       body,
       { headers }
     );
