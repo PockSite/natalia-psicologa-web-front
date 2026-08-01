@@ -539,12 +539,13 @@ export class ProductDetailComponent implements OnInit {
     });
   }
 
-  /** Fecha/hora real de la cita elegida (día del calendario + hora del slot). */
+  /** Fecha/hora real de la cita elegida (día del calendario + hora del slot).
+   *  Se ancla a la hora de Colombia (UTC-5, sin DST) para que el instante sea
+   *  correcto sin importar la zona horaria del navegador del usuario. */
   private selectedAppointmentStartTime(): Date | undefined {
     if (!this.isService || !this.selectedDay || !this.selectedAppointment) { return undefined; }
-    const [h, m] = this.selectedAppointment.startTime.split(':').map(Number);
-    const date = this.selectedDay.date;
-    return new Date(date.getFullYear(), date.getMonth(), date.getDate(), h, m);
+    const dateStr = this.toIsoDate(this.selectedDay.date);
+    return new Date(`${dateStr}T${this.selectedAppointment.startTime}`);
   }
 
   getWhatsappConfirmLink(): string {
