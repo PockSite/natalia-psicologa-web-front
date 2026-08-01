@@ -53,6 +53,7 @@ interface ApiAgenda {
 interface ApiAvailabilitySlot {
   start_time: string;
   available: boolean;
+  lock?: boolean;
 }
 
 interface ApiAvailability {
@@ -187,7 +188,8 @@ export class ProductService {
         id: `${availability.date}-${slot.start_time}-${i}`,
         startTime: slot.start_time,
         endingTime: end,
-        available: slot.available,
+        // Un slot con lock viene como available:true; en la web principal se muestra ocupado.
+        available: slot.available && !slot.lock,
       };
     });
     return { id: `day-${availability.date}`, date, appointments };
