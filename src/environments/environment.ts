@@ -10,5 +10,5 @@ export const environment = {
   /* Chatbot — se puede llenar aquí o inyectar en runtime con CHATBOT_API_URL (config.json).
      Vacío = el widget de chat queda desactivado.
      El endpoint no usa API key: se protege con CORS + rate limit por IP. */
-  chatbotApiUrl: 'https://devnataliachatbotapi.pocksite.com/api/v1/chatbot',
+  chatbotApiUrl: 'https://devnataliachatbotapi.pocksite.com/api/v1',
 };

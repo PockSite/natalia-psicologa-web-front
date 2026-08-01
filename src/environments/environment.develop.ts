@@ -8,5 +8,5 @@ export const environment = {
   psychologistsApiUrl: 'http://localhost:8007/api/v1',
 
   /* Chatbot — ajusta el puerto al que uses localmente (ver README de chatbot-api). */
-  chatbotApiUrl: 'http://localhost:8008/api/v1/chatbot',
+  chatbotApiUrl: 'http://localhost:8008/api/v1',
 };

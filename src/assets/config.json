@@ -6,5 +6,5 @@
   "clientsApiUrl": "https://devnataliaclientsapi.pocksite.com/api/v1",
   "paymentsApiUrl": "https://devnataliapayapi.pocksite.com/api/v1",
   "psychologistsApiUrl": "https://devnataliapsychologistsapi.pocksite.com/api/v1",
-  "chatbotApiUrl": "https://devnataliachatbotapi.pocksite.com/api/v1/chatbot"
+  "chatbotApiUrl": "https://devnataliachatbotapi.pocksite.com/api/v1"
 }
