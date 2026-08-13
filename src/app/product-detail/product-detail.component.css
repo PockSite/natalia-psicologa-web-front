@@ -922,27 +922,46 @@
 
 /* ── Acompañantes (terapia de pareja) ───────────────────────── */
 /* Se enmarca cada acompañante para que el formulario no se lea como
-   una lista interminable de campos sueltos. */
+   una lista interminable de campos sueltos. Dentro, los pasos y los
+   campos son los mismos que los del titular. */
 .pd-attendee {
-  margin-top: 26px;
-  padding: 4px 16px 16px;
+  margin-top: 28px;
+  padding: 22px 20px 24px;
   border: 1px solid rgba(139, 78, 93, 0.18);
-  border-radius: 14px;
+  border-radius: 18px;
   background: rgba(139, 78, 93, 0.03);
 }
 
-.pd-attendee .pd-form-step-next {
-  border-top: none;
-  padding-top: 18px;
-  margin-top: 0;
+.pd-attendee-head {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  margin: 0 0 22px;
 }
 
-/* Indicativo simple: el combobox del titular está atado a un único
-   ViewChild, así que aquí se usa un campo de texto. */
-.pd-ext-simple {
-  max-width: 78px;
-  margin-right: 8px;
-  text-align: center;
+/* Mismo relieve que los campos: el acompañante pertenece al formulario,
+   no es una sección aparte. */
+.pd-attendee-icon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border: 1.5px solid #6e4450;
+  border-radius: 50%;
+  box-shadow: 2.5px 3px 0 #6e4450;
+  background: #f3d2d1;
+  color: #6e4450;
+  font-size: 0.95rem;
+}
+
+.pd-attendee-title {
+  min-width: 0;
+  font-size: 1.02rem;
+  font-weight: 700;
+  color: #4d2b35;
+  line-height: 1.3;
 }
 
 .pd-field-row {
@@ -1414,6 +1433,10 @@
 
   .pd-form-grid {
     grid-template-columns: 1fr;
+  }
+
+  .pd-attendee {
+    padding: 18px 14px 20px;
   }
 
   .pd-actions {

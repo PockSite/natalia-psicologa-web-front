@@ -318,7 +318,7 @@
                 <label for="pd-celular">Número de celular</label>
                 <div class="pd-phone-row">
                   <!-- Indicativo: se puede escribir o elegir de la lista -->
-                  <div class="pd-phone-ext-wrap" #extWrap [class.is-open]="extOpen">
+                  <div class="pd-phone-ext-wrap" #extWrap [class.is-open]="buyerExt.open">
                     <span class="pd-phone-flag" aria-hidden="true">
                       {{ (countryCodes | countryFlag: buyerForm.get('extensionPais')?.value) }}
                     </span>
@@ -326,30 +326,30 @@
                       formControlName="extensionPais" placeholder="+57" maxlength="5"
                       inputmode="tel" autocomplete="tel-country-code" spellcheck="false"
                       role="combobox" aria-label="Indicativo de país" aria-autocomplete="list"
-                      aria-controls="pd-extension-list" [attr.aria-expanded]="extOpen"
+                      aria-controls="pd-extension-list" [attr.aria-expanded]="buyerExt.open"
                       (input)="onExtensionInput($event)"
                       (focus)="openExtension()"
                       (keydown)="onExtensionKeydown($event)">
                     <button type="button" class="pd-phone-ext-toggle" tabindex="-1"
-                      [attr.aria-label]="extOpen ? 'Ocultar indicativos' : 'Ver indicativos'"
+                      [attr.aria-label]="buyerExt.open ? 'Ocultar indicativos' : 'Ver indicativos'"
                       (click)="toggleExtension()">
                       <i class="fas fa-chevron-down"></i>
                     </button>
 
                     <ul class="pd-phone-ext-list" id="pd-extension-list" role="listbox"
-                      *ngIf="extOpen">
-                      <li *ngFor="let c of filteredCountryCodes; let i = index"
+                      *ngIf="buyerExt.open">
+                      <li *ngFor="let c of buyerExt.filtered; let i = index"
                         class="pd-phone-ext-option" role="option"
-                        [class.is-active]="i === extHighlight"
+                        [class.is-active]="i === buyerExt.highlight"
                         [class.is-current]="c.dialCode === buyerForm.get('extensionPais')?.value"
                         [attr.aria-selected]="c.dialCode === buyerForm.get('extensionPais')?.value"
-                        (mouseenter)="extHighlight = i"
+                        (mouseenter)="buyerExt.highlight = i"
                         (click)="selectExtension(c)">
                         <span class="pd-phone-flag">{{ c.flag }}</span>
                         <span class="pd-phone-ext-name">{{ c.name }}</span>
                         <span class="pd-phone-ext-code">{{ c.dialCode }}</span>
                       </li>
-                      <li class="pd-phone-ext-empty" *ngIf="!filteredCountryCodes.length">
+                      <li class="pd-phone-ext-empty" *ngIf="!buyerExt.filtered.length">
                         Sin coincidencias. Puedes escribir tu indicativo.
                       </li>
                     </ul>
@@ -406,86 +406,176 @@
             <ng-container *ngIf="attendees.length">
               <div class="pd-attendee" *ngFor="let a of attendees; let i = index" [formGroup]="a.form">
 
-                <p class="pd-form-step-label pd-form-step-next">
-                  <i class="fas fa-user-group"></i>
-                  {{ attendees.length === 1 ? 'Datos de tu acompañante' : 'Datos del acompañante ' + (i + 1) }}
-                </p>
+                <header class="pd-attendee-head">
+                  <span class="pd-attendee-icon" aria-hidden="true">
+                    <i class="fas fa-user-group"></i>
+                  </span>
+                  <span class="pd-attendee-title">
+                    {{ attendees.length === 1 ? 'Datos de tu acompañante' : 'Datos del acompañante ' + (i + 1) }}
+                  </span>
+                </header>
 
+                <!-- ── Paso 1: Documento ── -->
+                <p class="pd-form-step-label">
+                  <i class="fas fa-id-card"></i> Primero, ingresa su documento
+                </p>
                 <div class="pd-form-grid">
+
+                  <!-- Tipo de documento -->
                   <div class="pd-field" [class.has-error]="attendeeInvalid(a, 'tipoDocumento')">
-                    <label>Tipo de documento</label>
-                    <select formControlName="tipoDocumento" (change)="onAttendeeDocumentInput(a)">
+                    <label [attr.for]="'pd-a-tipo-documento-' + i">Tipo de documento</label>
+                    <select [id]="'pd-a-tipo-documento-' + i" formControlName="tipoDocumento"
+                      (change)="onAttendeeDocumentInput(a)">
                       <option *ngFor="let dt of documentTypes" [value]="dt.code">{{ dt.name }}</option>
                     </select>
                   </div>
 
+                  <!-- Documento -->
                   <div class="pd-field" [class.has-error]="attendeeInvalid(a, 'documento')">
-                    <label>Número de documento</label>
+                    <label [attr.for]="'pd-a-documento-' + i">Número de documento</label>
                     <div class="pd-field-row">
-                      <input type="text" formControlName="documento" placeholder="Ej: 1020304050"
-                        autocomplete="off" (input)="onAttendeeDocumentInput(a)">
-                      <span class="pd-doc-spinner" *ngIf="a.loading"><i class="fas fa-circle-notch fa-spin"></i></span>
-                      <span class="pd-doc-ok" *ngIf="!a.loading && a.found"><i class="fas fa-circle-check"></i></span>
+                      <input [id]="'pd-a-documento-' + i" type="text" formControlName="documento"
+                        placeholder="Ej: 1020304050" autocomplete="off"
+                        (input)="onAttendeeDocumentInput(a)">
+                      <span class="pd-doc-spinner" *ngIf="a.loading">
+                        <i class="fas fa-circle-notch fa-spin"></i>
+                      </span>
+                      <span class="pd-doc-ok" *ngIf="!a.loading && a.found">
+                        <i class="fas fa-circle-check"></i>
+                      </span>
                     </div>
                     <small class="pd-error" *ngIf="attendeeInvalid(a, 'documento')">
                       Ingresa un número de documento válido.
                     </small>
                   </div>
+
                 </div>
 
+                <!-- Banner cliente encontrado -->
                 <div class="pd-client-found" *ngIf="a.found && !a.loading">
                   <i class="fas fa-circle-check"></i>
-                  <span>Ya está registrado: completamos sus datos.</span>
+                  <span>Ya está registrado: revisamos sus datos y los completamos por ti.</span>
                 </div>
 
+                <!-- ── Paso 2: Resto del formulario (aparece tras consultar doc) ── -->
                 <ng-container *ngIf="a.checked || a.found">
+
+                  <p class="pd-form-step-label pd-form-step-next">
+                    <i class="fas fa-user"></i> Completa sus datos personales
+                  </p>
                   <div class="pd-form-grid">
+
+                    <!-- Nombre -->
                     <div class="pd-field" [class.has-error]="attendeeInvalid(a, 'nombre')">
-                      <label>Nombre</label>
-                      <input type="text" formControlName="nombre" placeholder="Nombre">
-                      <small class="pd-error" *ngIf="attendeeInvalid(a, 'nombre')">Ingresa el nombre.</small>
-                    </div>
-
-                    <div class="pd-field" [class.has-error]="attendeeInvalid(a, 'apellido')">
-                      <label>Apellido</label>
-                      <input type="text" formControlName="apellido" placeholder="Apellido">
-                      <small class="pd-error" *ngIf="attendeeInvalid(a, 'apellido')">Ingresa el apellido.</small>
-                    </div>
-
-                    <div class="pd-field" [class.has-error]="attendeeInvalid(a, 'correo')">
-                      <label>Correo electrónico</label>
-                      <input type="email" formControlName="correo" placeholder="correo@ejemplo.com">
-                      <small class="pd-error" *ngIf="attendeeInvalid(a, 'correo')">Ingresa un correo válido.</small>
-                    </div>
-
-                    <div class="pd-field" [class.has-error]="attendeeInvalid(a, 'celular')">
-                      <label>Celular (WhatsApp)</label>
-                      <div class="pd-field-row">
-                        <input type="text" formControlName="extensionPais" class="pd-ext-simple" placeholder="+57">
-                        <input type="text" formControlName="celular" placeholder="3001234567">
-                      </div>
-                      <small class="pd-error" *ngIf="attendeeInvalid(a, 'celular')">Ingresa un número válido.</small>
-                    </div>
-
-                    <div class="pd-field" [class.has-error]="attendeeInvalid(a, 'sexoId')">
-                      <label>Sexo</label>
-                      <div class="pd-radio-group">
-                        <label class="pd-radio" *ngFor="let s of sexTypes">
-                          <input type="radio" formControlName="sexoId" [value]="s.id">
-                          <span>{{ s.name }}</span>
-                        </label>
-                      </div>
-                      <small class="pd-error" *ngIf="attendeeInvalid(a, 'sexoId')">Selecciona una opción.</small>
-                    </div>
-
-                    <div class="pd-field" [class.has-error]="attendeeInvalid(a, 'fechaNacimiento')">
-                      <label>Fecha de nacimiento</label>
-                      <input type="date" formControlName="fechaNacimiento" lang="es-CO"
-                        [max]="today | date:'yyyy-MM-dd'">
-                      <small class="pd-error" *ngIf="attendeeInvalid(a, 'fechaNacimiento')">
-                        Ingresa la fecha de nacimiento.
+                      <label [attr.for]="'pd-a-nombre-' + i">Nombre</label>
+                      <input [id]="'pd-a-nombre-' + i" type="text" formControlName="nombre"
+                        placeholder="Su nombre" autocomplete="off">
+                      <small class="pd-error" *ngIf="attendeeInvalid(a, 'nombre')">
+                        Ingresa su nombre (mínimo 2 letras).
                       </small>
                     </div>
+
+                    <!-- Apellido -->
+                    <div class="pd-field" [class.has-error]="attendeeInvalid(a, 'apellido')">
+                      <label [attr.for]="'pd-a-apellido-' + i">Apellido</label>
+                      <input [id]="'pd-a-apellido-' + i" type="text" formControlName="apellido"
+                        placeholder="Su apellido" autocomplete="off">
+                      <small class="pd-error" *ngIf="attendeeInvalid(a, 'apellido')">
+                        Ingresa su apellido (mínimo 2 letras).
+                      </small>
+                    </div>
+
+                    <!-- Celular -->
+                    <div class="pd-field"
+                      [class.has-error]="attendeeInvalid(a, 'celular') || attendeeInvalid(a, 'extensionPais')">
+                      <label [attr.for]="'pd-a-celular-' + i">Número de celular</label>
+                      <div class="pd-phone-row">
+                        <!-- Indicativo: se puede escribir o elegir de la lista -->
+                        <div class="pd-phone-ext-wrap" #extWrap [class.is-open]="a.ext.open">
+                          <span class="pd-phone-flag" aria-hidden="true">
+                            {{ (countryCodes | countryFlag: a.form.get('extensionPais')?.value) }}
+                          </span>
+                          <input [id]="'pd-a-extension-' + i" type="text" class="pd-phone-ext-input"
+                            formControlName="extensionPais" placeholder="+57" maxlength="5"
+                            inputmode="tel" autocomplete="off" spellcheck="false"
+                            role="combobox" aria-label="Indicativo de país" aria-autocomplete="list"
+                            [attr.aria-controls]="'pd-a-extension-list-' + i"
+                            [attr.aria-expanded]="a.ext.open"
+                            (input)="onExtensionInput($event, a.form, a.ext)"
+                            (focus)="openExtension(a.form, a.ext)"
+                            (keydown)="onExtensionKeydown($event, a.form, a.ext)">
+                          <button type="button" class="pd-phone-ext-toggle" tabindex="-1"
+                            [attr.aria-label]="a.ext.open ? 'Ocultar indicativos' : 'Ver indicativos'"
+                            (click)="toggleExtension(a.form, a.ext)">
+                            <i class="fas fa-chevron-down"></i>
+                          </button>
+
+                          <ul class="pd-phone-ext-list" [id]="'pd-a-extension-list-' + i"
+                            role="listbox" *ngIf="a.ext.open">
+                            <li *ngFor="let c of a.ext.filtered; let ci = index"
+                              class="pd-phone-ext-option" role="option"
+                              [class.is-active]="ci === a.ext.highlight"
+                              [class.is-current]="c.dialCode === a.form.get('extensionPais')?.value"
+                              [attr.aria-selected]="c.dialCode === a.form.get('extensionPais')?.value"
+                              (mouseenter)="a.ext.highlight = ci"
+                              (click)="selectExtension(c, a.form, a.ext)">
+                              <span class="pd-phone-flag">{{ c.flag }}</span>
+                              <span class="pd-phone-ext-name">{{ c.name }}</span>
+                              <span class="pd-phone-ext-code">{{ c.dialCode }}</span>
+                            </li>
+                            <li class="pd-phone-ext-empty" *ngIf="!a.ext.filtered.length">
+                              Sin coincidencias. Puedes escribir su indicativo.
+                            </li>
+                          </ul>
+                        </div>
+                        <input [id]="'pd-a-celular-' + i" type="tel" formControlName="celular"
+                          placeholder="300 000 0000" autocomplete="off" class="pd-phone-number">
+                      </div>
+                      <small class="pd-error" *ngIf="attendeeInvalid(a, 'extensionPais')">
+                        Escribe o elige un indicativo válido (ej: +57).
+                      </small>
+                      <small class="pd-error" *ngIf="attendeeInvalid(a, 'celular')">
+                        Ingresa un número de celular válido (solo dígitos, 7 a 15).
+                      </small>
+                    </div>
+
+                    <!-- Correo -->
+                    <div class="pd-field" [class.has-error]="attendeeInvalid(a, 'correo')">
+                      <label [attr.for]="'pd-a-correo-' + i">Correo electrónico</label>
+                      <input [id]="'pd-a-correo-' + i" type="email" formControlName="correo"
+                        placeholder="sucorreo@ejemplo.com" autocomplete="off">
+                      <small class="pd-error" *ngIf="attendeeInvalid(a, 'correo')">
+                        Ingresa un correo electrónico válido.
+                      </small>
+                    </div>
+
+                    <!-- Sexo -->
+                    <div class="pd-field pd-field-full" [class.has-error]="attendeeInvalid(a, 'sexoId')">
+                      <label>Sexo</label>
+                      <div class="mydict">
+                        <div>
+                          <label *ngFor="let s of sexTypes">
+                            <input type="radio" [name]="'sexoId-acompanante-' + i" [value]="s.id"
+                              formControlName="sexoId">
+                            <span>{{ s.name }}</span>
+                          </label>
+                        </div>
+                      </div>
+                      <small class="pd-error" *ngIf="attendeeInvalid(a, 'sexoId')">
+                        Selecciona una opción.
+                      </small>
+                    </div>
+
+                    <!-- Fecha de nacimiento -->
+                    <div class="pd-field" [class.has-error]="attendeeInvalid(a, 'fechaNacimiento')">
+                      <label [attr.for]="'pd-a-fecha-nac-' + i">Fecha de nacimiento</label>
+                      <input [id]="'pd-a-fecha-nac-' + i" type="date" formControlName="fechaNacimiento"
+                        lang="es-CO" required [max]="today | date:'yyyy-MM-dd'">
+                      <small class="pd-error" *ngIf="attendeeInvalid(a, 'fechaNacimiento')">
+                        Ingresa su fecha de nacimiento.
+                      </small>
+                    </div>
+
                   </div>
                 </ng-container>
               </div>
