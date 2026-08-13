@@ -235,6 +235,11 @@
               ? 'Con estos datos confirmamos tu cita y te enviamos el enlace de la sesión.'
               : 'Con estos datos te enviamos el acceso a tu producto digital.' }}
           </p>
+          <p class="pd-form-sub" *ngIf="requiredAttendees > 1">
+            <i class="fas fa-user-group"></i>
+            Esta sesión es para {{ requiredAttendees }} personas. Necesitamos los datos de
+            cada una para enviarles la invitación; el precio ya incluye a ambas.
+          </p>
 
           <form class="pd-form" [formGroup]="buyerForm" (ngSubmit)="onSubmit()" novalidate>
 
@@ -395,6 +400,100 @@
               </div>
 
             </div>
+            </ng-container>
+
+            <!-- ── Acompañantes (terapia de pareja y similares) ── -->
+            <ng-container *ngIf="attendees.length">
+              <div class="pd-attendee" *ngFor="let a of attendees; let i = index" [formGroup]="a.form">
+
+                <p class="pd-form-step-label pd-form-step-next">
+                  <i class="fas fa-user-group"></i>
+                  {{ attendees.length === 1 ? 'Datos de tu acompañante' : 'Datos del acompañante ' + (i + 1) }}
+                </p>
+
+                <div class="pd-form-grid">
+                  <div class="pd-field" [class.has-error]="attendeeInvalid(a, 'tipoDocumento')">
+                    <label>Tipo de documento</label>
+                    <select formControlName="tipoDocumento" (change)="onAttendeeDocumentInput(a)">
+                      <option *ngFor="let dt of documentTypes" [value]="dt.code">{{ dt.name }}</option>
+                    </select>
+                  </div>
+
+                  <div class="pd-field" [class.has-error]="attendeeInvalid(a, 'documento')">
+                    <label>Número de documento</label>
+                    <div class="pd-field-row">
+                      <input type="text" formControlName="documento" placeholder="Ej: 1020304050"
+                        autocomplete="off" (input)="onAttendeeDocumentInput(a)">
+                      <span class="pd-doc-spinner" *ngIf="a.loading"><i class="fas fa-circle-notch fa-spin"></i></span>
+                      <span class="pd-doc-ok" *ngIf="!a.loading && a.found"><i class="fas fa-circle-check"></i></span>
+                    </div>
+                    <small class="pd-error" *ngIf="attendeeInvalid(a, 'documento')">
+                      Ingresa un número de documento válido.
+                    </small>
+                  </div>
+                </div>
+
+                <div class="pd-client-found" *ngIf="a.found && !a.loading">
+                  <i class="fas fa-circle-check"></i>
+                  <span>Ya está registrado: completamos sus datos.</span>
+                </div>
+
+                <ng-container *ngIf="a.checked || a.found">
+                  <div class="pd-form-grid">
+                    <div class="pd-field" [class.has-error]="attendeeInvalid(a, 'nombre')">
+                      <label>Nombre</label>
+                      <input type="text" formControlName="nombre" placeholder="Nombre">
+                      <small class="pd-error" *ngIf="attendeeInvalid(a, 'nombre')">Ingresa el nombre.</small>
+                    </div>
+
+                    <div class="pd-field" [class.has-error]="attendeeInvalid(a, 'apellido')">
+                      <label>Apellido</label>
+                      <input type="text" formControlName="apellido" placeholder="Apellido">
+                      <small class="pd-error" *ngIf="attendeeInvalid(a, 'apellido')">Ingresa el apellido.</small>
+                    </div>
+
+                    <div class="pd-field" [class.has-error]="attendeeInvalid(a, 'correo')">
+                      <label>Correo electrónico</label>
+                      <input type="email" formControlName="correo" placeholder="correo@ejemplo.com">
+                      <small class="pd-error" *ngIf="attendeeInvalid(a, 'correo')">Ingresa un correo válido.</small>
+                    </div>
+
+                    <div class="pd-field" [class.has-error]="attendeeInvalid(a, 'celular')">
+                      <label>Celular (WhatsApp)</label>
+                      <div class="pd-field-row">
+                        <input type="text" formControlName="extensionPais" class="pd-ext-simple" placeholder="+57">
+                        <input type="text" formControlName="celular" placeholder="3001234567">
+                      </div>
+                      <small class="pd-error" *ngIf="attendeeInvalid(a, 'celular')">Ingresa un número válido.</small>
+                    </div>
+
+                    <div class="pd-field" [class.has-error]="attendeeInvalid(a, 'sexoId')">
+                      <label>Sexo</label>
+                      <div class="pd-radio-group">
+                        <label class="pd-radio" *ngFor="let s of sexTypes">
+                          <input type="radio" formControlName="sexoId" [value]="s.id">
+                          <span>{{ s.name }}</span>
+                        </label>
+                      </div>
+                      <small class="pd-error" *ngIf="attendeeInvalid(a, 'sexoId')">Selecciona una opción.</small>
+                    </div>
+
+                    <div class="pd-field" [class.has-error]="attendeeInvalid(a, 'fechaNacimiento')">
+                      <label>Fecha de nacimiento</label>
+                      <input type="date" formControlName="fechaNacimiento" lang="es-CO"
+                        [max]="today | date:'yyyy-MM-dd'">
+                      <small class="pd-error" *ngIf="attendeeInvalid(a, 'fechaNacimiento')">
+                        Ingresa la fecha de nacimiento.
+                      </small>
+                    </div>
+                  </div>
+                </ng-container>
+              </div>
+
+              <p class="pd-schedule-error" *ngIf="hasDuplicateDocuments">
+                <i class="fas fa-circle-exclamation"></i>
+                Hay un documento repetido: cada asistente debe ser una persona distinta.
+              </p>
             </ng-container>
 
             <!-- Resumen de cita seleccionada -->
