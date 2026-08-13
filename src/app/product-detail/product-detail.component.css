@@ -920,6 +920,31 @@
   border-top: 1px dashed rgba(139, 78, 93, 0.2);
 }
 
+/* ── Acompañantes (terapia de pareja) ───────────────────────── */
+/* Se enmarca cada acompañante para que el formulario no se lea como
+   una lista interminable de campos sueltos. */
+.pd-attendee {
+  margin-top: 26px;
+  padding: 4px 16px 16px;
+  border: 1px solid rgba(139, 78, 93, 0.18);
+  border-radius: 14px;
+  background: rgba(139, 78, 93, 0.03);
+}
+
+.pd-attendee .pd-form-step-next {
+  border-top: none;
+  padding-top: 18px;
+  margin-top: 0;
+}
+
+/* Indicativo simple: el combobox del titular está atado a un único
+   ViewChild, así que aquí se usa un campo de texto. */
+.pd-ext-simple {
+  max-width: 78px;
+  margin-right: 8px;
+  text-align: center;
+}
+
 .pd-field-row {
   position: relative;
   display: flex;

@@ -1,10 +1,10 @@
-import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Subject } from 'rxjs';
+import { Subject, Subscription, of } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { ProductService } from '../services/product.service';
-import { PaymentService } from '../services/payment.service';
+import { PaymentService, CheckoutAttendee } from '../services/payment.service';
 import { ClientService, CountryCode, DocumentType, SexType } from '../services/client.service';
 import { Product } from '../models/product.model';
 import { Psychologist } from '../models/psychologist.model';
@@ -15,12 +15,21 @@ interface CalendarCell {
   inMonth: boolean;
 }
 
+/** Un acompañante: su formulario y el estado de su búsqueda por documento. */
+export interface AttendeeSlot {
+  form: FormGroup;
+  lookup$: Subject<{ tipo: string; doc: string }>;
+  loading: boolean;
+  found: boolean;
+  checked: boolean;
+}
+
 @Component({
   selector: 'app-product-detail',
   templateUrl: './product-detail.component.html',
   styleUrls: ['./product-detail.component.css']
 })
-export class ProductDetailComponent implements OnInit {
+export class ProductDetailComponent implements OnInit, OnDestroy {
 
   product?: Product;
   loading = true;
@@ -78,6 +87,12 @@ export class ProductDetailComponent implements OnInit {
   documentChecked = false;
   private docLookup$ = new Subject<{ tipo: string; doc: string }>();
 
+  /* ── Acompañantes (terapia de pareja y similares) ──
+     El titular sigue en buyerForm; aquí van solo los demás asistentes,
+     cada uno con su propio formulario y su propia búsqueda por documento. */
+  attendees: AttendeeSlot[] = [];
+  private attendeeSubs: Subscription[] = [];
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -119,6 +134,8 @@ export class ProductDetailComponent implements OnInit {
           }
           this.product = product;
           console.log('[PD] isService:', this.isService, 'product.type:', product.type);
+          // El producto define cuántos asisten: se crean sus formularios.
+          this.syncAttendees();
           this.loadPsychologists(product);
         },
         error: err => {
@@ -322,7 +339,13 @@ export class ProductDetailComponent implements OnInit {
   /* ── Formulario ─────────────────────────────────────────── */
 
   private buildForm(): void {
-    this.buyerForm = this.fb.group({
+    this.buyerForm = this.newPersonForm();
+  }
+
+  /** Los asistentes piden los mismos datos que el titular: cada uno queda
+   *  registrado como cliente, y eso exige documento. */
+  private newPersonForm(): FormGroup {
+    return this.fb.group({
       nombre:          ['', [Validators.required, Validators.minLength(2)]],
       apellido:        ['', [Validators.required, Validators.minLength(2)]],
       extensionPais:   ['+57', [Validators.required, Validators.pattern(/^\+\d{1,4}$/)]],
@@ -333,6 +356,93 @@ export class ProductDetailComponent implements OnInit {
       tipoDocumento:   ['CC', Validators.required],
       documento:       ['', [Validators.required, Validators.minLength(5)]]
     });
+  }
+
+  /* ── Acompañantes ───────────────────────────────────────── */
+
+  /** Asistentes que exige el producto (1 = sesión individual). */
+  get requiredAttendees(): number {
+    return this.product?.attendeesCount ?? 1;
+  }
+
+  /** Ajusta el número de formularios de acompañante al que pide el producto. */
+  private syncAttendees(): void {
+    const needed = Math.max(0, this.requiredAttendees - 1);
+    while (this.attendees.length > needed) {
+      this.attendees.pop();
+    }
+    while (this.attendees.length < needed) {
+      this.attendees.push(this.createAttendeeSlot());
+    }
+  }
+
+  private createAttendeeSlot(): AttendeeSlot {
+    const slot: AttendeeSlot = {
+      form: this.newPersonForm(),
+      lookup$: new Subject<{ tipo: string; doc: string }>(),
+      loading: false,
+      found: false,
+      checked: false,
+    };
+
+    // Mismo autocompletado que el titular: si ya es paciente, se rellena solo.
+    const sub = slot.lookup$.pipe(
+      debounceTime(600),
+      distinctUntilChanged((a, b) => a.tipo === b.tipo && a.doc === b.doc),
+      switchMap(({ tipo, doc }) => {
+        if (doc.length < 5) { return of(null); }
+        slot.loading = true;
+        return this.clientService.findByDocument(tipo, doc);
+      })
+    ).subscribe(client => {
+      slot.loading = false;
+      slot.checked = true;
+      if (client) {
+        slot.found = true;
+        const spaceIdx = client.fullName.indexOf(' ');
+        slot.form.patchValue({
+          nombre:          spaceIdx > -1 ? client.fullName.slice(0, spaceIdx) : client.fullName,
+          apellido:        spaceIdx > -1 ? client.fullName.slice(spaceIdx + 1) : '',
+          correo:          client.email            ?? '',
+          extensionPais:   client.phoneCountryCode ?? '+57',
+          celular:         client.whatsappNumber   ?? '',
+          sexoId:          client.sexId            ?? null,
+          fechaNacimiento: client.birthDate        ?? '',
+        });
+      } else {
+        slot.found = false;
+        slot.form.patchValue({
+          nombre: '', apellido: '', correo: '',
+          extensionPais: '+57', celular: '',
+          sexoId: null, fechaNacimiento: '',
+        });
+      }
+    });
+
+    this.attendeeSubs.push(sub);
+    return slot;
+  }
+
+  onAttendeeDocumentInput(slot: AttendeeSlot): void {
+    const tipo = slot.form.get('tipoDocumento')?.value;
+    const doc  = slot.form.get('documento')?.value?.trim();
+    slot.checked = false;
+    slot.found = false;
+    if (doc && doc.length >= 5) {
+      slot.lookup$.next({ tipo, doc });
+    }
+  }
+
+  /** Documento repetido entre asistentes: serían la misma persona. */
+  get hasDuplicateDocuments(): boolean {
+    const keys = [this.buyerForm, ...this.attendees.map(a => a.form)]
+      .map(f => `${f.get('tipoDocumento')?.value}|${(f.get('documento')?.value ?? '').trim()}`)
+      .filter(k => !k.endsWith('|'));
+    return new Set(keys).size !== keys.length;
+  }
+
+  get attendeeFormsValid(): boolean {
+    return this.attendees.every(a => a.form.valid);
   }
 
   private setupDocumentLookup(): void {
@@ -490,12 +600,40 @@ export class ProductDetailComponent implements OnInit {
     return !!control && control.invalid && (control.touched || this.submitAttempted);
   }
 
+  /** Igual que `invalid`, pero sobre el formulario de un acompañante. */
+  attendeeInvalid(slot: AttendeeSlot, field: string): boolean {
+    const control = slot.form.get(field);
+    return !!control && control.invalid && (control.touched || this.submitAttempted);
+  }
+
+  private buildAttendeesPayload(): CheckoutAttendee[] {
+    return this.attendees.map(a => {
+      const v = a.form.value;
+      return {
+        full_name: `${v.nombre} ${v.apellido}`,
+        email: v.correo,
+        phone_country_code: v.extensionPais,
+        whatsapp_number: v.celular,
+        document: v.documento,
+        document_type: v.tipoDocumento,
+        sex_id: v.sexoId,
+        birth_date: v.fechaNacimiento || null,
+      };
+    });
+  }
+
   onSubmit(): void {
     this.submitAttempted = true;
     this.scheduleError = this.isService && !this.selectedAppointment;
 
-    if (this.buyerForm.invalid || this.scheduleError) {
+    if (this.buyerForm.invalid || !this.attendeeFormsValid || this.scheduleError) {
       this.buyerForm.markAllAsTouched();
+      this.attendees.forEach(a => a.form.markAllAsTouched());
+      return;
+    }
+    // Se comprueba antes de abrir el widget de pago: descubrirlo después, con
+    // el 400 del backend, dejaría al usuario ya metido en el cobro.
+    if (this.hasDuplicateDocuments) {
       return;
     }
 
@@ -513,7 +651,8 @@ export class ProductDetailComponent implements OnInit {
       sexId: buyer.sexoId,
       birthDate: buyer.fechaNacimiento || undefined,
       startTime: this.selectedAppointmentStartTime(),
-      psychologist_id: this.isService ? this.selectedPsychologist?.id : undefined
+      psychologist_id: this.isService ? this.selectedPsychologist?.id : undefined,
+      attendees: this.buildAttendeesPayload(),
     }).subscribe({
       next: (checkout) => {
         const redirectUrl = `${window.location.origin}/pago-resultado?product_id=${this.product!.id}`;
@@ -564,6 +703,18 @@ export class ProductDetailComponent implements OnInit {
 
   /* ── Utilidades ─────────────────────────────────────────── */
 
+  ngOnDestroy(): void {
+    this.clearAttendees();
+  }
+
+  /** Descarta los acompañantes y cierra sus búsquedas pendientes. */
+  private clearAttendees(): void {
+    this.attendeeSubs.forEach(s => s.unsubscribe());
+    this.attendeeSubs = [];
+    this.attendees.forEach(a => a.lookup$.complete());
+    this.attendees = [];
+  }
+
   private resetState(): void {
     this.product = undefined;
     this.loading = true;
@@ -587,6 +738,9 @@ export class ProductDetailComponent implements OnInit {
     this.clientLookupLoading = false;
     this.clientFound = false;
     this.documentChecked = false;
+    // Al cambiar de producto cambia cuántos asisten: se descartan y se
+    // recrean cuando llegue el producto nuevo.
+    this.clearAttendees();
     this.closeExtension();
     this.filteredCountryCodes = this.countryCodes;
     this.buyerForm.reset({ tipoDocumento: 'CC', extensionPais: '+57' });

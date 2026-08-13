@@ -30,6 +30,7 @@ interface ApiProduct {
   format?: string;
   category?: string;
   language?: string;
+  attendees_count?: number;
 }
 
 interface ApiAppointment {
@@ -166,6 +167,8 @@ export class ProductService {
       format: p.format,
       category: p.category,
       language: p.language,
+      // Un backend que aún no expone la columna se trata como sesión individual.
+      attendeesCount: p.attendees_count ?? 1,
     };
   }
 

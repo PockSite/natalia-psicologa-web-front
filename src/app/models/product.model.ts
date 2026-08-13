@@ -16,4 +16,9 @@ export interface Product {
   rating?: string;
   language?: string;
   guarantee?: string;
+  /**
+   * Personas que asisten a la sesión (2 = terapia de pareja).
+   * El precio es el mismo: cubre la sesión completa, no se multiplica.
+   */
+  attendeesCount: number;
 }
