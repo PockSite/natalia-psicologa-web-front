@@ -106,7 +106,8 @@ export class PsychologistsSectionComponent implements OnInit, OnDestroy {
         this.syncTimer();
       },
       error: () => {
-        // El servicio ya degrada a datos de muestra; esto cubre un fallo inesperado.
+        // El servicio ya devuelve lista vacía si la API falla; esto cubre un
+        // fallo inesperado para que la sección no se quede cargando.
         this.psychologists = [];
         this.isLoading = false;
       },

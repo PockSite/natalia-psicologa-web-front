@@ -17,39 +17,6 @@ interface ApiPsychologist {
   years_experience?: number;
 }
 
-/**
- * Datos de muestra para poder ver la sección mientras la API de psicólogas
- * (environment.psychologistsApiUrl) todavía no responde.
- *
- * TODO: eliminar esta constante y el `catchError` que la usa cuando el endpoint
- * esté configurado. Es lo único que hay que borrar para quedarse solo con la API.
- */
-export const FALLBACK_PSYCHOLOGISTS: Psychologist[] = [
-  {
-    id: 'demo-1',
-    fullName: 'Natalia Güechá',
-    headline: 'Psicóloga clínica · Intervención en crisis',
-    yearsExperience: 8,
-    photo: 'assets/images/fotografia1.jpeg',
-    whatsappCountryCode: '+57',
-    whatsappNumber: '3104671284',
-  },
-  {
-    id: 'demo-2',
-    fullName: 'Nombre de la profesional',
-    headline: 'Psicóloga clínica · Terapia de pareja',
-    yearsExperience: 6,
-    photo: 'assets/images/fotografia3.jpeg',
-  },
-  {
-    id: 'demo-3',
-    fullName: 'Nombre de la profesional',
-    headline: 'Psicóloga clínica · Infancia y adolescencia',
-    yearsExperience: 5,
-    photo: 'assets/images/fotografia4.jpeg',
-  },
-];
-
 @Injectable({ providedIn: 'root' })
 export class PsychologistService {
 
@@ -67,9 +34,13 @@ export class PsychologistService {
         .get<ApiPsychologist[]>(`${this.apiUrl}/psychologists/`)
         .pipe(
           map(list => (list ?? []).map(p => this.toPsychologist(p))),
-          // Un 200 con lista vacía dejaría la sección en blanco: se trata como "sin datos aún".
-          map(list => list.length ? list : this.withFallback('respuesta vacía')),
-          catchError(() => of(this.withFallback('la API no respondió'))),
+          catchError(err => {
+            console.error('[PsychologistService] No se pudo cargar el equipo', err);
+            // Se descarta la caché para reintentar la próxima vez que se pida:
+            // con shareReplay, una lista vacía quedaría fijada para siempre.
+            this.psychologists$ = null;
+            return of([] as Psychologist[]);
+          }),
           shareReplay(1)
         );
     }
@@ -81,6 +52,11 @@ export class PsychologistService {
     return this.getPsychologists().pipe(
       map(list => list.find(p => p.id === id))
     );
+  }
+
+  /** Fuerza recargar el equipo en la próxima consulta. */
+  refresh(): void {
+    this.psychologists$ = null;
   }
 
   /* ── Mapeo API → modelo del front ── */
@@ -96,11 +72,5 @@ export class PsychologistService {
       headline: p.headline,
       yearsExperience: p.years_experience,
     };
-  }
-
-  /** TODO: borrar junto con FALLBACK_PSYCHOLOGISTS al conectar la API. */
-  private withFallback(reason: string): Psychologist[] {
-    console.warn(`[PsychologistService] ${reason}; mostrando datos de muestra.`);
-    return FALLBACK_PSYCHOLOGISTS;
   }
 }
