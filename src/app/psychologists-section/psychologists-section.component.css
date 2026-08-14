@@ -1,0 +1,648 @@
+/* ============================================================
+   Sección "Quiénes te acompañan"
+   Tokens locales derivados de la paleta global (styles.css).
+   ============================================================ */
+:host {
+  /* Vino de marca oscurecido: pasa contraste AA sobre el fondo crema. */
+  --psy-ink: #3a1f27;
+  --psy-ink-soft: #6b4b53;
+  --psy-wine: var(--color-main);
+  --psy-blush: var(--color-main2);
+  --psy-cream: #f7efe9;
+  --psy-coral: var(--color-second);
+  --psy-line: rgba(58, 31, 39, 0.14);
+
+  display: block;
+}
+
+.psy {
+  position: relative;
+  padding: 100px 50px;
+  background:
+    radial-gradient(circle at 12% 12%, rgba(243, 210, 209, 0.75), transparent 45%),
+    radial-gradient(circle at 88% 8%, rgba(255, 88, 80, 0.10), transparent 40%),
+    radial-gradient(circle at 70% 95%, rgba(139, 78, 93, 0.12), transparent 45%),
+    var(--psy-cream);
+  color: var(--psy-ink);
+  font-family: var(--font-text);
+  overflow: hidden;
+}
+
+.psy-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Texto solo para lectores de pantalla */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ── Encabezado ── */
+.psy-head {
+  max-width: 640px;
+  margin-bottom: 64px;
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.psy.is-visible .psy-head {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.psy-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 14px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--psy-wine);
+}
+
+.psy-rule {
+  width: 42px;
+  height: 2px;
+  background: var(--psy-coral);
+  border-radius: 2px;
+}
+
+.psy-title {
+  margin: 0 0 18px;
+  font-family: var(--font-title);
+  font-size: clamp(2.2rem, 4.5vw, 3.4rem);
+  font-weight: 400;
+  line-height: 1.1;
+  color: var(--psy-ink);
+  max-inline-size: 18ch;
+}
+
+.psy-lead {
+  margin: 0;
+  font-size: 1.1rem;
+  line-height: 1.75;
+  color: var(--psy-ink-soft);
+}
+
+/* ── Escenario del carrusel ── */
+.psy-stage {
+  display: grid;
+  grid-template-columns: 3fr 4fr 5fr;
+  gap: 44px;
+  align-items: stretch;
+  opacity: 0;
+  transform: translateY(36px);
+  transition: opacity 0.9s ease 0.15s, transform 0.9s ease 0.15s;
+  outline: none;
+  border-radius: 24px;
+}
+
+.psy.is-visible .psy-stage {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* El contenedor es focusable para navegar con flechas: el foco debe verse. */
+.psy-stage:focus-visible {
+  outline: 2px solid var(--psy-wine);
+  outline-offset: 14px;
+}
+
+/* ── Columna izquierda: contador + miniaturas ── */
+.psy-meta {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 32px;
+  min-width: 0;
+}
+
+.psy-counter {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  font-variant-numeric: tabular-nums;
+}
+
+.psy-counter-current {
+  font-family: var(--font-title);
+  font-size: 3.2rem;
+  line-height: 1;
+  color: var(--psy-coral);
+}
+
+.psy-counter-sep,
+.psy-counter-total {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--psy-ink-soft);
+}
+
+.psy-vertical {
+  margin: 18px 0 0;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--psy-ink-soft);
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  align-self: flex-start;
+}
+
+.psy-thumbs {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.psy-thumb {
+  position: relative;
+  width: 72px;
+  height: 92px;
+  padding: 0;
+  border: 0;
+  border-radius: 14px;
+  overflow: hidden;
+  cursor: pointer;
+  background: var(--psy-blush);
+  box-shadow: 0 6px 18px rgba(58, 31, 39, 0.16);
+  transition: transform 0.35s ease, box-shadow 0.35s ease, filter 0.35s ease;
+  filter: saturate(0.75);
+}
+
+.psy-thumb::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 14px;
+  border: 2px solid transparent;
+  transition: border-color 0.35s ease;
+}
+
+.psy-thumb:hover,
+.psy-thumb:focus-visible {
+  transform: translateY(-4px);
+  filter: saturate(1);
+  box-shadow: 0 12px 26px rgba(58, 31, 39, 0.24);
+}
+
+.psy-thumb:hover::after,
+.psy-thumb:focus-visible::after {
+  border-color: var(--psy-coral);
+}
+
+.psy-thumb:focus-visible {
+  outline: 2px solid var(--psy-wine);
+  outline-offset: 3px;
+}
+
+.psy-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.psy-thumb-initials {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  font-family: var(--font-title);
+  font-size: 1.4rem;
+  color: var(--psy-wine);
+}
+
+/* ── Columna central: foto principal ── */
+.psy-photo-frame {
+  position: relative;
+  min-height: 480px;
+}
+
+/* Marco desplazado detrás de la foto: da profundidad sin cargar la composición. */
+.psy-photo-deco {
+  position: absolute;
+  inset: 22px -22px -22px 22px;
+  border-radius: 26px;
+  border: 1.5px solid var(--psy-wine);
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+.psy-photo-mask {
+  position: absolute;
+  inset: 0;
+  border-radius: 26px;
+  overflow: hidden;
+  background: var(--psy-blush);
+  box-shadow: 0 26px 60px rgba(58, 31, 39, 0.28);
+}
+
+.psy-photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  will-change: transform, opacity;
+}
+
+.psy-photo-initials {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-title);
+  font-size: 4.5rem;
+  color: var(--psy-wine);
+  background: var(--psy-blush);
+}
+
+/* ── Columna derecha: información ── */
+.psy-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 36px;
+  min-width: 0;
+}
+
+.psy-info-text {
+  padding-top: 24px;
+  /* Suelo de alto para que el cambio de ficha no encoja la columna. */
+  min-height: 280px;
+}
+
+/* Las fichas se apilan en la misma celda: durante la transición conviven la que
+   sale y la que entra sin empujar el layout, y el alto lo marca la más alta. */
+.psy-info-inner {
+  display: grid;
+}
+
+.psy-card {
+  grid-area: 1 / 1;
+  will-change: transform, opacity;
+}
+
+.psy-role {
+  margin: 0 0 10px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--psy-wine);
+}
+
+.psy-name {
+  margin: 0 0 22px;
+  font-family: var(--font-title);
+  font-size: clamp(2rem, 3.4vw, 3rem);
+  font-weight: 400;
+  line-height: 1.15;
+  color: var(--psy-ink);
+  max-inline-size: 16ch;
+}
+
+.psy-years {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 32px;
+  padding-top: 20px;
+  border-top: 1px solid var(--psy-line);
+}
+
+.psy-years-number {
+  font-family: var(--font-title);
+  font-size: 2.4rem;
+  line-height: 1;
+  color: var(--psy-coral);
+}
+
+.psy-years-label {
+  font-size: 0.95rem;
+  line-height: 1.4;
+  color: var(--psy-ink-soft);
+  max-inline-size: 14ch;
+}
+
+/* ── Botones de contacto ── */
+.psy-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.psy-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 46px;
+  padding: 12px 24px;
+  border-radius: 50px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
+}
+
+.psy-btn-primary {
+  background: var(--psy-wine);
+  color: var(--color-text2);
+  box-shadow: 0 10px 24px rgba(139, 78, 93, 0.32);
+}
+
+.psy-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px rgba(139, 78, 93, 0.42);
+}
+
+.psy-btn-ghost {
+  background: transparent;
+  color: var(--psy-ink);
+  border: 1.5px solid var(--psy-line);
+}
+
+.psy-btn-ghost:hover {
+  transform: translateY(-2px);
+  background: var(--psy-blush);
+}
+
+.psy-btn:focus-visible {
+  outline: 2px solid var(--psy-wine);
+  outline-offset: 3px;
+}
+
+/* ── Controles del carrusel ── */
+.psy-controls {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.psy-nav {
+  display: flex;
+  gap: 10px;
+}
+
+.psy-arrow,
+.psy-play {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1rem;
+  background: transparent;
+  color: var(--psy-ink);
+  border: 1.5px solid var(--psy-line);
+  transition: transform 0.3s ease, background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+.psy-arrow:hover,
+.psy-play:hover {
+  background: var(--psy-blush);
+  border-color: var(--psy-wine);
+  transform: translateY(-2px);
+}
+
+.psy-arrow-primary {
+  background: var(--psy-wine);
+  border-color: var(--psy-wine);
+  color: var(--color-text2);
+}
+
+.psy-arrow-primary:hover {
+  background: var(--psy-ink);
+  border-color: var(--psy-ink);
+}
+
+.psy-arrow:focus-visible,
+.psy-play:focus-visible {
+  outline: 2px solid var(--psy-wine);
+  outline-offset: 3px;
+}
+
+/* Barra de avance del cambio automático */
+.psy-progress {
+  flex: 1;
+  height: 3px;
+  min-width: 60px;
+  border-radius: 3px;
+  background: var(--psy-line);
+  overflow: hidden;
+}
+
+.psy-progress-fill {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: var(--psy-coral);
+  transition: width 0.12s linear;
+}
+
+/* ── Estados de carga y vacío ── */
+.psy-skeleton {
+  display: grid;
+  grid-template-columns: 4fr 5fr;
+  gap: 44px;
+  align-items: center;
+}
+
+.psy-skeleton-photo {
+  height: 480px;
+  border-radius: 26px;
+}
+
+.psy-skeleton-text {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.psy-skeleton-line {
+  height: 20px;
+  border-radius: 8px;
+}
+
+.psy-skeleton-line.short { width: 35%; }
+.psy-skeleton-line.long { width: 80%; height: 42px; }
+.psy-skeleton-line.medium { width: 55%; }
+
+.psy-skeleton-photo,
+.psy-skeleton-line {
+  background: linear-gradient(90deg, rgba(139, 78, 93, 0.10) 25%, rgba(139, 78, 93, 0.18) 37%, rgba(139, 78, 93, 0.10) 63%);
+  background-size: 400% 100%;
+  animation: psy-shimmer 1.4s ease infinite;
+}
+
+@keyframes psy-shimmer {
+  from { background-position: 100% 50%; }
+  to { background-position: 0 50%; }
+}
+
+.psy-empty {
+  margin: 0;
+  font-size: 1.05rem;
+  color: var(--psy-ink-soft);
+}
+
+/* ============================================================
+   Responsive
+   ============================================================ */
+
+/* Tablet: foto y texto lado a lado, meta en una fila superior */
+@media (max-width: 1024px) {
+  .psy {
+    padding: 72px 30px;
+  }
+
+  .psy-head {
+    margin-bottom: 44px;
+  }
+
+  .psy-stage {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      'meta meta'
+      'photo info';
+    gap: 32px;
+  }
+
+  .psy-meta {
+    grid-area: meta;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .psy-photo-frame { grid-area: photo; min-height: 420px; }
+  .psy-info { grid-area: info; }
+
+  /* En horizontal la etiqueta vertical sobra y rompe la línea del contador. */
+  .psy-vertical { display: none; }
+
+  .psy-info-text {
+    padding-top: 0;
+    min-height: 300px;
+  }
+}
+
+/* Móvil: todo apilado, foto primero */
+@media (max-width: 768px) {
+  .psy {
+    padding: 56px 20px;
+  }
+
+  .psy-stage {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      'photo'
+      'info'
+      'meta';
+    gap: 28px;
+  }
+
+  .psy-photo-frame {
+    min-height: 0;
+    aspect-ratio: 4 / 5;
+  }
+
+  /* En móvil el marco decorativo se saldría del viewport. */
+  .psy-photo-deco {
+    inset: 16px -12px -16px 16px;
+  }
+
+  .psy-info-text {
+    padding-top: 0;
+    min-height: 0;
+  }
+
+  .psy-meta {
+    align-items: flex-end;
+  }
+
+  .psy-thumbs {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    scrollbar-width: none;
+  }
+
+  .psy-thumbs::-webkit-scrollbar { display: none; }
+
+  .psy-thumb {
+    flex: 0 0 auto;
+    width: 64px;
+    height: 82px;
+  }
+
+  .psy-counter-current { font-size: 2.6rem; }
+
+  .psy-controls {
+    flex-direction: column-reverse;
+    align-items: stretch;
+    gap: 16px;
+  }
+
+  .psy-progress { width: 100%; }
+
+  .psy-actions .psy-btn {
+    flex: 1 1 auto;
+    justify-content: center;
+  }
+}
+
+/* Aspect-ratio no está en todos los navegadores objetivo: red de seguridad. */
+@supports not (aspect-ratio: 4 / 5) {
+  @media (max-width: 768px) {
+    .psy-photo-frame { min-height: 420px; }
+  }
+}
+
+/* ── Preferencia de movimiento reducido ── */
+@media (prefers-reduced-motion: reduce) {
+  .psy-head,
+  .psy-stage {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .psy-thumb,
+  .psy-btn,
+  .psy-arrow,
+  .psy-play {
+    transition: none;
+  }
+
+  .psy-thumb:hover,
+  .psy-btn:hover,
+  .psy-arrow:hover,
+  .psy-play:hover {
+    transform: none;
+  }
+
+  .psy-skeleton-photo,
+  .psy-skeleton-line {
+    animation: none;
+  }
+}

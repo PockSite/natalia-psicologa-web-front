@@ -23,6 +23,7 @@ import { ProductDetailComponent } from './product-detail/product-detail.componen
 import { PaymentResultComponent } from './payment-result/payment-result.component';
 import { CopCurrencyPipe } from './pipes/cop-currency.pipe';
 import { CountryFlagPipe } from './pipes/country-flag.pipe';
+import { PsychologistsSectionComponent } from './psychologists-section/psychologists-section.component';
 
 
 @NgModule({
@@ -44,6 +45,7 @@ import { CountryFlagPipe } from './pipes/country-flag.pipe';
     PaymentResultComponent,
     CopCurrencyPipe,
     CountryFlagPipe,
+    PsychologistsSectionComponent,
   ],
   imports: [
     BrowserModule,

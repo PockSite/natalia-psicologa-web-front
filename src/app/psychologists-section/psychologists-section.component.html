@@ -1,0 +1,138 @@
+<section class="psy" id="equipo" [class.is-visible]="isVisible" aria-labelledby="psy-title">
+  <div class="psy-inner">
+
+    <!-- ── Encabezado de la sección ── -->
+    <header class="psy-head">
+      <p class="psy-eyebrow">
+        <span class="psy-rule" aria-hidden="true"></span> El consultorio
+      </p>
+      <h2 class="psy-title" id="psy-title">Quiénes te acompañan</h2>
+      <p class="psy-lead">
+        Un equipo de psicólogas clínicas que comparte la misma forma de trabajar:
+        cercana, sin juicios y pensada para tu proceso.
+      </p>
+    </header>
+
+    <!-- ── Carga ── -->
+    <div class="psy-skeleton" *ngIf="isLoading" aria-busy="true" aria-live="polite">
+      <span class="sr-only">Cargando el equipo de psicólogas…</span>
+      <div class="psy-skeleton-photo"></div>
+      <div class="psy-skeleton-text">
+        <span class="psy-skeleton-line short"></span>
+        <span class="psy-skeleton-line long"></span>
+        <span class="psy-skeleton-line medium"></span>
+      </div>
+    </div>
+
+    <!-- ── Sin datos ── -->
+    <p class="psy-empty" *ngIf="!isLoading && !total">
+      Estamos actualizando la información del equipo. Vuelve pronto.
+    </p>
+
+    <!-- ── Carrusel ── -->
+    <div class="psy-stage" *ngIf="!isLoading && active"
+         role="group"
+         aria-roledescription="carrusel"
+         aria-label="Equipo de psicólogas"
+         tabindex="0"
+         [@.disabled]="prefersReducedMotion"
+         (keydown)="onKeydown($event)"
+         (mouseenter)="hold()"
+         (mouseleave)="release()"
+         (focusin)="hold()"
+         (focusout)="release()">
+
+      <!-- Columna izquierda: contador, etiqueta vertical y miniaturas -->
+      <div class="psy-meta">
+        <div class="psy-counter">
+          <span class="psy-counter-current">{{ pad(currentIndex + 1) }}</span>
+          <span class="psy-counter-sep" aria-hidden="true">/</span>
+          <span class="psy-counter-total">{{ pad(total) }}</span>
+        </div>
+
+        <p class="psy-vertical" aria-hidden="true">Equipo</p>
+
+        <div class="psy-thumbs" *ngIf="hasMultiple">
+          <button type="button" class="psy-thumb"
+                  *ngFor="let psy of thumbnails; trackBy: trackById"
+                  (click)="goToPsychologist(psy)"
+                  [attr.aria-label]="'Ver el perfil de ' + psy.fullName">
+            <img *ngIf="psy.photo" [src]="psy.photo" [alt]="psy.fullName" loading="lazy">
+            <span class="psy-thumb-initials" *ngIf="!psy.photo" aria-hidden="true">
+              {{ initials(psy) }}
+            </span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Columna central: foto principal -->
+      <div class="psy-photo-frame">
+        <span class="psy-photo-deco" aria-hidden="true"></span>
+        <div class="psy-photo-mask" [@photoStage]="slideCounter">
+          <ng-container *ngFor="let psy of activeAsList; trackBy: trackById">
+            <img class="psy-photo" *ngIf="psy.photo" [src]="psy.photo" [alt]="'Fotografía de ' + psy.fullName">
+            <span class="psy-photo psy-photo-initials" *ngIf="!psy.photo" aria-hidden="true">
+              {{ initials(psy) }}
+            </span>
+          </ng-container>
+        </div>
+      </div>
+
+      <!-- Columna derecha: información y controles -->
+      <div class="psy-info">
+        <div class="psy-info-text" [attr.aria-live]="isPlaying ? 'off' : 'polite'">
+          <div class="psy-info-inner" [@textStage]="slideCounter">
+            <ng-container *ngFor="let psy of activeAsList; trackBy: trackById">
+              <div class="psy-card">
+                <p class="psy-role" *ngIf="psy.headline">{{ psy.headline }}</p>
+                <h3 class="psy-name">{{ psy.fullName }}</h3>
+
+                <p class="psy-years" *ngIf="psy.yearsExperience">
+                  <span class="psy-years-number">{{ psy.yearsExperience }}</span>
+                  <span class="psy-years-label">años acompañando procesos</span>
+                </p>
+
+                <div class="psy-actions">
+                  <a class="psy-btn psy-btn-primary"
+                     *ngIf="whatsappLink(psy) as wa"
+                     [href]="wa" target="_blank" rel="noopener"
+                     [attr.aria-label]="'Escribir por WhatsApp a ' + psy.fullName">
+                    <i class="fab fa-whatsapp" aria-hidden="true"></i> Escribirle
+                  </a>
+                  <a class="psy-btn psy-btn-ghost"
+                     *ngIf="mailtoLink(psy) as mail"
+                     [href]="mail"
+                     [attr.aria-label]="'Enviar un correo a ' + psy.fullName">
+                    <i class="fas fa-envelope" aria-hidden="true"></i> Correo
+                  </a>
+                </div>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+
+        <!-- Controles -->
+        <div class="psy-controls" *ngIf="hasMultiple">
+          <div class="psy-nav">
+            <button type="button" class="psy-arrow" (click)="prev()" aria-label="Psicóloga anterior">
+              <i class="fas fa-arrow-left" aria-hidden="true"></i>
+            </button>
+            <button type="button" class="psy-arrow psy-arrow-primary" (click)="next()" aria-label="Siguiente psicóloga">
+              <i class="fas fa-arrow-right" aria-hidden="true"></i>
+            </button>
+            <button type="button" class="psy-play" (click)="toggleAutoplay()"
+                    [attr.aria-pressed]="!isPlaying"
+                    [attr.aria-label]="isPlaying ? 'Pausar el cambio automático' : 'Reanudar el cambio automático'">
+              <i class="fas" [class.fa-pause]="isPlaying" [class.fa-play]="!isPlaying" aria-hidden="true"></i>
+            </button>
+          </div>
+
+          <div class="psy-progress" aria-hidden="true">
+            <span class="psy-progress-fill" [style.width.%]="isPlaying ? progress : 0"></span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
