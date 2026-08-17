@@ -348,6 +348,8 @@
   line-height: 1.6;
   color: var(--psy-ink-soft);
   max-inline-size: 46ch;
+  text-align: justify;
+  text-justify: inter-word;
 }
 
 /* ── Botones de contacto ── */
