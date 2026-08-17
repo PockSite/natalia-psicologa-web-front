@@ -92,6 +92,8 @@
                   <span class="psy-years-label">años acompañando procesos</span>
                 </p>
 
+                <p class="psy-description" *ngIf="psy.description">{{ psy.description }}</p>
+
                 <div class="psy-actions">
                   <a class="psy-btn psy-btn-primary"
                      *ngIf="whatsappLink(psy) as wa"
