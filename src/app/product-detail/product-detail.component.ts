@@ -1,10 +1,10 @@
-import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Subject } from 'rxjs';
+import { Subject, Subscription, of } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { ProductService } from '../services/product.service';
-import { PaymentService } from '../services/payment.service';
+import { PaymentService, CheckoutAttendee } from '../services/payment.service';
 import { ClientService, CountryCode, DocumentType, SexType } from '../services/client.service';
 import { Product } from '../models/product.model';
 import { Psychologist } from '../models/psychologist.model';
@@ -15,12 +15,30 @@ interface CalendarCell {
   inMonth: boolean;
 }
 
+/** Estado del selector de indicativo de país. Cada persona tiene el suyo:
+ *  así el combobox del titular y el del acompañante no se pisan. */
+export interface DialCodePicker {
+  open: boolean;
+  highlight: number;
+  filtered: CountryCode[];
+}
+
+/** Un acompañante: su formulario y el estado de su búsqueda por documento. */
+export interface AttendeeSlot {
+  form: FormGroup;
+  lookup$: Subject<{ tipo: string; doc: string }>;
+  loading: boolean;
+  found: boolean;
+  checked: boolean;
+  ext: DialCodePicker;
+}
+
 @Component({
   selector: 'app-product-detail',
   templateUrl: './product-detail.component.html',
   styleUrls: ['./product-detail.component.css']
 })
-export class ProductDetailComponent implements OnInit {
+export class ProductDetailComponent implements OnInit, OnDestroy {
 
   product?: Product;
   loading = true;
@@ -63,11 +81,10 @@ export class ProductDetailComponent implements OnInit {
   readonly today = new Date();
 
   /* ── Indicativo de país: se puede escribir o elegir de la lista ── */
-  @ViewChild('extWrap') extWrapRef?: ElementRef<HTMLElement>;
-  extOpen = false;
-  /** Índice resaltado dentro de filteredCountryCodes (-1 = ninguno) */
-  extHighlight = -1;
-  filteredCountryCodes: CountryCode[] = [];
+  /** Un wrapper por combobox en pantalla: titular y acompañantes. */
+  @ViewChildren('extWrap') extWrapRefs?: QueryList<ElementRef<HTMLElement>>;
+  /** Selector de indicativo del titular. */
+  buyerExt: DialCodePicker = { open: false, highlight: -1, filtered: [] };
 
   /* ── Lookup de cliente por documento ── */
   /** true = buscando, false = listo */
@@ -77,6 +94,12 @@ export class ProductDetailComponent implements OnInit {
   /** true = documento consultado y no existe: formulario habilitado para llenar */
   documentChecked = false;
   private docLookup$ = new Subject<{ tipo: string; doc: string }>();
+
+  /* ── Acompañantes (terapia de pareja y similares) ──
+     El titular sigue en buyerForm; aquí van solo los demás asistentes,
+     cada uno con su propio formulario y su propia búsqueda por documento. */
+  attendees: AttendeeSlot[] = [];
+  private attendeeSubs: Subscription[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -94,7 +117,7 @@ export class ProductDetailComponent implements OnInit {
     this.clientService.getSexTypes().subscribe(types => this.sexTypes = types);
     this.clientService.getCountryCodes().subscribe(codes => {
       this.countryCodes = codes;
-      this.filteredCountryCodes = codes;
+      this.dialCodePickers.forEach(picker => picker.filtered = codes);
     });
 
     // paramMap (y no snapshot) para reaccionar si se navega entre productos
@@ -119,6 +142,8 @@ export class ProductDetailComponent implements OnInit {
           }
           this.product = product;
           console.log('[PD] isService:', this.isService, 'product.type:', product.type);
+          // El producto define cuántos asisten: se crean sus formularios.
+          this.syncAttendees();
           this.loadPsychologists(product);
         },
         error: err => {
@@ -322,7 +347,13 @@ export class ProductDetailComponent implements OnInit {
   /* ── Formulario ─────────────────────────────────────────── */
 
   private buildForm(): void {
-    this.buyerForm = this.fb.group({
+    this.buyerForm = this.newPersonForm();
+  }
+
+  /** Los asistentes piden los mismos datos que el titular: cada uno queda
+   *  registrado como cliente, y eso exige documento. */
+  private newPersonForm(): FormGroup {
+    return this.fb.group({
       nombre:          ['', [Validators.required, Validators.minLength(2)]],
       apellido:        ['', [Validators.required, Validators.minLength(2)]],
       extensionPais:   ['+57', [Validators.required, Validators.pattern(/^\+\d{1,4}$/)]],
@@ -333,6 +364,94 @@ export class ProductDetailComponent implements OnInit {
       tipoDocumento:   ['CC', Validators.required],
       documento:       ['', [Validators.required, Validators.minLength(5)]]
     });
+  }
+
+  /* ── Acompañantes ───────────────────────────────────────── */
+
+  /** Asistentes que exige el producto (1 = sesión individual). */
+  get requiredAttendees(): number {
+    return this.product?.attendeesCount ?? 1;
+  }
+
+  /** Ajusta el número de formularios de acompañante al que pide el producto. */
+  private syncAttendees(): void {
+    const needed = Math.max(0, this.requiredAttendees - 1);
+    while (this.attendees.length > needed) {
+      this.attendees.pop();
+    }
+    while (this.attendees.length < needed) {
+      this.attendees.push(this.createAttendeeSlot());
+    }
+  }
+
+  private createAttendeeSlot(): AttendeeSlot {
+    const slot: AttendeeSlot = {
+      form: this.newPersonForm(),
+      lookup$: new Subject<{ tipo: string; doc: string }>(),
+      loading: false,
+      found: false,
+      checked: false,
+      ext: { open: false, highlight: -1, filtered: this.countryCodes },
+    };
+
+    // Mismo autocompletado que el titular: si ya es paciente, se rellena solo.
+    const sub = slot.lookup$.pipe(
+      debounceTime(600),
+      distinctUntilChanged((a, b) => a.tipo === b.tipo && a.doc === b.doc),
+      switchMap(({ tipo, doc }) => {
+        if (doc.length < 5) { return of(null); }
+        slot.loading = true;
+        return this.clientService.findByDocument(tipo, doc);
+      })
+    ).subscribe(client => {
+      slot.loading = false;
+      slot.checked = true;
+      if (client) {
+        slot.found = true;
+        const spaceIdx = client.fullName.indexOf(' ');
+        slot.form.patchValue({
+          nombre:          spaceIdx > -1 ? client.fullName.slice(0, spaceIdx) : client.fullName,
+          apellido:        spaceIdx > -1 ? client.fullName.slice(spaceIdx + 1) : '',
+          correo:          client.email            ?? '',
+          extensionPais:   client.phoneCountryCode ?? '+57',
+          celular:         client.whatsappNumber   ?? '',
+          sexoId:          client.sexId            ?? null,
+          fechaNacimiento: client.birthDate        ?? '',
+        });
+      } else {
+        slot.found = false;
+        slot.form.patchValue({
+          nombre: '', apellido: '', correo: '',
+          extensionPais: '+57', celular: '',
+          sexoId: null, fechaNacimiento: '',
+        });
+      }
+    });
+
+    this.attendeeSubs.push(sub);
+    return slot;
+  }
+
+  onAttendeeDocumentInput(slot: AttendeeSlot): void {
+    const tipo = slot.form.get('tipoDocumento')?.value;
+    const doc  = slot.form.get('documento')?.value?.trim();
+    slot.checked = false;
+    slot.found = false;
+    if (doc && doc.length >= 5) {
+      slot.lookup$.next({ tipo, doc });
+    }
+  }
+
+  /** Documento repetido entre asistentes: serían la misma persona. */
+  get hasDuplicateDocuments(): boolean {
+    const keys = [this.buyerForm, ...this.attendees.map(a => a.form)]
+      .map(f => `${f.get('tipoDocumento')?.value}|${(f.get('documento')?.value ?? '').trim()}`)
+      .filter(k => !k.endsWith('|'));
+    return new Set(keys).size !== keys.length;
+  }
+
+  get attendeeFormsValid(): boolean {
+    return this.attendees.every(a => a.form.valid);
   }
 
   private setupDocumentLookup(): void {
@@ -386,82 +505,98 @@ export class ProductDetailComponent implements OnInit {
   }
 
   /* ── Indicativo de país ─────────────────────────────────── */
+  /* El titular y cada acompañante usan el mismo combobox: los métodos
+     reciben su formulario y su estado, y por defecto operan sobre el
+     titular para que la plantilla del comprador siga igual de simple. */
 
-  openExtension(): void {
-    this.filterExtension(this.buyerForm.get('extensionPais')?.value ?? '');
-    this.extOpen = true;
+  /** Todos los selectores en pantalla: titular + acompañantes. */
+  get dialCodePickers(): DialCodePicker[] {
+    return [this.buyerExt, ...this.attendees.map(a => a.ext)];
   }
 
-  toggleExtension(): void {
-    if (this.extOpen) {
-      this.closeExtension();
+  openExtension(form: FormGroup = this.buyerForm, picker: DialCodePicker = this.buyerExt): void {
+    // Solo una lista abierta a la vez: dos desplegables se solaparían.
+    this.closeAllExtensions();
+    this.filterExtension(form, picker, form.get('extensionPais')?.value ?? '');
+    picker.open = true;
+  }
+
+  toggleExtension(form: FormGroup = this.buyerForm, picker: DialCodePicker = this.buyerExt): void {
+    if (picker.open) {
+      this.closeExtension(picker);
       return;
     }
-    this.openExtension();
+    this.openExtension(form, picker);
   }
 
-  closeExtension(): void {
-    this.extOpen = false;
-    this.extHighlight = -1;
+  closeExtension(picker: DialCodePicker = this.buyerExt): void {
+    picker.open = false;
+    picker.highlight = -1;
+  }
+
+  private closeAllExtensions(): void {
+    this.dialCodePickers.forEach(picker => this.closeExtension(picker));
   }
 
   /** Al escribir solo dejamos "+" seguido de dígitos y filtramos la lista. */
-  onExtensionInput(event: Event): void {
+  onExtensionInput(event: Event, form: FormGroup = this.buyerForm,
+                   picker: DialCodePicker = this.buyerExt): void {
     const input = event.target as HTMLInputElement;
     const clean = this.sanitizeDialCode(input.value);
     if (clean !== input.value) {
       input.value = clean;
     }
-    const control = this.buyerForm.get('extensionPais');
+    const control = form.get('extensionPais');
     if (control && control.value !== clean) {
       // emitModelToViewChange: false → el DOM ya tiene el valor, así no salta el cursor
       control.setValue(clean, { emitModelToViewChange: false });
     }
-    this.filterExtension(clean);
-    this.extOpen = true;
+    this.filterExtension(form, picker, clean);
+    picker.open = true;
   }
 
-  selectExtension(country: CountryCode): void {
-    const control = this.buyerForm.get('extensionPais');
+  selectExtension(country: CountryCode, form: FormGroup = this.buyerForm,
+                  picker: DialCodePicker = this.buyerExt): void {
+    const control = form.get('extensionPais');
     control?.setValue(country.dialCode);
     control?.markAsTouched();
-    this.closeExtension();
+    this.closeExtension(picker);
   }
 
-  onExtensionKeydown(event: KeyboardEvent): void {
+  onExtensionKeydown(event: KeyboardEvent, form: FormGroup = this.buyerForm,
+                     picker: DialCodePicker = this.buyerExt): void {
     if (event.key === 'Escape' || event.key === 'Tab') {
-      this.closeExtension();
+      this.closeExtension(picker);
       return;
     }
 
     if (event.key === 'Enter') {
-      if (!this.extOpen) { return; }
+      if (!picker.open) { return; }
       event.preventDefault();   // no enviar el formulario con la lista abierta
-      if (this.extHighlight > -1) {
-        this.selectExtension(this.filteredCountryCodes[this.extHighlight]);
+      if (picker.highlight > -1) {
+        this.selectExtension(picker.filtered[picker.highlight], form, picker);
       } else {
-        this.closeExtension();
+        this.closeExtension(picker);
       }
       return;
     }
 
     if (event.key !== 'ArrowDown' && event.key !== 'ArrowUp') { return; }
     event.preventDefault();
-    if (!this.extOpen) { this.openExtension(); }
-    const total = this.filteredCountryCodes.length;
+    if (!picker.open) { this.openExtension(form, picker); }
+    const total = picker.filtered.length;
     if (!total) { return; }
     const step = event.key === 'ArrowDown' ? 1 : -1;
-    this.extHighlight = (this.extHighlight + step + total) % total;
-    this.scrollHighlightIntoView();
+    picker.highlight = (picker.highlight + step + total) % total;
+    this.scrollHighlightIntoView(event.target as HTMLElement, picker.highlight);
   }
 
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent): void {
-    if (!this.extOpen) { return; }
-    const wrap = this.extWrapRef?.nativeElement;
-    if (wrap && !wrap.contains(event.target as Node)) {
-      this.closeExtension();
-    }
+    const wraps = this.extWrapRefs?.toArray() ?? [];
+    // Un clic dentro de cualquier combobox lo maneja el propio control.
+    if (wraps.some(w => w.nativeElement.contains(event.target as Node))) { return; }
+    this.closeAllExtensions();
   }
 
   private sanitizeDialCode(raw: string): string {
@@ -469,19 +604,22 @@ export class ProductDetailComponent implements OnInit {
     return digits ? `+${digits}` : '';
   }
 
-  private filterExtension(term: string): void {
+  private filterExtension(form: FormGroup, picker: DialCodePicker, term: string): void {
     const digits = (term ?? '').replace(/\D/g, '');
-    this.filteredCountryCodes = digits
+    picker.filtered = digits
       ? this.countryCodes.filter(c => c.dialCode.slice(1).startsWith(digits))
       : this.countryCodes;
-    const current = this.buyerForm.get('extensionPais')?.value;
-    this.extHighlight = this.filteredCountryCodes.findIndex(c => c.dialCode === current);
+    const current = form.get('extensionPais')?.value;
+    picker.highlight = picker.filtered.findIndex(c => c.dialCode === current);
   }
 
-  private scrollHighlightIntoView(): void {
+  /** `origin` es el input del combobox: de ahí sale la lista a la que hay
+   *  que hacer scroll, sin tener que mapear cada persona a su elemento. */
+  private scrollHighlightIntoView(origin: HTMLElement, index: number): void {
     setTimeout(() => {
-      const options = this.extWrapRef?.nativeElement.querySelectorAll('.pd-phone-ext-option');
-      (options?.[this.extHighlight] as HTMLElement | undefined)?.scrollIntoView({ block: 'nearest' });
+      const options = origin.closest('.pd-phone-ext-wrap')
+        ?.querySelectorAll('.pd-phone-ext-option');
+      (options?.[index] as HTMLElement | undefined)?.scrollIntoView({ block: 'nearest' });
     });
   }
 
@@ -490,12 +628,40 @@ export class ProductDetailComponent implements OnInit {
     return !!control && control.invalid && (control.touched || this.submitAttempted);
   }
 
+  /** Igual que `invalid`, pero sobre el formulario de un acompañante. */
+  attendeeInvalid(slot: AttendeeSlot, field: string): boolean {
+    const control = slot.form.get(field);
+    return !!control && control.invalid && (control.touched || this.submitAttempted);
+  }
+
+  private buildAttendeesPayload(): CheckoutAttendee[] {
+    return this.attendees.map(a => {
+      const v = a.form.value;
+      return {
+        full_name: `${v.nombre} ${v.apellido}`,
+        email: v.correo,
+        phone_country_code: v.extensionPais,
+        whatsapp_number: v.celular,
+        document: v.documento,
+        document_type: v.tipoDocumento,
+        sex_id: v.sexoId,
+        birth_date: v.fechaNacimiento || null,
+      };
+    });
+  }
+
   onSubmit(): void {
     this.submitAttempted = true;
     this.scheduleError = this.isService && !this.selectedAppointment;
 
-    if (this.buyerForm.invalid || this.scheduleError) {
+    if (this.buyerForm.invalid || !this.attendeeFormsValid || this.scheduleError) {
       this.buyerForm.markAllAsTouched();
+      this.attendees.forEach(a => a.form.markAllAsTouched());
+      return;
+    }
+    // Se comprueba antes de abrir el widget de pago: descubrirlo después, con
+    // el 400 del backend, dejaría al usuario ya metido en el cobro.
+    if (this.hasDuplicateDocuments) {
       return;
     }
 
@@ -513,7 +679,8 @@ export class ProductDetailComponent implements OnInit {
       sexId: buyer.sexoId,
       birthDate: buyer.fechaNacimiento || undefined,
       startTime: this.selectedAppointmentStartTime(),
-      psychologist_id: this.isService ? this.selectedPsychologist?.id : undefined
+      psychologist_id: this.isService ? this.selectedPsychologist?.id : undefined,
+      attendees: this.buildAttendeesPayload(),
     }).subscribe({
       next: (checkout) => {
         const redirectUrl = `${window.location.origin}/pago-resultado?product_id=${this.product!.id}`;
@@ -539,12 +706,13 @@ export class ProductDetailComponent implements OnInit {
     });
   }
 
-  /** Fecha/hora real de la cita elegida (día del calendario + hora del slot). */
+  /** Fecha/hora real de la cita elegida (día del calendario + hora del slot).
+   *  Se ancla a la hora de Colombia (UTC-5, sin DST) para que el instante sea
+   *  correcto sin importar la zona horaria del navegador del usuario. */
   private selectedAppointmentStartTime(): Date | undefined {
     if (!this.isService || !this.selectedDay || !this.selectedAppointment) { return undefined; }
-    const [h, m] = this.selectedAppointment.startTime.split(':').map(Number);
-    const date = this.selectedDay.date;
-    return new Date(date.getFullYear(), date.getMonth(), date.getDate(), h, m);
+    const dateStr = this.toIsoDate(this.selectedDay.date);
+    return new Date(`${dateStr}T${this.selectedAppointment.startTime}`);
   }
 
   getWhatsappConfirmLink(): string {
@@ -562,6 +730,18 @@ export class ProductDetailComponent implements OnInit {
   }
 
   /* ── Utilidades ─────────────────────────────────────────── */
+
+  ngOnDestroy(): void {
+    this.clearAttendees();
+  }
+
+  /** Descarta los acompañantes y cierra sus búsquedas pendientes. */
+  private clearAttendees(): void {
+    this.attendeeSubs.forEach(s => s.unsubscribe());
+    this.attendeeSubs = [];
+    this.attendees.forEach(a => a.lookup$.complete());
+    this.attendees = [];
+  }
 
   private resetState(): void {
     this.product = undefined;
@@ -586,8 +766,11 @@ export class ProductDetailComponent implements OnInit {
     this.clientLookupLoading = false;
     this.clientFound = false;
     this.documentChecked = false;
-    this.closeExtension();
-    this.filteredCountryCodes = this.countryCodes;
+    // Al cambiar de producto cambia cuántos asisten: se descartan y se
+    // recrean cuando llegue el producto nuevo.
+    this.clearAttendees();
+    this.closeAllExtensions();
+    this.buyerExt.filtered = this.countryCodes;
     this.buyerForm.reset({ tipoDocumento: 'CC', extensionPais: '+57' });
   }
 

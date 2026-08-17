@@ -30,6 +30,7 @@ interface ApiProduct {
   format?: string;
   category?: string;
   language?: string;
+  attendees_count?: number;
 }
 
 interface ApiAppointment {
@@ -53,6 +54,7 @@ interface ApiAgenda {
 interface ApiAvailabilitySlot {
   start_time: string;
   available: boolean;
+  lock?: boolean;
 }
 
 interface ApiAvailability {
@@ -165,6 +167,8 @@ export class ProductService {
       format: p.format,
       category: p.category,
       language: p.language,
+      // Un backend que aún no expone la columna se trata como sesión individual.
+      attendeesCount: p.attendees_count ?? 1,
     };
   }
 
@@ -187,7 +191,8 @@ export class ProductService {
         id: `${availability.date}-${slot.start_time}-${i}`,
         startTime: slot.start_time,
         endingTime: end,
-        available: slot.available,
+        // Un slot con lock viene como available:true; en la web principal se muestra ocupado.
+        available: slot.available && !slot.lock,
       };
     });
     return { id: `day-${availability.date}`, date, appointments };

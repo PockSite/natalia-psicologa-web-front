@@ -3,6 +3,18 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 
+/** Acompañante de una consulta con varios asistentes (ej. terapia de pareja). */
+export interface CheckoutAttendee {
+  full_name: string;
+  email: string;
+  phone_country_code?: string | null;
+  whatsapp_number: string;
+  document: string;
+  document_type: string;
+  sex_id?: number | null;
+  birth_date?: string | null;
+}
+
 export interface CheckoutPayload {
   productId: string;
   clientFullName: string;
@@ -15,6 +27,8 @@ export interface CheckoutPayload {
   birthDate?: string;
   startTime?: Date;
   psychologist_id?: string;
+  /** Solo los acompañantes; el titular va en los campos client* de arriba. */
+  attendees?: CheckoutAttendee[];
 }
 
 export interface CheckoutResponse {
@@ -48,6 +62,7 @@ export class PaymentService {
       birth_date: payload.birthDate ?? null,
       start_time: payload.startTime ? payload.startTime.toISOString() : null,
       psychologist_id: payload.psychologist_id ?? null,
+      attendees: payload.attendees ?? [],
     };
     return this.http.post<CheckoutResponse>(`${this.apiUrl}/payments/checkout`, body);
   }
