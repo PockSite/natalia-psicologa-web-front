@@ -342,6 +342,14 @@
   max-inline-size: 14ch;
 }
 
+.psy-description {
+  margin: 0 0 20px;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--psy-ink-soft);
+  max-inline-size: 46ch;
+}
+
 /* ── Botones de contacto ── */
 .psy-actions {
   display: flex;

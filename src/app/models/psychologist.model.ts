@@ -7,4 +7,5 @@ export interface Psychologist {
   photo?: string;
   headline?: string;
   yearsExperience?: number;
+  description?: string;
 }

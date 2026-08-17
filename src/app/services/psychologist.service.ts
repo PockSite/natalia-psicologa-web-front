@@ -15,6 +15,7 @@ interface ApiPsychologist {
   photo?: string;
   headline?: string;
   years_experience?: number;
+  description?: string;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -71,6 +72,7 @@ export class PsychologistService {
       photo: p.photo,
       headline: p.headline,
       yearsExperience: p.years_experience,
+      description: p.description,
     };
   }
 }
