@@ -94,12 +94,13 @@
 
                 <p class="psy-description" *ngIf="psy.description">{{ psy.description }}</p>
 
-                <div class="psy-actions">
+              <!-- 
+              <div class="psy-actions">
                   <a class="psy-btn psy-btn-primary"
                      *ngIf="whatsappLink(psy) as wa"
                      [href]="wa" target="_blank" rel="noopener"
                      [attr.aria-label]="'Escribir por WhatsApp a ' + psy.fullName">
-                    <i class="fab fa-whatsapp" aria-hidden="true"></i> Escribirle
+                    <i class="fab fa-whatsapp" aria-hidden="true"></i> 
                   </a>
                   <a class="psy-btn psy-btn-ghost"
                      *ngIf="mailtoLink(psy) as mail"
@@ -107,7 +108,8 @@
                      [attr.aria-label]="'Enviar un correo a ' + psy.fullName">
                     <i class="fas fa-envelope" aria-hidden="true"></i> Correo
                   </a>
-                </div>
+                </div>  
+              -->  
               </div>
             </ng-container>
           </div>
