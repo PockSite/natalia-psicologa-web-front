@@ -5,9 +5,9 @@
   padding: 90px 50px;
   align-items: flex-start;
   background:
-    radial-gradient(circle at 10% 10%, rgba(255, 255, 255, 0.08), transparent 35%),
-    radial-gradient(circle at 90% 20%, rgba(255, 255, 255, 0.06), transparent 40%),
-    linear-gradient(140deg, rgba(0, 0, 0, 0.12), transparent 45%),
+    radial-gradient(circle at 10% 10%, rgba(var(--color-white-rgb), 0.08), transparent 35%),
+    radial-gradient(circle at 90% 20%, rgba(var(--color-white-rgb), 0.06), transparent 40%),
+    linear-gradient(140deg, rgba(var(--color-black-rgb), 0.12), transparent 45%),
     var(--color-main);
   color: var(--color-text2);
   max-width: 1400px;
@@ -109,7 +109,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 3px 10px rgba(var(--color-black-rgb), 0.2);
   transition: transform 0.3s ease, background 0.3s ease;
   cursor: default;
 }
@@ -173,7 +173,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 5px 15px rgba(var(--color-black-rgb), 0.35);
   border: 1px solid transparent;
   transition: transform 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
   flex: 0 0 auto;
@@ -191,7 +191,7 @@
 
 .achievement-card:hover {
   border: 1px solid var(--color-title);
-  box-shadow: 0 0 25px rgba(248, 225, 216, 0.4);
+  box-shadow: 0 0 25px rgba(var(--color-text2-rgb), 0.4);
   /* Color secundario translúcido */
   transform: scale(1.02);
 }

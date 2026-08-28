@@ -1,19 +1,36 @@
 :root {
   --color-main: #8b4e5d;
-  --color-main-rgb: 6, 5, 14;
-  --color-main2: #f3d2d1;
+  --color-main-rgb: 139, 78, 93;
+  /* Vino de marca oscurecido: pasa contraste AA sobre fondos crema */
+  --color-main-shade: #6e3d49;
+  --color-main-dark: #3a1f27;
+  --color-main-dark-rgb: 58, 31, 39;
+  --color-main-soft: #6b4b53;
+  --color-main2: #f7efe9;
   --color-second: #ff5850;
   --color-second-rgb: 235, 94, 40;
   --color-title: #000000;
-  --color-title-rgb: 218, 194, 158;
+  --color-title-rgb: 0, 0, 0;
   --color-border: #d8d1ce; 
   --color-text2: #eae0d5;
+  --color-text2-rgb: 234, 224, 213;
   --color-tech: rgba(255, 255, 255, 0.03);
+  --color-overlay-dark-rgb: 6, 5, 14;
 
   --color-btn-contact: #7a3eff;
   --color-btn-linkedin: #0077b5;
   --color-btn-whatsapp: #25D366;
   --color-btn-tiktok: #000000;
+
+  /* Neutros base (sombras, overlays y textos sobre imagen) */
+  --color-white: #ffffff;
+  --color-white-rgb: 255, 255, 255;
+  --color-black-rgb: 0, 0, 0;
+  --color-text-light: #f0f0f0;
+
+  /* Verde del boton flotante de WhatsApp (tono sage, distinto al del header) */
+  --color-whatsapp-float: #599a53;
+  --color-whatsapp-float-rgb: 89, 154, 83;
 
   --sidebar-desktop: 290px;
   --sidebar-tablet: 200px;
@@ -38,7 +55,7 @@ body {
   padding: 0;
   height: 100%;
   width: 100%;
-  background-color: #8b4e5d;
+  background-color: var(--color-main);
   font-family: var(--font-text);
   /* Global text font */
 }
