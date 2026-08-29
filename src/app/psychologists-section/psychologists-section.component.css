@@ -3,14 +3,15 @@
    Tokens locales derivados de la paleta global (styles.css).
    ============================================================ */
 :host {
-  /* Vino de marca oscurecido: pasa contraste AA sobre el fondo crema. */
-  --psy-ink: #3a1f27;
-  --psy-ink-soft: #6b4b53;
+  /* Alias semanticos de la paleta global (styles.css): esta seccion no define
+     ningun color propio, solo les da un nombre local segun su rol. */
+  --psy-ink: var(--color-main-dark);
+  --psy-ink-soft: var(--color-main-soft);
   --psy-wine: var(--color-main);
   --psy-blush: var(--color-main2);
-  --psy-cream: #f7efe9;
+  --psy-cream: var(--color-main2);
   --psy-coral: var(--color-second);
-  --psy-line: rgba(58, 31, 39, 0.14);
+  --psy-line: rgba(var(--color-main-dark-rgb), 0.14);
 
   display: block;
 }
@@ -18,11 +19,7 @@
 .psy {
   position: relative;
   padding: 100px 50px;
-  background:
-    radial-gradient(circle at 12% 12%, rgba(243, 210, 209, 0.75), transparent 45%),
-    radial-gradient(circle at 88% 8%, rgba(255, 88, 80, 0.10), transparent 40%),
-    radial-gradient(circle at 70% 95%, rgba(139, 78, 93, 0.12), transparent 45%),
-    var(--psy-cream);
+  background:var(--psy-cream);
   color: var(--psy-ink);
   font-family: var(--font-text);
   overflow: hidden;
@@ -180,7 +177,7 @@
   overflow: hidden;
   cursor: pointer;
   background: var(--psy-blush);
-  box-shadow: 0 6px 18px rgba(58, 31, 39, 0.16);
+  box-shadow: 0 6px 18px rgba(var(--color-main-dark-rgb), 0.16);
   transition: transform 0.35s ease, box-shadow 0.35s ease, filter 0.35s ease;
   filter: saturate(0.75);
 }
@@ -198,7 +195,7 @@
 .psy-thumb:focus-visible {
   transform: translateY(-4px);
   filter: saturate(1);
-  box-shadow: 0 12px 26px rgba(58, 31, 39, 0.24);
+  box-shadow: 0 12px 26px rgba(var(--color-main-dark-rgb), 0.24);
 }
 
 .psy-thumb:hover::after,
@@ -251,7 +248,7 @@
   border-radius: 26px;
   overflow: hidden;
   background: var(--psy-blush);
-  box-shadow: 0 26px 60px rgba(58, 31, 39, 0.28);
+  box-shadow: 0 26px 60px rgba(var(--color-main-dark-rgb), 0.28);
 }
 
 .psy-photo {
@@ -375,12 +372,12 @@
 .psy-btn-primary {
   background: var(--psy-wine);
   color: var(--color-text2);
-  box-shadow: 0 10px 24px rgba(139, 78, 93, 0.32);
+  box-shadow: 0 10px 24px rgba(var(--color-main-rgb), 0.32);
 }
 
 .psy-btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 14px 30px rgba(139, 78, 93, 0.42);
+  box-shadow: 0 14px 30px rgba(var(--color-main-rgb), 0.42);
 }
 
 .psy-btn-ghost {
@@ -499,7 +496,7 @@
 
 .psy-skeleton-photo,
 .psy-skeleton-line {
-  background: linear-gradient(90deg, rgba(139, 78, 93, 0.10) 25%, rgba(139, 78, 93, 0.18) 37%, rgba(139, 78, 93, 0.10) 63%);
+  background: linear-gradient(90deg, rgba(var(--color-main-rgb), 0.10) 25%, rgba(var(--color-main-rgb), 0.18) 37%, rgba(var(--color-main-rgb), 0.10) 63%);
   background-size: 400% 100%;
   animation: psy-shimmer 1.4s ease infinite;
 }

@@ -12,9 +12,14 @@
     "start": "ng serve",
     "backend": "node app.js",
     "backend:dev": "nodemon app.js",
+    "prebuild": "node scripts/build-llms-full.mjs",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "test:agents": "node scripts/verify-agent-readiness.mjs",
+    "test:nginx": "node scripts/check-nginx.mjs",
+    "serve:dist": "node scripts/preview-server.mjs",
+    "verify:agents": "node scripts/verify-agent-readiness.mjs --url https://bienestarconnataliaguecha.com"
   },
   "dependencies": {
     "@angular/animations": "^16.2.0",

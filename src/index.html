@@ -1,11 +1,45 @@
 <!doctype html>
-<html lang="en">
+<html lang="es">
 
 <head>
   <meta charset="utf-8">
-  <title>Natalia Güechá</title>
+  <title>Psicóloga Clínica Natalia Güechá — terapia online en español</title>
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Marca de "hay JavaScript". Inline y síncrono a propósito, y lo antes posible:
+       se ejecuta antes del primer render y sin depender de ningún script externo.
+       La regla `html.has-js #app-shell-fallback { display: none }` del bloque <style>
+       de más abajo evita así que el contenido de respaldo llegue a verse. -->
+  <script>document.documentElement.className += ' has-js';</script>
+  <meta name="description"
+    content="Terapia psicológica online en español, cercana y sin juicios. Sesiones virtuales 1 a 1 y de pareja con Natalia Güechá Nieto, magíster en psicología clínica, y su equipo. Bogotá, Colombia, para Latinoamérica y España.">
+  <meta name="author" content="Natalia Güechá Nieto">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+
+  <!-- Resolución de entidad y atribución para buscadores y agentes -->
+  <link rel="canonical" href="https://bienestarconnataliaguecha.com/">
+  <link rel="alternate" type="text/markdown" href="https://bienestarconnataliaguecha.com/index.md">
+  <link rel="sitemap" type="application/xml" href="/sitemap.xml">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Bienestar con Natalia Güechá">
+  <meta property="og:title" content="Psicóloga Clínica Natalia Güechá — terapia online en español">
+  <meta property="og:description"
+    content="Sesiones virtuales 1 a 1 y de pareja con Natalia Güechá Nieto y su equipo de psicólogas clínicas. Cercanía, profesionalismo y acompañamiento sin barreras geográficas.">
+  <meta property="og:url" content="https://bienestarconnataliaguecha.com/">
+  <meta property="og:image" content="https://bienestarconnataliaguecha.com/assets/images/fotografia1.jpeg">
+  <meta property="og:image:width" content="1600">
+  <meta property="og:image:height" content="1068">
+  <meta property="og:image:alt" content="Natalia Güechá, psicóloga clínica">
+  <meta property="og:locale" content="es_CO">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Psicóloga Clínica Natalia Güechá — terapia online en español">
+  <meta name="twitter:description"
+    content="Sesiones virtuales 1 a 1 y de pareja con Natalia Güechá Nieto y su equipo de psicólogas clínicas.">
+  <meta name="twitter:image" content="https://bienestarconnataliaguecha.com/assets/images/fotografia1.jpeg">
+
   <link rel="icon" type="image/png" href="/assets/images/logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,10 +48,320 @@
     rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <script src="https://checkout.wompi.co/widget.js"></script>
+
+  <!-- Identidad legible por máquinas. Se mantiene sincronizada con /llms.txt y /about. -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": ["Organization", "ProfessionalService"],
+        "@id": "https://bienestarconnataliaguecha.com/#organization",
+        "name": "Bienestar con Natalia Güechá",
+        "alternateName": "Consulta de psicología clínica de Natalia Güechá",
+        "description": "Consulta de psicología clínica online dirigida por Natalia Güechá Nieto. Sesiones virtuales individuales y de pareja en español, desde Bogotá (Colombia) para Latinoamérica y España.",
+        "url": "https://bienestarconnataliaguecha.com/",
+        "logo": "https://bienestarconnataliaguecha.com/assets/images/logo.png",
+        "image": "https://bienestarconnataliaguecha.com/assets/images/fotografia1.jpeg",
+        "email": "psicologanataliagnieto@gmail.com",
+        "telephone": "+57-310-4671284",
+        "priceRange": "$$",
+        "currenciesAccepted": "COP",
+        "paymentAccepted": "Tarjeta de crédito, tarjeta débito, PSE, Nequi (pasarela Wompi)",
+        "knowsLanguage": "es",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Bogotá",
+          "addressRegion": "Bogotá D.C.",
+          "addressCountry": "CO"
+        },
+        "areaServed": [
+          { "@type": "Country", "name": "Colombia" },
+          { "@type": "Country", "name": "España" },
+          { "@type": "Place", "name": "Latinoamérica" }
+        ],
+        "contactPoint": [
+          {
+            "@type": "ContactPoint",
+            "contactType": "customer service",
+            "email": "psicologanataliagnieto@gmail.com",
+            "telephone": "+57-310-4671284",
+            "availableLanguage": ["es"],
+            "areaServed": ["CO", "ES", "MX", "AR", "CL", "PE", "EC"],
+            "hoursAvailable": {
+              "@type": "OpeningHoursSpecification",
+              "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+              "opens": "09:00",
+              "closes": "18:00"
+            }
+          },
+          {
+            "@type": "ContactPoint",
+            "contactType": "reservations",
+            "telephone": "+57-310-4671284",
+            "url": "https://wa.me/573104671284",
+            "availableLanguage": ["es"]
+          }
+        ],
+        "openingHoursSpecification": [
+          {
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+            "opens": "09:00",
+            "closes": "18:00"
+          }
+        ],
+        "founder": { "@id": "https://bienestarconnataliaguecha.com/#natalia-guecha" },
+        "employee": { "@id": "https://bienestarconnataliaguecha.com/#natalia-guecha" },
+        "sameAs": [
+          "https://www.linkedin.com/in/natalia-g%C3%BCech%C3%A1-nieto-91a636244/",
+          "https://www.instagram.com/psicologa.nataliaguecha/",
+          "https://www.tiktok.com/@psicologa.nataliaguecha"
+        ],
+        "hasOfferCatalog": {
+          "@type": "OfferCatalog",
+          "name": "Servicios de Bienestar con Natalia Güechá",
+          "itemListElement": [
+            {
+              "@type": "Service",
+              "name": "Sesión de psicología clínica individual (online)",
+              "serviceType": "Psicoterapia individual por videollamada",
+              "availableChannel": {
+                "@type": "ServiceChannel",
+                "serviceUrl": "https://bienestarconnataliaguecha.com/#proyectos",
+                "availableLanguage": "es"
+              }
+            },
+            {
+              "@type": "Service",
+              "name": "Terapia de pareja (online)",
+              "serviceType": "Psicoterapia de pareja por videollamada",
+              "availableChannel": {
+                "@type": "ServiceChannel",
+                "serviceUrl": "https://bienestarconnataliaguecha.com/#proyectos",
+                "availableLanguage": "es"
+              }
+            },
+            {
+              "@type": "Service",
+              "name": "Productos digitales de trabajo personal",
+              "serviceType": "Material descargable de acompañamiento psicológico",
+              "availableChannel": {
+                "@type": "ServiceChannel",
+                "serviceUrl": "https://bienestarconnataliaguecha.com/#proyectos",
+                "availableLanguage": "es"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "@type": "Person",
+        "@id": "https://bienestarconnataliaguecha.com/#natalia-guecha",
+        "name": "Natalia Güechá Nieto",
+        "alternateName": "Natalia Güechá",
+        "jobTitle": "Psicóloga clínica",
+        "description": "Magíster en psicología clínica y especialista en intervención psicológica en situaciones de crisis. Atiende en modalidad virtual e híbrida desde Bogotá, Colombia.",
+        "url": "https://bienestarconnataliaguecha.com/about",
+        "image": "https://bienestarconnataliaguecha.com/assets/images/fotografia1.jpeg",
+        "email": "mailto:psicologanataliagnieto@gmail.com",
+        "telephone": "+57-310-4671284",
+        "knowsLanguage": "es",
+        "knowsAbout": [
+          "Psicología clínica",
+          "Intervención psicológica en crisis",
+          "Ansiedad y estrés",
+          "Ataques de pánico",
+          "Autoestima",
+          "Terapia de pareja",
+          "Duelo",
+          "Regulación emocional"
+        ],
+        "hasCredential": [
+          {
+            "@type": "EducationalOccupationalCredential",
+            "credentialCategory": "Maestría",
+            "name": "Magíster en psicología clínica"
+          },
+          {
+            "@type": "EducationalOccupationalCredential",
+            "credentialCategory": "Especialización",
+            "name": "Especialista en intervención psicológica en situaciones de crisis"
+          }
+        ],
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Bogotá",
+          "addressRegion": "Bogotá D.C.",
+          "addressCountry": "CO"
+        },
+        "worksFor": { "@id": "https://bienestarconnataliaguecha.com/#organization" },
+        "sameAs": [
+          "https://www.linkedin.com/in/natalia-g%C3%BCech%C3%A1-nieto-91a636244/",
+          "https://www.instagram.com/psicologa.nataliaguecha/",
+          "https://www.tiktok.com/@psicologa.nataliaguecha"
+        ]
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://bienestarconnataliaguecha.com/#website",
+        "url": "https://bienestarconnataliaguecha.com/",
+        "name": "Bienestar con Natalia Güechá",
+        "description": "Terapia psicológica online en español con Natalia Güechá Nieto y su equipo de psicólogas clínicas.",
+        "inLanguage": "es-CO",
+        "publisher": { "@id": "https://bienestarconnataliaguecha.com/#organization" }
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://bienestarconnataliaguecha.com/#webpage",
+        "url": "https://bienestarconnataliaguecha.com/",
+        "name": "Psicóloga Clínica Natalia Güechá — terapia online en español",
+        "description": "Sesiones virtuales 1 a 1 y de pareja con Natalia Güechá Nieto y su equipo de psicólogas clínicas. Cercanía, profesionalismo y acompañamiento sin barreras geográficas.",
+        "inLanguage": "es-CO",
+        "isPartOf": { "@id": "https://bienestarconnataliaguecha.com/#website" },
+        "about": { "@id": "https://bienestarconnataliaguecha.com/#organization" },
+        "primaryImageOfPage": "https://bienestarconnataliaguecha.com/assets/images/fotografia1.jpeg"
+      }
+    ]
+  }
+  </script>
+
+  <!-- Estilos del contenido inicial: lo ven los rastreadores y los navegadores sin
+       JavaScript. Angular vacía <app-root> al bootstrapear, así que en la app real
+       este bloque desaparece solo. -->
+  <style>
+    /* Con JavaScript disponible el bloque no llega a pintarse: la marca `has-js`
+       la pone el script de más abajo mientras se parsea el <head>, antes del primer
+       render, así que no hay parpadeo de contenido distinto al arrancar la app.
+       Sin JavaScript la clase nunca se añade y el contenido queda visible. */
+    html.has-js #app-shell-fallback {
+      display: none;
+    }
+
+    #app-shell-fallback {
+      min-height: 100vh;
+      background: #8b4e5d;
+      color: #f7efe9;
+      font-family: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+      font-weight: 300;
+      line-height: 1.75;
+      padding: 3.5rem 1.25rem 4rem;
+      text-align: center;
+    }
+
+    #app-shell-fallback .fb-wrap { max-width: 720px; margin: 0 auto; }
+
+    #app-shell-fallback img.fb-logo { width: 72px; height: 72px; object-fit: contain; }
+
+    #app-shell-fallback h1 {
+      font-family: 'Outfit', Georgia, serif;
+      font-weight: 800;
+      font-size: clamp(1.9rem, 6vw, 3rem);
+      line-height: 1.12;
+      margin: 1.5rem 0 .75rem;
+    }
+
+    #app-shell-fallback .fb-tagline {
+      font-size: 1.05rem;
+      opacity: .92;
+      margin: 0 0 2rem;
+    }
+
+    #app-shell-fallback .fb-cta {
+      display: inline-block;
+      background: #f7efe9;
+      color: #8b4e5d;
+      text-decoration: none;
+      font-weight: 600;
+      padding: .8rem 1.8rem;
+      border-radius: 999px;
+    }
+
+    #app-shell-fallback h2 {
+      font-family: 'Outfit', Georgia, serif;
+      font-weight: 700;
+      font-size: 1.2rem;
+      margin: 2.5rem 0 .5rem;
+    }
+
+    #app-shell-fallback p { margin: 0 0 1rem; }
+
+    #app-shell-fallback ul {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 1rem;
+    }
+
+    #app-shell-fallback li { margin: .35rem 0; }
+
+    #app-shell-fallback a { color: #f7efe9; text-underline-offset: 3px; }
+
+    #app-shell-fallback .fb-links {
+      margin-top: 2.5rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid rgba(247, 239, 233, .25);
+      font-size: .9rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: .6rem 1.25rem;
+    }
+  </style>
 </head>
 
 <body>
-  <app-root></app-root>
+  <app-root>
+    <!-- Contenido inicial del documento: lo ven los rastreadores y los navegadores
+         sin JavaScript. La aplicación Angular lo reemplaza al arrancar. -->
+    <div id="app-shell-fallback">
+      <div class="fb-wrap">
+        <img class="fb-logo" src="/assets/images/LogoBlanco.svg" alt="Logotipo de Bienestar con Natalia Güechá">
+
+        <h1>Psicóloga Clínica Natalia Güechá</h1>
+
+        <p class="fb-tagline">Empatía y escucha · Conexión humana · Bienestar mental · Apoyo profesional</p>
+
+        <p><a class="fb-cta" href="https://wa.me/573104671284">Quiero una consulta</a></p>
+
+        <h2>Terapia online, cercana y sin juicios</h2>
+        <p>Soy Natalia Güechá Nieto, magíster en psicología clínica y especialista en intervención psicológica en
+          situaciones de crisis. Atiendo en modalidad principalmente virtual e híbrida desde Bogotá, Colombia, para
+          personas de Latinoamérica y España. Mi objetivo es transformar la experiencia clínica tradicional en un
+          proceso cercano, dinámico y libre de juicios, dentro de un ecosistema terapéutico pensado para una comunidad
+          global.</p>
+
+        <h2>Cómo acompañamos</h2>
+        <ul>
+          <li><strong>Profesionalismo:</strong> enfoque terapéutico fresco, especializado y adaptado a cada persona.
+          </li>
+          <li><strong>Cercanía:</strong> conexión humana genuina, lejos de la frialdad clínica.</li>
+          <li><strong>Acompañamiento:</strong> herramientas digitales que rompen las barreras geográficas.</li>
+        </ul>
+
+        <h2>Servicios</h2>
+        <p>Sesiones virtuales individuales y de pareja, y productos digitales de trabajo personal. Cada servicio tiene
+          su ficha con descripción, precio en pesos colombianos, elección de psicóloga, calendario de disponibilidad y
+          pago en línea. Áreas de trabajo habituales: ansiedad y estrés, ataques de pánico, autoestima, terapia de
+          pareja, duelo, crecimiento personal y regulación emocional.</p>
+
+        <h2>Contacto</h2>
+        <p>Correo <a href="mailto:psicologanataliagnieto@gmail.com">psicologanataliagnieto@gmail.com</a> · WhatsApp
+          <a href="https://wa.me/573104671284">+57 310 4671284</a> · Bogotá, Colombia · Lunes a viernes, 9:00–18:00
+          (hora de Bogotá).
+        </p>
+        <p><small>Este sitio no atiende urgencias. Si estás en riesgo vital, llama a la línea de emergencias de tu país
+            (123 en Colombia, 112 en España).</small></p>
+
+        <nav class="fb-links" aria-label="Enlaces del sitio">
+          <a href="/about">Sobre Natalia</a>
+          <a href="/contact">Contacto y agendamiento</a>
+          <a href="/privacy">Privacidad</a>
+          <a href="/llms.txt">Guía para agentes</a>
+          <a href="/sitemap.xml">Mapa del sitio</a>
+        </nav>
+      </div>
+    </div>
+  </app-root>
 </body>
 
 </html>

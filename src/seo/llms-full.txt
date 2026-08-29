@@ -1,0 +1,255 @@
+# Bienestar con Natalia Güechá — contenido completo
+
+> Todas las páginas de bienestarconnataliaguecha.com en un solo archivo markdown,
+> pensado para que un modelo o un agente lo lea de una vez. El índice corto está
+> en https://bienestarconnataliaguecha.com/llms.txt y las instrucciones de uso en https://bienestarconnataliaguecha.com/agent-instructions.md.
+
+Generado automáticamente por scripts/build-llms-full.mjs. No editar a mano.
+
+---
+
+<!-- Fuente: https://bienestarconnataliaguecha.com/ (https://bienestarconnataliaguecha.com/index.md) -->
+
+# Psicóloga Clínica Natalia Güechá
+
+> Terapia psicológica online en español, cercana y sin juicios. Sesiones virtuales 1 a 1 y de pareja con Natalia Güechá Nieto y su equipo de psicólogas clínicas, desde Bogotá (Colombia) para Latinoamérica y España.
+
+*Versión markdown de <https://bienestarconnataliaguecha.com/>. Actualizado: 2026-08-28.*
+
+Empatía y escucha · Conexión humana · Bienestar mental · Apoyo profesional
+
+**[Quiero una consulta →](https://wa.me/573104671284)**
+
+## Identidad
+
+- **Profesionalismo.** Enfoque terapéutico fresco, especializado y adaptado a las necesidades particulares de cada persona.
+- **Cercanía.** Conexión humana genuina, lejos de la frialdad clínica.
+- **Acompañamiento.** Rompiendo barreras geográficas con el uso de herramientas digitales.
+
+## Sobre Natalia Güechá
+
+Soy Natalia Güechá. Magíster en psicología clínica y especialista en intervención psicológica en situaciones de crisis, bajo una modalidad principalmente virtual e híbrida. Mi objetivo es transformar la experiencia clínica tradicional en un proceso cercano, dinámico y libre de juicios. He diseñado un ecosistema terapéutico pensado para la comunidad global.
+
+Más detalle en [/about.md](https://bienestarconnataliaguecha.com/about.md).
+
+## Quiénes te acompañan
+
+Un equipo de psicólog@s clínic@s que comparte la misma forma de trabajar: cercana, sin juicios y pensada para tu proceso. El equipo completo, con la formación de cada profesional, se muestra en la sección **Equipo** de la portada; la psicóloga que atenderá cada sesión se elige al agendar.
+
+## Servicios
+
+Dos tipos de servicio, ambos con precio publicado en pesos colombianos (COP) dentro de su ficha:
+
+- **Sesión virtual.** Acompañamiento psicológico por videollamada. Se elige psicóloga, día y hora en el calendario de disponibilidad.
+- **Producto digital.** Materiales de trabajo personal descargables tras la compra.
+
+El catálogo vive en la sección **Servicios** de la portada. Cada elemento abre su ficha en `/producto/{id}`, donde están la descripción completa, lo que incluye, el precio, la agenda y el pago en línea (pasarela Wompi). También se puede resolver cualquier duda antes de comprar por WhatsApp.
+
+Áreas de trabajo habituales: ansiedad y estrés, ataques de pánico, autoestima, terapia de pareja, duelo, crecimiento personal y regulación emocional.
+
+## Testimonios
+
+Testimonios anónimos de personas atendidas, publicados sin datos identificables para proteger el secreto profesional. Algunos ejemplos:
+
+- «Me sentí escuchado y acompañado en todo el proceso. Las sesiones me ayudaron a organizar mis emociones y tomar decisiones con más calma.» — *Ansiedad y estrés*
+- «Aprendí herramientas prácticas para manejar momentos de crisis. Siento que ahora tengo más control sobre mis pensamientos.» — *Ataques de pánico*
+- «Las sesiones me ayudaron a mejorar la comunicación en mi relación y a poner límites de forma sana.» — *Terapia de pareja*
+- «Recibí acompañamiento claro y humano en un momento difícil. Me sentí guiado y comprendido.» — *Duelo*
+
+## Contáctame
+
+Estoy disponible para colaborarte con el mejor acompañamiento que puedes tener.
+
+| | |
+| --- | --- |
+| Email | psicologanataliagnieto@gmail.com |
+| Teléfono / WhatsApp | +57 310 4671284 |
+| Ubicación | Bogotá, Colombia (atención virtual e híbrida) |
+| Disponibilidad | Lunes a viernes, 9:00–18:00 (hora de Bogotá, UTC-5) |
+
+Redes: [LinkedIn](https://www.linkedin.com/in/natalia-g%C3%BCech%C3%A1-nieto-91a636244/) · [Instagram](https://www.instagram.com/psicologa.nataliaguecha/) · [TikTok](https://www.tiktok.com/@psicologa.nataliaguecha)
+
+> **Este sitio no atiende urgencias.** Si estás en una situación de riesgo vital, llama a la línea de emergencias de tu país (123 en Colombia, 112 en España) o acude a urgencias.
+
+## Más
+
+- [Sobre Natalia Güechá](https://bienestarconnataliaguecha.com/about.md)
+- [Contacto y agendamiento](https://bienestarconnataliaguecha.com/contact.md)
+- [Política de privacidad y tratamiento de datos](https://bienestarconnataliaguecha.com/privacy.md)
+- [Guía para agentes de IA](https://bienestarconnataliaguecha.com/llms.txt)
+
+---
+
+<!-- Fuente: https://bienestarconnataliaguecha.com/about (https://bienestarconnataliaguecha.com/about.md) -->
+
+# Sobre Natalia Güechá — psicóloga clínica
+
+> Quién está detrás de Bienestar con Natalia Güechá: formación, enfoque terapéutico, modalidad de atención y áreas de trabajo.
+
+*Versión markdown de <https://bienestarconnataliaguecha.com/about>. Actualizado: 2026-08-28.*
+
+## Quién soy
+
+Soy **Natalia Güechá Nieto**, psicóloga clínica. Soy **magíster en psicología clínica** y **especialista en intervención psicológica en situaciones de crisis**, y atiendo bajo una modalidad principalmente **virtual e híbrida** desde Bogotá, Colombia.
+
+Mi objetivo es transformar la experiencia clínica tradicional en un proceso cercano, dinámico y libre de juicios. Para eso he diseñado un ecosistema terapéutico pensado para una comunidad global: personas de Colombia, del resto de Latinoamérica y de España que quieren empezar o retomar un proceso psicológico sin que la distancia, la agenda o el miedo al «diván» sean un obstáculo.
+
+## Cómo trabajo
+
+Tres cosas sostienen la forma de acompañar de esta consulta:
+
+- **Profesionalismo.** Un enfoque terapéutico fresco, especializado y adaptado a las necesidades particulares de cada persona. Nada de protocolos idénticos para todo el mundo.
+- **Cercanía.** Conexión humana genuina, lejos de la frialdad clínica. Un espacio seguro donde se puede hablar sin sentirse juzgado.
+- **Acompañamiento.** Herramientas digitales que rompen las barreras geográficas: videollamada, seguimiento entre sesiones y materiales de trabajo personal.
+
+Cada proceso empieza con una sesión de encuadre en la que revisamos qué te trae a consulta, qué esperas del proceso y con qué ritmo vamos a trabajar. A partir de ahí se define un plan realista, con metas concretas y revisables.
+
+## Áreas de trabajo
+
+- Ansiedad y estrés
+- Ataques de pánico e intervención en crisis
+- Autoestima e identidad
+- Terapia de pareja y comunicación en la relación
+- Duelo y pérdidas
+- Regulación emocional
+- Crecimiento y desarrollo personal
+
+## El equipo
+
+No trabajo sola. Un equipo de psicólog@s clínic@s comparte la misma forma de trabajar: cercana, sin juicios y pensada para tu proceso. Al agendar una sesión puedes ver el perfil de cada profesional y elegir con quién quieres iniciar. El equipo actualizado se publica en la sección **Equipo** de la portada.
+
+## Modalidad y alcance
+
+- **Atención virtual** por videollamada, en español, con agenda propia por profesional.
+- **Zona horaria de referencia:** America/Bogota (UTC-5). La disponibilidad se muestra en esa franja al reservar.
+- **Horario de atención:** lunes a viernes, de 9:00 a 18:00.
+- **Sede:** Bogotá, Colombia. La atención híbrida presencial se coordina caso a caso.
+
+## Qué no es esta consulta
+
+Esta consulta **no atiende urgencias ni situaciones de riesgo vital**: si estás en peligro inmediato, llama a la línea de emergencias de tu país (123 en Colombia, 112 en España) o acude a urgencias. Tampoco se prescriben medicamentos —eso corresponde a psiquiatría— ni se emiten peritajes forenses o certificados laborales.
+
+## Siguiente paso
+
+- [Contacto y agendamiento](https://bienestarconnataliaguecha.com/contact.md)
+- [Política de privacidad y tratamiento de datos](https://bienestarconnataliaguecha.com/privacy.md)
+- [Portada](https://bienestarconnataliaguecha.com/index.md)
+
+---
+
+<!-- Fuente: https://bienestarconnataliaguecha.com/contact (https://bienestarconnataliaguecha.com/contact.md) -->
+
+# Contacto y agendamiento — Natalia Güechá
+
+> Cómo escribir a la consulta de psicología de Natalia Güechá y cómo reservar una sesión virtual: correo, WhatsApp, teléfono, horario y pasos del agendamiento.
+
+*Versión markdown de <https://bienestarconnataliaguecha.com/contact>. Actualizado: 2026-08-28.*
+
+## Datos de contacto
+
+| Canal | Dato |
+| --- | --- |
+| **Email** | psicologanataliagnieto@gmail.com |
+| **Teléfono / WhatsApp** | +57 310 4671284 |
+| **Ubicación** | Bogotá, Colombia |
+| **Modalidad** | Virtual e híbrida, en español |
+| **Disponibilidad** | Lunes a viernes, 9:00–18:00 (hora de Bogotá, UTC-5) |
+
+Escribir por **WhatsApp** es la vía más rápida: <https://wa.me/573104671284>. El correo se responde dentro del horario de atención.
+
+## Redes
+
+- LinkedIn: <https://www.linkedin.com/in/natalia-g%C3%BCech%C3%A1-nieto-91a636244/>
+- Instagram: <https://www.instagram.com/psicologa.nataliaguecha/>
+- TikTok: <https://www.tiktok.com/@psicologa.nataliaguecha>
+
+## Cómo agendar una sesión
+
+El agendamiento se hace en el sitio, no por correo, para que veas la disponibilidad real de cada profesional:
+
+1. Entra en la sección **Servicios** de la [portada](https://bienestarconnataliaguecha.com/) y elige el servicio que necesitas (sesión virtual o producto digital).
+2. Abre su ficha (`/producto/{id}`). Ahí está la descripción completa, lo que incluye y el **precio en pesos colombianos (COP)**.
+3. Si es una sesión, elige la **psicóloga** con la que quieres trabajar y luego el **día y la hora** en el calendario de disponibilidad.
+4. Completa los datos de quien asistirá: nombre y apellido, tipo y número de documento, correo, celular, sexo y fecha de nacimiento. Si la sesión es para más de una persona (por ejemplo, terapia de pareja), se piden los datos de cada asistente.
+5. Paga en línea a través de la pasarela **Wompi**. Al terminar vuelves al sitio con el resultado de la transacción y recibes la confirmación por correo.
+
+Si tienes dudas antes de reservar —sobre el enfoque, el precio, la duración o si tu caso encaja—, escríbenos por WhatsApp antes de pagar. También puedes usar el formulario de contacto de la portada: al enviarlo se abre una conversación de WhatsApp con tu mensaje ya redactado.
+
+## Antes de escribir, ten esto en cuenta
+
+- **Urgencias:** este no es un servicio de emergencias. Si estás en riesgo vital o acompañas a alguien que lo está, llama a la línea de emergencias de tu país (123 en Colombia, 112 en España) o acude al servicio de urgencias más cercano.
+- **No compartas información clínica sensible por redes sociales.** Para eso está la sesión, que sí está cubierta por el secreto profesional.
+- **Medicación:** no se prescriben medicamentos. Si tu caso lo requiere, se coordina la derivación a psiquiatría.
+
+## Enlaces relacionados
+
+- [Sobre Natalia Güechá](https://bienestarconnataliaguecha.com/about.md)
+- [Política de privacidad y tratamiento de datos](https://bienestarconnataliaguecha.com/privacy.md)
+- [Portada](https://bienestarconnataliaguecha.com/index.md)
+
+---
+
+<!-- Fuente: https://bienestarconnataliaguecha.com/privacy (https://bienestarconnataliaguecha.com/privacy.md) -->
+
+# Política de privacidad y tratamiento de datos personales
+
+> Qué datos personales recoge bienestarconnataliaguecha.com, con qué finalidad, con quién se comparten y cómo ejercer los derechos reconocidos por la Ley 1581 de 2012 (Colombia).
+
+*Versión markdown de <https://bienestarconnataliaguecha.com/privacy>. Última actualización: 2026-08-28.*
+
+## Responsable del tratamiento
+
+**Natalia Güechá Nieto** — psicóloga clínica. Bogotá, Colombia.
+Correo para asuntos de datos personales: **psicologanataliagnieto@gmail.com** · WhatsApp **+57 310 4671284**.
+
+## Datos que se recogen
+
+Este sitio **no exige registro para navegar**. Solo se recogen datos cuando la persona los entrega de forma voluntaria:
+
+1. **Formulario de contacto de la portada.** Nombre, correo, asunto y mensaje. Estos datos **no se almacenan en un servidor**: al enviar el formulario se abre WhatsApp con el mensaje redactado para que sea la propia persona quien lo envíe.
+2. **Compra de un servicio o producto digital.** Nombre y apellido, tipo y número de documento, correo electrónico, número de celular con indicativo, sexo y fecha de nacimiento de cada asistente. Son necesarios para identificar a quien recibirá la sesión, emitir la factura y reservar el cupo en la agenda.
+3. **Pago.** Los datos de la tarjeta o del medio de pago se introducen directamente en la pasarela **Wompi** y **nunca pasan por este sitio ni se almacenan aquí**. De la transacción solo se conserva su identificador y su estado.
+4. **Asistente virtual (chat).** El texto de los mensajes que se escriben en el chat del sitio se envía al servicio que genera la respuesta. **No escribas en el chat información clínica ni datos sensibles**: es un canal informativo, no un espacio terapéutico.
+5. **Datos técnicos.** El servidor registra la dirección IP, la fecha y el recurso solicitado en sus logs de acceso, con fines de seguridad y diagnóstico.
+
+El sitio **no usa cookies de publicidad ni de perfilado**. El navegador puede guardar información técnica mínima en almacenamiento local para el funcionamiento de la interfaz.
+
+## Finalidad
+
+Los datos se tratan únicamente para: atender la solicitud de contacto; agendar, prestar y facturar el servicio contratado; entregar los productos digitales comprados; enviar la confirmación y los recordatorios de la sesión; y cumplir las obligaciones legales y contables aplicables.
+
+**No se venden, alquilan ni ceden datos personales con fines comerciales**, y no se utilizan para publicidad de terceros.
+
+## Historia clínica y secreto profesional
+
+El contenido de las sesiones está amparado por el **secreto profesional** que la **Ley 1090 de 2006** impone a las y los psicólogos en Colombia. La historia clínica se custodia por separado de este sitio web, no es accesible desde internet y solo se comparte con terceros con consentimiento expreso de la persona o por orden de autoridad competente.
+
+## Encargados y terceros
+
+Para operar el servicio se apoyan en proveedores que actúan como encargados del tratamiento: la pasarela de pagos **Wompi** (procesamiento del pago), el proveedor de infraestructura donde se alojan el sitio y sus servicios, el proveedor de correo electrónico para las confirmaciones y el proveedor del asistente virtual. Cada uno accede solo a los datos imprescindibles para su función.
+
+## Conservación
+
+Los datos de contacto y de agendamiento se conservan mientras dure la relación profesional y, después, durante los plazos que exijan las obligaciones legales, contables y clínicas aplicables. Cumplidos esos plazos, se eliminan o se anonimizan.
+
+## Derechos de la persona titular
+
+De acuerdo con la **Ley 1581 de 2012** y el **Decreto 1074 de 2015**, cualquier persona puede **conocer, actualizar, rectificar y suprimir** sus datos, **revocar la autorización** otorgada, solicitar prueba de esa autorización y presentar quejas ante la **Superintendencia de Industria y Comercio**. Para ejercerlos basta escribir a **psicologanataliagnieto@gmail.com** indicando la solicitud y un documento que acredite la identidad. Las consultas se responden en un máximo de diez (10) días hábiles y los reclamos en quince (15) días hábiles, prorrogables en los términos de ley.
+
+## Menores de edad
+
+La atención de menores de edad requiere la autorización expresa de quien ejerza la patria potestad o la custodia. El sitio no está dirigido a que menores contraten servicios por su cuenta.
+
+## Seguridad
+
+El sitio se sirve sobre HTTPS y los servicios que lo acompañan aplican controles de acceso y cifrado en tránsito. Ninguna medida es infalible: si detectas un problema de seguridad, escríbenos y lo revisaremos.
+
+## Cambios
+
+Cualquier modificación de esta política se publicará en esta misma dirección, con su fecha de actualización. Se recomienda revisarla periódicamente.
+
+## Enlaces relacionados
+
+- [Sobre Natalia Güechá](https://bienestarconnataliaguecha.com/about.md)
+- [Contacto y agendamiento](https://bienestarconnataliaguecha.com/contact.md)
+- [Portada](https://bienestarconnataliaguecha.com/index.md)

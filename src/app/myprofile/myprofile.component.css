@@ -38,7 +38,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.45);
+  background-color: rgba(var(--color-black-rgb), 0.45);
   z-index: 1;
   backdrop-filter: blur(2px);
 }
@@ -75,11 +75,11 @@
 }
 
 .main-title {
-  color: #ffffff;
+  color: var(--color-white);
   font-size: 5rem;
   font-weight: 900;
   line-height: 1.1;
-  text-shadow: 3px 3px 12px rgba(0, 0, 0, 0.8);
+  text-shadow: 3px 3px 12px rgba(var(--color-black-rgb), 0.8);
   letter-spacing: 3px;
   margin: 0;
   animation: slideDown 0.8s ease forwards;
@@ -88,14 +88,14 @@
 
 /* ✨ PALABRAS DINÁMICAS */
 .intro-text {
-  color: #f0f0f0;
+  color: var(--color-text-light);
   font-size: 2.5rem;
   font-weight: 700;
   line-height: 1.2;
   opacity: 0;
   transform: translateY(40px);
   animation: fadeInUp 1.2s ease forwards 0.3s;
-  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6);
+  text-shadow: 2px 2px 8px rgba(var(--color-black-rgb), 0.6);
   letter-spacing: 1px;
   position: relative;
   z-index: 3;
@@ -107,7 +107,7 @@
 .highlight {
   color: var(--color-second);
   -webkit-text-stroke: 0.2px var(--color-text2);
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+  text-shadow: 0 2px 8px rgba(var(--color-black-rgb), 0.35);
   font-weight: 900;
   display: inline-block;
   transition: opacity 0.8s ease, transform 0.8s ease;
@@ -188,7 +188,7 @@
   transform-style: preserve-3d;
   letter-spacing: 1px;
   border-radius: 999px;
-  box-shadow: 0 18px 35px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 18px 35px rgba(var(--color-black-rgb), 0.35);
   min-width: clamp(230px, 28vw, 360px);
 }
 
@@ -211,7 +211,7 @@
 
 .btn-96:after,
 .btn-96:before {
-  background: rgba(255, 255, 255, 0.35);
+  background: rgba(var(--color-white-rgb), 0.35);
   content: "";
   height: 100%;
   left: 0;
@@ -224,7 +224,7 @@
 }
 
 .btn-96:after {
-  background: rgba(255, 255, 255, 0.5);
+  background: rgba(var(--color-white-rgb), 0.5);
   width: 0;
 }
 
@@ -279,7 +279,7 @@
     font-size: 1.6rem;
   }
   .overlay-dark {
-    background-color: rgba(0, 0, 0, 0.55);
+    background-color: rgba(var(--color-black-rgb), 0.55);
   }
 }
 
@@ -311,12 +311,12 @@
 
 .float-label {
   font-size: 0.85rem;
-  color: #599a53;
+  color: var(--color-whatsapp-float);
   font-weight: 600;
   text-align: center;
   font-family: var(--font-text);
   white-space: nowrap;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-shadow: 0 2px 4px rgba(var(--color-black-rgb), 0.1);
   animation: labelSlideIn 0.6s ease-out forwards;
 }
 
@@ -367,11 +367,11 @@
   position: absolute;
   border-radius: 50%;
   inset: 7px;
-  border: 3px solid #599a53;
+  border: 3px solid var(--color-whatsapp-float);
   transition:
     opacity 0.4s cubic-bezier(0.77, 0, 0.175, 1) 80ms,
     transform 0.5s cubic-bezier(0.455, 0.03, 0.515, 0.955) 80ms;
-  box-shadow: 0 4px 15px rgba(89, 154, 83, 0.2);
+  box-shadow: 0 4px 15px rgba(var(--color-whatsapp-float-rgb), 0.2);
 }
 
 .styled-wrapper .button:after {
@@ -379,13 +379,13 @@
   position: absolute;
   border-radius: 50%;
   inset: 7px;
-  border: 4px solid #599a53;
+  border: 4px solid var(--color-whatsapp-float);
   transform: scale(1.3);
   transition:
     opacity 0.4s cubic-bezier(0.165, 0.84, 0.44, 1),
     transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   opacity: 0;
-  box-shadow: 0 4px 20px rgba(89, 154, 83, 0.3);
+  box-shadow: 0 4px 20px rgba(var(--color-whatsapp-float-rgb), 0.3);
 }
 
 .styled-wrapper .button:hover:before,
@@ -414,8 +414,8 @@
 .whatsapp-icon {
   width: 42px;
   height: 42px;
-  fill: #599a53;
-  filter: drop-shadow(0 2px 4px rgba(89, 154, 83, 0.3));
+  fill: var(--color-whatsapp-float);
+  filter: drop-shadow(0 2px 4px rgba(var(--color-whatsapp-float-rgb), 0.3));
   z-index: 10;
   position: relative;
   display: block;

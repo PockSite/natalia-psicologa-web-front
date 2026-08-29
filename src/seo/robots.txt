@@ -1,0 +1,54 @@
+# robots.txt — https://bienestarconnataliaguecha.com
+# Sitio de la psicóloga clínica Natalia Güechá (terapia virtual, español).
+# Guía para agentes de IA: /llms.txt  ·  /agent-instructions.md
+# Variantes markdown: añade la cabecera `Accept: text/markdown` o usa la ruta .md
+# (por ejemplo /index.md, /about.md, /contact.md, /privacy.md).
+
+User-agent: *
+Allow: /
+Disallow: /pago-resultado
+
+# ── Rastreadores de IA: contenido público, se permite leer y citar. ──
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: Meta-ExternalAgent
+Allow: /
+
+Sitemap: https://bienestarconnataliaguecha.com/sitemap.xml
