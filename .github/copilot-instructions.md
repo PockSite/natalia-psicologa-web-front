@@ -32,15 +32,26 @@ Dependency & build specifics
 
 Testing & quality
 - Unit tests use Karma + Jasmine. Tests live next to components as `*.component.spec.ts` files. Run `npm test` to execute.
+- `npm run test:agents` valida los archivos legibles por agentes (404, markdown, JSON-LD, sitemap, llms.txt, metadatos) sin necesidad de red.
+- `npm run serve:dist` levanta `dist/my-landing` con las reglas de `nginx.conf`; `npm run test:agents -- --url http://localhost:4300` comprueba los endpoints contra él.
+- `npm run test:nginx` valida la sintaxis de `nginx.conf` con `nginx -t` (necesita Docker). `npm run verify:agents` hace lo mismo contra el sitio publicado.
 - There are no linting or formatting tools configured in the repo; do not add formatting assumptions unless requested.
 
+SEO / legibilidad por agentes de IA (no romper)
+- `src/seo/` se copia tal cual a la raíz del sitio (ver `assets` en `angular.json`): `robots.txt`, `sitemap.xml`, `llms.txt`, `llms-full.txt`, `agent-instructions.md`, las páginas ancla `about|contact|privacy` (`.html` + `.md`) y los cuerpos de error `404.html` / `404.md`.
+- `src/index.html` lleva dentro de `<app-root>` el contenido que ven los rastreadores sin JavaScript. Angular lo borra al arrancar (`selectRootElement`), así que **no lo saques de ahí** ni lo ocultes con CSS.
+- El `<head>` de `index.html` trae el JSON-LD (`Organization`/`ProfessionalService`, `Person`, `WebSite`, `WebPage`). Si cambian teléfono, correo, dirección o redes, actualízalos también en `src/seo/*.md`, `src/seo/contact.html` y `src/seo/about.html`.
+- `nginx.conf` implementa 404 reales, negociación `Accept: text/markdown` y las páginas ancla. **Las rutas de la SPA están enumeradas allí**: si añades una ruta a `app-routing.module.ts`, añade su `location` o devolverá 404.
+- `src/app/services/seo.service.ts` mantiene `canonical`, `og:url`, título y descripción al navegar. Añade la ruta nueva a `ROUTE_META` si necesita metadatos propios.
+- `llms-full.txt` se genera con `scripts/build-llms-full.mjs` (hook `prebuild`). No lo edites a mano.
+
 What to avoid
-- Do not modify `index.html` or `main.ts` unless you have to—these bootstrapping files follow Angular CLI defaults.
+- `index.html` y `main.ts` siguen los valores por defecto del CLI salvo por el bloque SEO descrito arriba; tócalos solo cuando haga falta.
 - Avoid adding global CSS rules that break component encapsulation; prefer per-component styles unless you need app-wide theming.
 
 Where to change common behavior
 - To change header/sidebar scroll behavior: edit `src/app/app.component.ts` and aligned templates `src/app/app.component.html`.
-- To add routes: modify `src/app/app-routing.module.ts` and then update `AppModule` imports if adding lazy-loaded modules.
+- To add routes: modify `src/app/app-routing.module.ts`, add the matching `location` in `nginx.conf`, and then update `AppModule` imports if adding lazy-loaded modules.
 
 If uncertain, useful files to open
 - `package.json` (scripts & deps)
