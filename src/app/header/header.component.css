@@ -101,7 +101,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url('../../assets/images/Ilustraciones(2).png');
+  background-image: url('../../assets/images/ilustracion-2-w1600.webp');
   background-size: 160%;
   background-position: calc(100% + 100px) 10%;
   background-repeat: no-repeat;
@@ -218,6 +218,12 @@
 .contact-info i {
   color: var(--color-title);
   font-size: 14px;
+}
+
+/* Teléfono y correo son enlaces (tel:/mailto:) pero se ven como texto plano */
+.contact-info a {
+  color: inherit;
+  text-decoration: none;
 }
 
 .action-buttons {

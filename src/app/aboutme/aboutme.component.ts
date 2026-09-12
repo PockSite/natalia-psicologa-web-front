@@ -15,15 +15,16 @@ export class AboutmeComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('aboutRight', { static: false }) aboutRight!: ElementRef;
   private resizeTimeout: ReturnType<typeof setTimeout> | undefined;
 
+  // Las tarjetas miden 260px como máximo: 560px de lado largo cubre pantallas retina.
   logros = [
-    { image: 'assets/images/fotografia1.jpeg' },
-    { image: 'assets/images/fotografia2.jpeg' },
-    { image: 'assets/images/fotografia3.jpeg' },
-    { image: 'assets/images/fotografia4.jpeg' },
-    { image: 'assets/images/fotografia5.jpeg' },
+    { image: 'assets/images/fotografia1-w560.webp', alt: 'Natalia Güechá Nieto, psicóloga clínica, sonriendo en su consultorio' },
+    { image: 'assets/images/fotografia2-w560.webp', alt: 'Natalia Güechá durante una sesión de terapia psicológica' },
+    { image: 'assets/images/fotografia3-w560.webp', alt: 'Retrato de Natalia Güechá, magíster en psicología clínica' },
+    { image: 'assets/images/fotografia4-w560.webp', alt: 'Natalia Güechá, psicóloga clínica en Bogotá, Colombia' },
+    { image: 'assets/images/fotografia5-w560.webp', alt: 'Natalia Güechá atendiendo terapia online desde Bogotá' },
   ];
 
-  logrosDuplicados: { image: string }[] = [];
+  logrosDuplicados: { image: string; alt: string }[] = [];
 
   constructor(private el: ElementRef, private renderer: Renderer2) {}
 

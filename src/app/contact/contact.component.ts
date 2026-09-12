@@ -35,11 +35,12 @@ ${this.form.message}
 
   // 🌟 Contacto
 
-  contactMethods = [
-    { icon: 'fas fa-envelope', title: 'Email', value: 'psicologanataliagnieto@gmail.com' },
-    { icon: 'fas fa-phone', title: 'Teléfono', value: '+57 310 4671284' },
+  // `href` convierte el dato en enlace (mailto:/tel:), clave en móvil y para el SEO local.
+  contactMethods: { icon: string; title: string; value: string; href?: string }[] = [
+    { icon: 'fas fa-envelope', title: 'Email', value: 'psicologanataliagnieto@gmail.com', href: 'mailto:psicologanataliagnieto@gmail.com' },
+    { icon: 'fas fa-phone', title: 'Teléfono', value: '+57 310 4671284', href: 'tel:+573104671284' },
     { icon: 'fas fa-map-marker-alt', title: 'Ubicación', value: 'Bogotá, Colombia' },
-    { icon: 'fas fa-calendar', title: 'Disponibilidad', value: 'Lun - Vie, 9AM - 6PM' }
+    { icon: 'fas fa-calendar', title: 'Horario de atención', value: 'Lunes a viernes, 9:00 – 18:00 (hora de Bogotá)' }
   ];
 
   socialLinks = [

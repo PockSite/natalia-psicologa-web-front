@@ -16,12 +16,12 @@ export interface PageMeta {
   robots?: string;
 }
 
+/** Título ≤ 580px y descripción ≤ 155 caracteres (≈990px): así no se truncan en Google. */
 export const DEFAULT_META: PageMeta = {
-  title: 'Psicóloga Clínica Natalia Güechá — terapia online en español',
+  title: 'Psicóloga Clínica Online | Natalia Güechá · Bogotá y LATAM',
   description:
-    'Terapia psicológica online en español, cercana y sin juicios. Sesiones virtuales 1 a 1 y de ' +
-    'pareja con Natalia Güechá Nieto, magíster en psicología clínica, y su equipo. Bogotá, ' +
-    'Colombia, para Latinoamérica y España.',
+    'Psicóloga clínica online en español: terapia individual y de pareja con Natalia Güechá, ' +
+    'magíster en psicología clínica. Bogotá, Latinoamérica y España.',
 };
 
 /** Metadatos por primer segmento de la URL (ver app-routing.module.ts). */

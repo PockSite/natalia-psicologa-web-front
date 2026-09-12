@@ -8,10 +8,13 @@
 
       <div class="contact-methods">
         <div class="contact-method" *ngFor="let method of contactMethods">
-          <i [class]="method.icon"></i>
+          <i [class]="method.icon" aria-hidden="true"></i>
           <div>
             <h4>{{ method.title }}</h4>
-            <p>{{ method.value }}</p>
+            <p>
+              <a *ngIf="method.href; else plainValue" [href]="method.href">{{ method.value }}</a>
+              <ng-template #plainValue>{{ method.value }}</ng-template>
+            </p>
           </div>
         </div>
       </div>
