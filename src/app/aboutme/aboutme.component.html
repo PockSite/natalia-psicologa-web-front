@@ -36,8 +36,10 @@
     <div #aboutRight class="about-right" [class.visible]="isVisible">
       <div #achievementsViewport class="achievements-viewport">
         <div #achievementsTrack class="achievements-track">
-          <div *ngFor="let logro of logrosDuplicados" class="achievement-card">
-            <img class="achievement-image" [src]="logro.image">
+          <!-- La segunda copia solo sirve para el bucle infinito: se oculta a los lectores de pantalla -->
+          <div *ngFor="let logro of logrosDuplicados; let i = index" class="achievement-card"
+            [attr.aria-hidden]="i >= logros.length ? 'true' : null">
+            <img class="achievement-image" [src]="logro.image" [alt]="logro.alt" decoding="async">
           </div>
         </div>
       </div>

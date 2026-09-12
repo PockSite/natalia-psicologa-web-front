@@ -20,7 +20,7 @@
   height: 1900px;
   margin-top: -450px;
   margin-left: -60px;
-  background-image: url('../../assets/images/Ilustraciones(10).png');
+  background-image: url('../../assets/images/ilustracion-10-w2400.webp');
   background-size: 100% 100%;
   background-position: center top;
   background-repeat: no-repeat;
@@ -82,15 +82,15 @@
 }
 
 .card-2 {
-  background-image: url('../../assets/images/Ilustraciones(9).png');
+  background-image: url('../../assets/images/ilustracion-9-w1200.webp');
 }
 
 .card-3 {
-  background-image: url('../../assets/images/Ilustraciones(4).png');
+  background-image: url('../../assets/images/ilustracion-4-w1200.webp');
 }
 
 .card-4 {
-  background-image: url('../../assets/images/Ilustraciones(1).png');
+  background-image: url('../../assets/images/ilustracion-1-w1200.webp');
 }
 
 .card-modern:hover {

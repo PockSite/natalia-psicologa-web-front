@@ -1,0 +1,33 @@
+<!-- 7. PREGUNTAS FRECUENTES (formato citable: pregunta como encabezado + respuesta directa) -->
+<section class="faq-section" id="preguntas-frecuentes" aria-labelledby="faq-title">
+  <h2 class="section-title2" id="faq-title">Preguntas frecuentes</h2>
+
+  <div class="faq-container">
+    <!-- Respuesta directa arriba: quién, qué, dónde y para quién -->
+    <p class="faq-lead">
+      <strong>Natalia Güechá Nieto</strong> es psicóloga clínica, magíster en psicología clínica y especialista en
+      intervención en crisis. Ofrece <strong>terapia psicológica online en español</strong>, individual y de pareja,
+      desde Bogotá (Colombia) para personas de Latinoamérica y España, junto a un equipo de psicólogas clínicas
+      con su misma forma de trabajar: cercana, profesional y sin juicios.
+    </p>
+
+    <!-- Respuestas siempre visibles (no acordeón): el texto cuenta como contenido
+         indexable y es citable tal cual por buscadores y asistentes de IA -->
+    <div class="faq-list">
+      <article class="faq-item" *ngFor="let faq of faqs; trackBy: trackByQuestion">
+        <h3 class="faq-question">
+          <i class="fas fa-circle-question faq-icon" aria-hidden="true"></i>
+          {{ faq.question }}
+        </h3>
+        <p class="faq-answer" [innerHTML]="faq.answer"></p>
+      </article>
+    </div>
+
+    <!-- E-E-A-T: autoría y fecha de revisión visibles -->
+    <p class="faq-meta">
+      Contenido elaborado y revisado por <a href="/about">Natalia Güechá Nieto</a>, psicóloga clínica
+      (Mg. en Psicología Clínica, Bogotá). Última actualización:
+      <time [attr.datetime]="updatedIso">{{ updatedLabel }}</time>.
+    </p>
+  </div>
+</section>

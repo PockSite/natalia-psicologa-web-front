@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="utf-8">
-  <title>Psicóloga Clínica Natalia Güechá — terapia online en español</title>
+  <title>Psicóloga Clínica Online | Natalia Güechá · Bogotá y LATAM</title>
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -12,9 +12,14 @@
        La regla `html.has-js #app-shell-fallback { display: none }` del bloque <style>
        de más abajo evita así que el contenido de respaldo llegue a verse. -->
   <script>document.documentElement.className += ' has-js';</script>
+  <!-- ≤155 caracteres para que no se trunque en el resultado (≈990px). Debe coincidir con DEFAULT_META en seo.service.ts -->
   <meta name="description"
-    content="Terapia psicológica online en español, cercana y sin juicios. Sesiones virtuales 1 a 1 y de pareja con Natalia Güechá Nieto, magíster en psicología clínica, y su equipo. Bogotá, Colombia, para Latinoamérica y España.">
+    content="Psicóloga clínica online en español: terapia individual y de pareja con Natalia Güechá, magíster en psicología clínica. Bogotá, Latinoamérica y España.">
   <meta name="author" content="Natalia Güechá Nieto">
+  <meta name="geo.region" content="CO-DC">
+  <meta name="geo.placename" content="Bogotá, Colombia">
+  <meta name="geo.position" content="4.7110;-74.0721">
+  <meta name="ICBM" content="4.7110, -74.0721">
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
 
   <!-- Resolución de entidad y atribución para buscadores y agentes -->
@@ -24,9 +29,9 @@
 
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Bienestar con Natalia Güechá">
-  <meta property="og:title" content="Psicóloga Clínica Natalia Güechá — terapia online en español">
+  <meta property="og:title" content="Psicóloga Clínica Online | Natalia Güechá · Bogotá y LATAM">
   <meta property="og:description"
-    content="Sesiones virtuales 1 a 1 y de pareja con Natalia Güechá Nieto y su equipo de psicólogas clínicas. Cercanía, profesionalismo y acompañamiento sin barreras geográficas.">
+    content="Terapia psicológica online en español, individual y de pareja, con Natalia Güechá Nieto y su equipo de psicólogas clínicas. Desde Bogotá para Latinoamérica y España.">
   <meta property="og:url" content="https://bienestarconnataliaguecha.com/">
   <meta property="og:image" content="https://bienestarconnataliaguecha.com/assets/images/fotografia1.jpeg">
   <meta property="og:image:width" content="1600">
@@ -35,19 +40,30 @@
   <meta property="og:locale" content="es_CO">
 
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Psicóloga Clínica Natalia Güechá — terapia online en español">
+  <meta name="twitter:title" content="Psicóloga Clínica Online | Natalia Güechá · Bogotá y LATAM">
   <meta name="twitter:description"
-    content="Sesiones virtuales 1 a 1 y de pareja con Natalia Güechá Nieto y su equipo de psicólogas clínicas.">
+    content="Terapia psicológica online en español, individual y de pareja, con Natalia Güechá Nieto y su equipo de psicólogas clínicas.">
   <meta name="twitter:image" content="https://bienestarconnataliaguecha.com/assets/images/fotografia1.jpeg">
 
-  <link rel="icon" type="image/png" href="/assets/images/logo.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/assets/images/favicon-192.png">
+  <link rel="apple-touch-icon" href="/assets/images/favicon-192.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <!-- Imagen de fondo del hero (LCP): está en un CSS de componente y el navegador
+       la descubriría tarde; con el preload empieza a bajar junto con el HTML. -->
+  <link rel="preload" as="image" type="image/webp" href="/assets/images/fotografia5-w1600.webp" fetchpriority="high">
   <link
     href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
     rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <script src="https://checkout.wompi.co/widget.js"></script>
+  <!-- Font Awesome no bloquea el primer render: se carga como "print" y se activa al terminar de bajar -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    media="print" onload="this.media='all'">
+  <noscript>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  </noscript>
+  <!-- El widget de pago solo se usa al pulsar "Pagar" en la ficha de un servicio: no necesita bloquear el parseo -->
+  <script src="https://checkout.wompi.co/widget.js" defer></script>
 
   <!-- Identidad legible por máquinas. Se mantiene sincronizada con /llms.txt y /about. -->
   <script type="application/ld+json">
@@ -55,13 +71,13 @@
     "@context": "https://schema.org",
     "@graph": [
       {
-        "@type": ["Organization", "ProfessionalService"],
+        "@type": ["LocalBusiness", "ProfessionalService", "Organization"],
         "@id": "https://bienestarconnataliaguecha.com/#organization",
         "name": "Bienestar con Natalia Güechá",
         "alternateName": "Consulta de psicología clínica de Natalia Güechá",
         "description": "Consulta de psicología clínica online dirigida por Natalia Güechá Nieto. Sesiones virtuales individuales y de pareja en español, desde Bogotá (Colombia) para Latinoamérica y España.",
         "url": "https://bienestarconnataliaguecha.com/",
-        "logo": "https://bienestarconnataliaguecha.com/assets/images/logo.png",
+        "logo": "https://bienestarconnataliaguecha.com/assets/images/logo-512.png",
         "image": "https://bienestarconnataliaguecha.com/assets/images/fotografia1.jpeg",
         "email": "psicologanataliagnieto@gmail.com",
         "telephone": "+57-310-4671284",
@@ -74,6 +90,11 @@
           "addressLocality": "Bogotá",
           "addressRegion": "Bogotá D.C.",
           "addressCountry": "CO"
+        },
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": 4.7110,
+          "longitude": -74.0721
         },
         "areaServed": [
           { "@type": "Country", "name": "Colombia" },
@@ -215,12 +236,86 @@
         "@type": "WebPage",
         "@id": "https://bienestarconnataliaguecha.com/#webpage",
         "url": "https://bienestarconnataliaguecha.com/",
-        "name": "Psicóloga Clínica Natalia Güechá — terapia online en español",
-        "description": "Sesiones virtuales 1 a 1 y de pareja con Natalia Güechá Nieto y su equipo de psicólogas clínicas. Cercanía, profesionalismo y acompañamiento sin barreras geográficas.",
+        "name": "Psicóloga Clínica Online | Natalia Güechá · Bogotá y LATAM",
+        "description": "Psicóloga clínica online en español: terapia individual y de pareja con Natalia Güechá, magíster en psicología clínica. Bogotá, Latinoamérica y España.",
         "inLanguage": "es-CO",
+        "datePublished": "2026-08-28",
+        "dateModified": "2026-09-11",
+        "author": { "@id": "https://bienestarconnataliaguecha.com/#natalia-guecha" },
+        "reviewedBy": { "@id": "https://bienestarconnataliaguecha.com/#natalia-guecha" },
         "isPartOf": { "@id": "https://bienestarconnataliaguecha.com/#website" },
         "about": { "@id": "https://bienestarconnataliaguecha.com/#organization" },
-        "primaryImageOfPage": "https://bienestarconnataliaguecha.com/assets/images/fotografia1.jpeg"
+        "primaryImageOfPage": "https://bienestarconnataliaguecha.com/assets/images/fotografia1.jpeg",
+        "breadcrumb": { "@id": "https://bienestarconnataliaguecha.com/#breadcrumb" },
+        "mainEntity": { "@id": "https://bienestarconnataliaguecha.com/#faq" }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": "https://bienestarconnataliaguecha.com/#breadcrumb",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Inicio",
+            "item": "https://bienestarconnataliaguecha.com/"
+          }
+        ]
+      },
+      {
+        "@type": "FAQPage",
+        "@id": "https://bienestarconnataliaguecha.com/#faq",
+        "url": "https://bienestarconnataliaguecha.com/#preguntas-frecuentes",
+        "inLanguage": "es-CO",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "¿Cómo funciona una sesión de terapia online con Natalia Güechá?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Las sesiones son por videollamada, individuales (1 a 1) o de pareja, y duran alrededor de una hora. Eliges la psicóloga, el día y la hora en el calendario de disponibilidad de cada servicio, y recibes el enlace de conexión al confirmar la reserva. Solo necesitas un dispositivo con cámara, conexión a internet y un espacio privado."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "¿Cuánto cuesta una sesión y cómo se paga?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "El precio de cada sesión y de cada producto digital se publica en pesos colombianos (COP) en su ficha, dentro de la sección Servicios. El pago se hace en línea con tarjeta de crédito o débito, PSE o Nequi a través de la pasarela Wompi, y si vives fuera de Colombia puedes pagar con tarjeta internacional."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "¿Atienden a personas que viven fuera de Colombia?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Sí. La consulta está en Bogotá, pero la atención es principalmente virtual y en español, por lo que acompañamos a personas de toda Latinoamérica y de España. Al agendar, el horario se muestra en hora de Bogotá (UTC-5); solo tienes que ajustarlo a tu zona horaria."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "¿Qué problemas trata una psicóloga clínica online?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Natalia Güechá Nieto es magíster en psicología clínica y especialista en intervención psicológica en situaciones de crisis. Las áreas de trabajo más habituales son ansiedad y estrés, ataques de pánico, autoestima, terapia de pareja, duelo, regulación emocional y crecimiento personal. Puedes conocer al equipo de psicólogas que la acompaña en la sección Equipo."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "¿Cómo agendo mi primera consulta?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Entra en Servicios, abre la ficha de la sesión que te interesa, elige psicóloga, fecha y hora, y completa el pago en línea; la reserva queda confirmada al instante. Si prefieres resolver dudas antes, escribe por WhatsApp al +57 310 4671284 o usa el formulario de contacto."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "¿La terapia online es confidencial? ¿Y si estoy en crisis?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Sí: la información de las sesiones está protegida por el secreto profesional (Ley 1090 de 2006) y por la política de tratamiento de datos de la consulta. Este sitio no atiende urgencias: si estás en riesgo vital, llama a la línea de emergencias de tu país (123 en Colombia, 112 en España) o acude a urgencias."
+            }
+          }
+        ]
       }
     ]
   }
@@ -344,11 +439,29 @@
           pago en línea. Áreas de trabajo habituales: ansiedad y estrés, ataques de pánico, autoestima, terapia de
           pareja, duelo, crecimiento personal y regulación emocional.</p>
 
+        <h2>Preguntas frecuentes</h2>
+        <h3>¿Cómo funciona una sesión de terapia online?</h3>
+        <p>Las sesiones son por videollamada, individuales (1 a 1) o de pareja, y duran alrededor de una hora. Eliges
+          la psicóloga, el día y la hora en el calendario de cada servicio y recibes el enlace al confirmar la reserva.
+        </p>
+        <h3>¿Cuánto cuesta una sesión y cómo se paga?</h3>
+        <p>El precio de cada sesión y producto digital se publica en pesos colombianos (COP) en su ficha. El pago se
+          hace en línea con tarjeta, PSE o Nequi (pasarela Wompi); desde fuera de Colombia, con tarjeta internacional.
+        </p>
+        <h3>¿Atienden a personas que viven fuera de Colombia?</h3>
+        <p>Sí. La consulta está en Bogotá, pero la atención es virtual y en español para toda Latinoamérica y España.
+          El horario se muestra en hora de Bogotá (UTC-5).</p>
+        <h3>¿Cómo agendo mi primera consulta?</h3>
+        <p>Abre la ficha del servicio, elige psicóloga, fecha y hora y completa el pago en línea. Si tienes dudas,
+          escribe por WhatsApp al <a href="https://wa.me/573104671284">+57 310 4671284</a>.</p>
+
         <h2>Contacto</h2>
-        <p>Correo <a href="mailto:psicologanataliagnieto@gmail.com">psicologanataliagnieto@gmail.com</a> · WhatsApp
-          <a href="https://wa.me/573104671284">+57 310 4671284</a> · Bogotá, Colombia · Lunes a viernes, 9:00–18:00
+        <p>Correo <a href="mailto:psicologanataliagnieto@gmail.com">psicologanataliagnieto@gmail.com</a> · Teléfono y
+          WhatsApp <a href="tel:+573104671284">+57 310 4671284</a> · Bogotá, Colombia · Lunes a viernes, 9:00–18:00
           (hora de Bogotá).
         </p>
+        <p><small>Contenido revisado por Natalia Güechá Nieto, psicóloga clínica. Última actualización:
+            <time datetime="2026-09-11">11 de septiembre de 2026</time>.</small></p>
         <p><small>Este sitio no atiende urgencias. Si estás en riesgo vital, llama a la línea de emergencias de tu país
             (123 en Colombia, 112 en España).</small></p>
 
