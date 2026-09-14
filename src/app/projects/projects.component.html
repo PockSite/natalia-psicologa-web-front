@@ -92,21 +92,29 @@
         </span>
       </div>
 
-      <div class="project-card" *ngFor="let project of pagedProjects; let i = index"
-        (click)="goToProjectSection(project)"
-        [class.active]="selectedProject === project"
-        [style.animation-delay]="i * 0.1 + 's'">
+      <!-- Mosaico de tarjetas: el marco negro y las líneas entre tarjetas
+           pertenecen a este contenedor, no a cada tarjeta. -->
+      <div class="cards-grid">
+        <div class="project-card" *ngFor="let project of pagedProjects; let i = index"
+          role="button" tabindex="0"
+          (click)="goToProjectSection(project)"
+          (keydown.enter)="goToProjectSection(project)"
+          (keydown.space)="goToProjectSection(project); $event.preventDefault()"
+          [class.active]="selectedProject === project"
+          [attr.aria-pressed]="selectedProject === project"
+          [style.animation-delay]="i * 0.1 + 's'">
 
-        <div class="project-image">
-          <img [src]="project.image" alt="proyecto">
+          <div class="project-image">
+            <img [src]="project.image" [alt]="project.name" loading="lazy">
 
-          <div class="type-badge" [ngClass]="project.type.code">
-            <i class="fas" [ngClass]="project.type.code === 'libro' ? 'fa-shopping-bag' : 'fa-calendar-check'"></i>
-          </div>
+            <div class="type-badge" [ngClass]="project.type.code">
+              <i class="fas" [ngClass]="project.type.code === 'libro' ? 'fa-shopping-bag' : 'fa-calendar-check'"></i>
+            </div>
 
-          <div class="overlay">
-            <h3>{{ project.name | slice:0:30 }}{{ project.name.length > 30 ? '...' : '' }}</h3>
-            <p>{{ project.short }}</p>
+            <div class="overlay">
+              <h3>{{ project.name | slice:0:30 }}{{ project.name.length > 30 ? '...' : '' }}</h3>
+              <p>{{ project.short }}</p>
+            </div>
           </div>
         </div>
       </div>
