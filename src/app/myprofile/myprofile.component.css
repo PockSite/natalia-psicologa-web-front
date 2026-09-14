@@ -105,7 +105,7 @@
 
 /* ✨ Palabra dinámica con color */
 .highlight {
-  color: var(--color-second);
+  color: var(--color-main2);
   -webkit-text-stroke: 0.2px var(--color-text2);
   text-shadow: 0 2px 8px rgba(var(--color-black-rgb), 0.35);
   font-weight: 900;

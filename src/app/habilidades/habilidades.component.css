@@ -7,22 +7,31 @@
   width: 100%;
   height: 300px;
   padding: 80px;
-  background-color: var(--color-border);
+  /* Mismo tono que el papel de la ilustración (#dbd4d2): si en algún ancho
+     quedara un borde sin cubrir, no se nota ningún cambio de color. */
+  background-color: var(--color-paper-bg);
+  --color-paper-bg: #dbd4d2;
 }
 
 /* === DECORACIÓN DE FONDO === */
 .wave-decoration {
   position: absolute;
-  top: -320px;
+  /* El bloque va desde arriba (borde rasgado sobre la portada) hasta el final
+     de la sección, así el papel siempre llega abajo aunque la sección crezca. */
+  top: -810px;
+  bottom: 0;
   left: 0;
   z-index: 1;
   width: 120vw;
-  height: 1900px;
-  margin-top: -450px;
   margin-left: -60px;
-  background-image: url('../../assets/images/ilustracion-10-w2400.webp');
-  background-size: 100% 100%;
-  background-position: center top;
+  /* Capa 1: a partir de 1230px (justo antes del corte inferior del papel, que
+     con 1900px de alto queda en ~1265px) se continúa con el color del papel.
+     Capa 2: la ilustración con el mismo tamaño de siempre (120vw × 1900px). */
+  background-image:
+    linear-gradient(to bottom, transparent 1230px, var(--color-paper-bg) 1230px),
+    url('../../assets/images/ilustracion-10-w2400.webp');
+  background-size: 100% 100%, 100% 1900px;
+  background-position: center top, center top;
   background-repeat: no-repeat;
   pointer-events: none;
   animation: waveScrollAppear 1s ease forwards;
@@ -212,6 +221,25 @@
     padding: 70px 28px;
   }
 
+  /* Con las tarjetas apiladas la sección es mucho más alta que la
+     ilustración estirada de escritorio; aquí se muestra en proporción real. */
+  .wave-decoration {
+    /* Desde el borde rasgado (≈90px por encima de la sección) hasta el final
+       de la sección, sin importar cuánto crezca su contenido. */
+    top: -90px;
+    /* La ilustración (2400×2400) solo tiene papel entre el 33,4% y el 66,6% de
+       su altura; el resto es transparente. Se muestra en proporción real a
+       2800px de alto (se recorta a los lados) con el borde rasgado alineado al
+       tope del bloque. A partir de 900px (unos px antes del corte inferior del
+       papel, que está en ~930px) la capa superior continúa con el mismo color
+       del papel, así el fondo cubre toda la sección sin que se note la unión. */
+    background-image:
+      linear-gradient(to bottom, transparent 900px, var(--color-paper-bg) 900px),
+      url('../../assets/images/ilustracion-10-w2400.webp');
+    background-size: 100% 100%, auto 2800px;
+    background-position: center top, center -934px;
+  }
+
   .skills-content {
     margin-left: 0;
   }
@@ -264,9 +292,7 @@
   }
 
   .wave-decoration {
-    top: -280px;
     width: 125vw;
-    height: 2000px;
     margin-left: -12.5vw;
   }
 
@@ -319,11 +345,6 @@
 @media (max-width: 320px) {
   .grid-wrapper {
     padding: 40px 15px;
-  }
-
-  .wave-decoration {
-    top: -180px;
-    height: 1600px;
   }
 
   .card-modern {
