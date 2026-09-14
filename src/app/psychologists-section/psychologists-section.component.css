@@ -19,7 +19,7 @@
 .psy {
   position: relative;
   padding: 100px 50px;
-  background:var(--psy-cream);
+  background:var(--color-border);
   color: var(--psy-ink);
   font-family: var(--font-text);
   overflow: hidden;
@@ -46,9 +46,12 @@
 }
 
 /* ── Encabezado ── */
+/* Mismo patrón que el resto de secciones del sitio (.section-title2):
+   título en mayúsculas, centrado, y párrafo introductorio centrado debajo. */
 .psy-head {
-  max-width: 640px;
-  margin-bottom: 64px;
+  max-width: 760px;
+  margin: 0 auto 64px;
+  text-align: center;
   opacity: 0;
   transform: translateY(28px);
   transition: opacity 0.8s ease, transform 0.8s ease;
@@ -79,17 +82,19 @@
 }
 
 .psy-title {
-  margin: 0 0 18px;
+  margin: 0 0 20px;
   font-family: var(--font-title);
-  font-size: clamp(2.2rem, 4.5vw, 3.4rem);
-  font-weight: 400;
-  line-height: 1.1;
+  font-size: 2.5rem;
+  font-weight: 900;
+  line-height: 1.2;
+  letter-spacing: 3px;
+  text-transform: uppercase;
   color: var(--psy-ink);
-  max-inline-size: 18ch;
 }
 
 .psy-lead {
-  margin: 0;
+  max-width: 640px;
+  margin: 0 auto;
   font-size: 1.1rem;
   line-height: 1.75;
   color: var(--psy-ink-soft);
@@ -557,6 +562,16 @@
 @media (max-width: 768px) {
   .psy {
     padding: 56px 20px;
+  }
+
+  /* Mismo tamaño que .section-title2 en móvil en el resto del sitio */
+  .psy-title {
+    font-size: 1.8rem;
+    letter-spacing: 2px;
+  }
+
+  .psy-lead {
+    font-size: 1rem;
   }
 
   .psy-stage {

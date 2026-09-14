@@ -1,6 +1,6 @@
 /* 6. PROYECTOS */
 .projects-section {
-  background: var(--color-main);
+  background: var(--color-main2);
   padding: 80px 20px;
 }
 
@@ -14,11 +14,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--color-main);
-  color: var(--color-white);
-  font-size: 16px;
+  /* Vidrio en vino profundo con filo negro: se lee sobre cualquier foto */
+  background: rgba(var(--color-main-dark-rgb), 0.55);
+  border: 1px solid var(--color-title);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  color: var(--color-main2);
+  font-size: 14px;
   z-index: 10;
-  box-shadow: 0px 5px 15px rgba(var(--color-black-rgb), 0.3);
+  box-shadow: 0 4px 12px rgba(var(--color-black-rgb), 0.25);
 }
 
 /* Versión grande sobre la imagen del detalle */
@@ -33,12 +37,12 @@
 }
 
 .section-title2 {
-  /* Es un <h2> por semántica (SEO), pero conserva el aspecto que tenía como <div> */
-  font-family: inherit;
+  /* Misma fuente de títulos que el resto de secciones (.psy-title, FAQ, etc.) */
+  font-family: var(--font-title);
   margin-top: 0;
   font-size: 2.5rem;
   font-weight: 900;
-  color: var(--color-border);
+  color: var(--color-title);
   margin-bottom: 50px;
   text-transform: uppercase;
   text-align: center;
@@ -240,7 +244,7 @@
 
 /* Separador + acción */
 .detail-action {
-  border-top: 1px solid rgba(var(--color-white-rgb), 0.12);
+  border-top: 1px solid rgba(var(--color-title-rgb), 0.12);
   padding-top: 22px;
   display: flex;
   justify-content: flex-end;
@@ -271,18 +275,20 @@
   font-size: 1.05rem;
 }
 
-.detail-btn-secondary:hover {
-  background: var(--color-main);
-  color: var(--color-white);
-  box-shadow: 0px 8px 20px rgba(var(--color-black-rgb), 0.25);
+.detail-btn-secondary:hover,
+.detail-btn-secondary:focus-visible {
+  background: rgba(var(--color-main-rgb), 0.1);
+  border-color: var(--color-main-soft);
+  color: var(--color-main-soft);
 }
 
-/* Botón CTA */
+/* Botón CTA: misma píldora y altura que el secundario para que la pareja
+   se lea como un solo control (antes tenía esquina cortada y radio 0). */
 .detail-btn {
   background: var(--color-main);
   color: var(--color-white);
-  padding: 12px 28px;
-  border-radius: 0;
+  padding: 13px 26px;
+  border-radius: 999px;
   text-decoration: none;
   font-weight: 700;
   font-size: 0.85rem;
@@ -291,37 +297,65 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  transition: all 0.3s ease;
-  -webkit-clip-path: polygon(0 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%);
-  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%);
+  box-shadow: 0 6px 16px -6px rgba(var(--color-main-dark-rgb), 0.6);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
 }
 
-.detail-btn:hover {
-  padding-left: 34px;
-  padding-right: 34px;
-  box-shadow: 0px 10px 25px rgba(var(--color-black-rgb), 0.3);
+.detail-btn:hover,
+.detail-btn:focus-visible {
+  background: var(--color-main-soft);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px -8px rgba(var(--color-main-dark-rgb), 0.7);
+}
+
+.detail-btn:active {
+  transform: translateY(0);
+}
+
+.detail-btn:focus-visible,
+.detail-btn-secondary:focus-visible {
+  outline: 2px solid var(--color-main-dark);
+  outline-offset: 3px;
 }
 
 /* ── LISTA DE PROYECTOS ──────────────────────────────────── */
+/* Columna derecha: índice + mosaico + paginación. Se estira a la altura de
+   la ficha de detalle para que ambos bloques terminen alineados. */
 .projects-list {
   flex: 1.2;
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+
+/* Mosaico: las tarjetas van pegadas; el negro del contenedor asoma solo como
+   marco exterior y como línea de 2px entre tarjetas. Las filas se reparten
+   todo el alto disponible, así el mosaico llena la sección. */
+.cards-grid {
+  flex: 1;
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-auto-rows: minmax(220px, 1fr);
+  gap: 2px;
+  padding: 2px;
+  background: var(--color-title);
+  border-radius: 16px;
+  overflow: hidden;
 }
 
 .services-index {
-  grid-column: 1 / -1;
-  width: 95%;
+  width: 100%;
+  box-sizing: border-box;
   padding: 10px 14px;
   border-radius: 14px;
-  background: rgba(var(--color-white-rgb), 0.08);
-  border: 1px solid rgba(var(--color-white-rgb), 0.25);
+  background: var(--color-white);
+  border: 2px solid var(--color-title);
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: center;
   column-gap: 14px;
-  backdrop-filter: blur(6px);
 }
 
 .index-item {
@@ -330,7 +364,7 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  color: var(--color-text2);
+  color: var(--color-title);
   font-size: 0.9rem;
   font-weight: 600;
   letter-spacing: 0.2px;
@@ -359,18 +393,21 @@
 .index-divider {
   width: 1px;
   height: 22px;
-  background: rgba(var(--color-white-rgb), 0.35);
+  background: rgba(var(--color-title-rgb), 0.3);
 }
 
+/* Cada tarjeta es una baldosa del mosaico: sin radio ni sombra propios,
+   el marco lo pone .cards-grid. */
 .project-card {
   position: relative;
-  border-radius: 20px;
   overflow: hidden;
   cursor: pointer;
-  box-shadow: 0px 10px 30px rgba(var(--color-black-rgb), 0.3);
-  transition: all 0.4s ease;
-  height: 250px;
+  background: var(--color-title);
+  height: 100%;
+  min-height: 220px;
   width: 100%;
+  outline: none;
+  isolation: isolate;
 }
 
 .project-card.in-view {
@@ -382,7 +419,10 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.6s ease;
+  display: block;
+  /* Las no seleccionadas se apagan un poco; la seleccionada queda a color */
+  filter: saturate(0.85) brightness(0.92);
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease;
 }
 
 .project-card .overlay {
@@ -391,8 +431,14 @@
   left: 0;
   width: 100%;
   max-height: 100%;
-  padding: 20px;
-  background: linear-gradient(to top, rgba(var(--color-black-rgb), 0.9) 0%, rgba(var(--color-black-rgb), 0.6) 60%, transparent 100%);
+  padding: 16px;
+  /* Velo en vino profundo (de la paleta) en vez de negro plano */
+  background: linear-gradient(
+    to top,
+    rgba(var(--color-main-dark-rgb), 0.92) 0%,
+    rgba(var(--color-main-dark-rgb), 0.55) 55%,
+    transparent 100%
+  );
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -403,23 +449,61 @@
 }
 
 .project-card .overlay h3 {
-  color: var(--color-white);
-  font-size: 1.3rem;
+  color: var(--color-main2);
+  font-size: 1.15rem;
   font-weight: 700;
-  margin-bottom: 5px;
+  line-height: 1.25;
+  margin: 0 0 4px;
   text-align: left;
   text-shadow: 0 2px 4px rgba(var(--color-black-rgb), 0.5);
   width: 100%;
   word-wrap: break-word;
 }
 
-.project-card .overlay p { color: var(--color-text2); }
+.project-card .overlay p {
+  color: var(--color-text2);
+  font-size: 0.82rem;
+  line-height: 1.4;
+  margin: 0;
+  opacity: 0.9;
+  /* Máximo dos líneas para que todas las tarjetas pesen lo mismo */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
 
-.project-card:hover .overlay { opacity: 0; }
+/* Hover / foco: la foto se acerca y el texto se mantiene legible
+   (ocultar la información al pasar el cursor no ayuda al usuario). */
+.project-card:hover img,
+.project-card:focus-visible img,
+.project-card.active img {
+  transform: scale(1.06);
+  filter: none;
+}
 
-.project-card.active {
-  border: 3px solid var(--color-title);
-  box-shadow: 0px 0px 20px var(--color-title);
+.project-card.active img {
+  transform: none;
+}
+
+/* Foco por teclado: anillo crema interior (el marco exterior ya es negro) */
+.project-card:focus-visible::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  box-shadow: inset 0 0 0 3px var(--color-main2);
+  pointer-events: none;
+  z-index: 4;
+}
+
+/* Tarjeta seleccionada: anillo vino de marca dentro del marco negro */
+.project-card.active::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  box-shadow: inset 0 0 0 3px var(--color-main);
+  pointer-events: none;
+  z-index: 4;
 }
 
 .project-image {
@@ -428,19 +512,16 @@
 }
 
 /* ── PAGINACIÓN ──────────────────────────────────────────── */
+/* Mismo lenguaje que el índice: blanco con marco negro sobre el fondo crema */
 .projects-pagination {
-  grid-column: 1 / -1;
-  justify-self: center;
-  margin-top: 10px;
+  align-self: center;
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 8px 12px;
+  padding: 6px 10px;
   border-radius: 999px;
-  background: rgba(var(--color-white-rgb), 0.08);
-  border: 1px solid rgba(var(--color-white-rgb), 0.25);
-  backdrop-filter: blur(6px);
-  box-shadow: 0 10px 26px rgba(var(--color-black-rgb), 0.18);
+  background: var(--color-white);
+  border: 2px solid var(--color-title);
 }
 
 .pagination-arrow {
@@ -448,9 +529,9 @@
   height: 38px;
   flex: 0 0 auto;
   border-radius: 50%;
-  border: 1px solid rgba(var(--color-white-rgb), 0.35);
-  background: rgba(var(--color-white-rgb), 0.14);
-  color: var(--color-text2);
+  border: 1px solid rgba(var(--color-title-rgb), 0.25);
+  background: transparent;
+  color: var(--color-title);
   font-size: 0.85rem;
   display: inline-flex;
   align-items: center;
@@ -460,10 +541,9 @@
 }
 
 .pagination-arrow:hover:not(:disabled) {
-  background: var(--color-border);
-  color: var(--color-main);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 18px rgba(var(--color-black-rgb), 0.28);
+  background: var(--color-title);
+  border-color: var(--color-title);
+  color: var(--color-main2);
 }
 
 .pagination-arrow:disabled {
@@ -484,7 +564,7 @@
   border-radius: 12px;
   border: 1px solid transparent;
   background: transparent;
-  color: var(--color-text2);
+  color: var(--color-title);
   font-size: 0.92rem;
   font-weight: 600;
   letter-spacing: 0.2px;
@@ -493,25 +573,23 @@
 }
 
 .pagination-page:hover:not(.active) {
-  background: rgba(var(--color-white-rgb), 0.18);
+  background: rgba(var(--color-title-rgb), 0.08);
 }
 
 .pagination-page.active {
-  background: var(--color-border);
-  color: var(--color-main);
-  border-color: rgba(var(--color-white-rgb), 0.5);
-  box-shadow: 0 6px 16px rgba(var(--color-black-rgb), 0.25);
+  background: var(--color-main);
+  color: var(--color-white);
 }
 
 .pagination-arrow:focus-visible,
 .pagination-page:focus-visible {
-  outline: 2px solid var(--color-border);
+  outline: 2px solid var(--color-main);
   outline-offset: 2px;
 }
 
 .pagination-ellipsis {
-  color: var(--color-text2);
-  opacity: 0.7;
+  color: var(--color-title);
+  opacity: 0.6;
   padding: 0 2px;
   user-select: none;
 }
@@ -696,7 +774,13 @@
 
 /* ── RESPONSIVE ──────────────────────────────────────────── */
 @media (max-width: 768px) {
-  .projects-list { grid-template-columns: 1fr; }
+  /* En columna la altura la da el contenido: filas fijas de 220px.
+     Las baldosas son estrechas (~180px): tipografía más compacta. */
+  .projects-list { align-self: auto; }
+  .cards-grid { grid-auto-rows: 220px; }
+  .project-card .overlay { padding: 12px; }
+  .project-card .overlay h3 { font-size: 0.98rem; }
+  .project-card .overlay p { font-size: 0.75rem; }
 
   .services-index { column-gap: 10px; padding: 10px 12px; }
 
@@ -734,4 +818,13 @@
 
   .detail-inner  { padding: 24px 18px 20px; }
   .detail-title  { font-size: 1.25rem; }
+
+  /* En columnas estrechas el justificado abre "ríos" entre palabras */
+  .detail-description { text-align: left; }
+
+  /* Botones a todo el ancho, apilados: objetivo táctil cómodo y sin
+     competir con los botones flotantes de la esquina. */
+  .detail-action { flex-direction: column; align-items: stretch; gap: 10px; }
+  .detail-btn,
+  .detail-btn-secondary { justify-content: center; }
 }

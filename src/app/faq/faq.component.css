@@ -2,14 +2,14 @@
    Usa la misma paleta y el mismo título de sección que Contáctame para
    integrarse con el diseño existente. */
 .faq-section {
-  background: var(--color-border);
+  background: var(--color-main);
   padding: 80px 20px;
 }
 
 .section-title2 {
   font-size: 2.5rem;
   font-weight: 900;
-  color: var(--color-title);
+  color: var(--color-main2);
   margin: 0 0 40px;
   text-transform: uppercase;
   text-align: center;
@@ -60,7 +60,7 @@
   font-family: inherit;
   font-size: 1.05rem;
   font-weight: 600;
-  color: var(--color-main-shade);
+  color: var(--color-second);
   line-height: 1.4;
 }
 
@@ -80,7 +80,7 @@
 /* Los enlaces llegan por [innerHTML] y no reciben el atributo de encapsulación:
    se estilan con ::ng-deep acotado al host */
 :host ::ng-deep .faq-answer a {
-  color: var(--color-main-shade);
+  color: var(--color-second);
   font-weight: 600;
   text-decoration: underline;
   text-underline-offset: 3px;

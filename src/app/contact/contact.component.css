@@ -19,9 +19,17 @@
   max-width: 1200px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  /* minmax(0, 1fr): una columna `1fr` a secas no puede ser más estrecha que
+     su contenido, y el correo (una sola palabra larga) empujaba toda la
+     sección fuera de la pantalla en celular. */
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 60px;
   align-items: start;
+}
+
+.contact-info,
+.contact-form {
+  min-width: 0;
 }
 
 .contact-info h3 {
@@ -60,6 +68,8 @@
 .contact-method p {
   color: var(--color-title);
   margin: 0;
+  /* Permite partir el correo si no cabe en una línea */
+  overflow-wrap: anywhere;
 }
 
 /* Correo y teléfono son enlaces (mailto:/tel:) con el mismo aspecto del texto */
@@ -114,6 +124,9 @@
 .form-group input,
 .form-group textarea {
   width: 100%;
+  /* El padding entra en el 100%: antes cada campo sobresalía 40px */
+  box-sizing: border-box;
+  font-family: inherit;
   padding: 15px 20px;
   background: var(--color-border);
   border: 2px solid transparent;
@@ -142,7 +155,7 @@
   background: var(--color-second);
   border: none;
   border-radius: 10px;
-  color: var(--color-main);
+  color: var(--color-main2);
   font-size: 1.1rem;
   font-weight: 600;
   cursor: pointer;
@@ -160,14 +173,79 @@
 
 /* RESPONSIVE */
 @media (max-width: 768px) {
+  .contact-section {
+    padding: 56px 20px;
+  }
+
   .contact-container {
-    grid-template-columns: 1fr;
-    gap: 40px;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 32px;
+  }
+
+  .section-title2 {
+    font-size: 1.8rem;
+    margin-bottom: 32px;
+  }
+
+  .contact-info h3 {
+    font-size: 1.5rem;
+  }
+
+  .contact-info p {
+    font-size: 1rem;
+    margin-bottom: 28px;
+  }
+
+  /* Sin sangría extra: en pantallas estrechas robaba ancho al texto */
+  .contact-method {
+    margin-left: 0;
+    align-items: flex-start;
+    margin-bottom: 18px;
+  }
+
+  .contact-method i {
+    margin-right: 14px;
+    margin-top: 2px;
+  }
+
+  .social-links {
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 32px;
+  }
+
+  .contact-form {
+    padding: 24px 18px;
+    margin-top: 0;
+  }
+
+  .form-group {
+    width: 100%;
+    margin-bottom: 18px;
+  }
+
+  .form-group input,
+  .form-group textarea {
+    padding: 13px 16px;
   }
 }
 
 @media (max-width: 480px) {
+  .contact-section {
+    padding: 48px 16px;
+  }
+
   .section-title2 {
-    font-size: 1.7rem;
+    font-size: 1.6rem;
+    letter-spacing: 2px;
+  }
+
+  .contact-form {
+    padding: 20px 14px;
+  }
+
+  /* Con este tamaño el correo cabe en una sola línea a 320px */
+  .contact-method p {
+    font-size: 0.92rem;
   }
 }
