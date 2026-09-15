@@ -35,43 +35,118 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 18px;
+  /* Cada tarjeta crece de forma independiente al desplegarse, sin estirar a su vecina */
+  align-items: start;
 }
 
+/* ---- Tarjeta (acordeón) ---- */
 .faq-item {
   background: var(--color-main2);
   border: 1px solid transparent;
   border-radius: 14px;
-  padding: 22px 24px;
   box-shadow: 0 5px 15px rgba(var(--color-black-rgb), 0.08);
-  transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+  overflow: hidden;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.faq-item:hover {
+.faq-item:hover,
+.faq-item.is-open {
   border-color: var(--color-main);
   box-shadow: 0 8px 20px rgba(var(--color-main-rgb), 0.18);
-  transform: translateY(-3px);
 }
 
+/* El <h3> se mantiene por semántica/SEO; el botón ocupa toda la cabecera */
 .faq-question {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  margin: 0 0 10px;
+  margin: 0;
   font-family: inherit;
   font-size: 1.05rem;
   font-weight: 600;
-  color: var(--color-second);
   line-height: 1.4;
+}
+
+/* Altura estándar de cada tarjeta cerrada: la cabecera reserva espacio para
+   --faq-question-lines líneas de pregunta, de modo que todas las tarjetas
+   miden lo mismo aunque la pregunta ocupe una sola línea. */
+.faq-trigger {
+  --faq-question-lines: 2;
+  --faq-trigger-padding-y: 22px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: calc(var(--faq-question-lines) * 1.4em + var(--faq-trigger-padding-y) * 2);
+  padding: var(--faq-trigger-padding-y) 24px;
+  background: transparent;
+  border: 0;
+  border-radius: inherit;
+  font: inherit;
+  color: var(--color-second);
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.25s ease;
+}
+
+.faq-trigger:hover {
+  background-color: rgba(var(--color-main-rgb), 0.06);
+}
+
+.faq-trigger:focus-visible {
+  outline: 2px solid var(--color-main);
+  outline-offset: -4px;
+}
+
+.faq-question-text {
+  flex: 1 1 auto;
+  min-width: 0;
+  /* Reparte las palabras entre líneas para evitar una última línea huérfana */
+  text-wrap: balance;
 }
 
 .faq-icon {
   flex: 0 0 auto;
-  margin-top: 3px;
   color: var(--color-second);
+}
+
+.faq-chevron {
+  flex: 0 0 auto;
+  font-size: 0.85em;
+  color: var(--color-main);
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.faq-item.is-open .faq-chevron {
+  transform: rotate(180deg);
+}
+
+/* ---- Panel de respuesta ----
+   Se anima grid-template-rows (0fr -> 1fr) en lugar de height, así la altura
+   es automática y la respuesta nunca sale del DOM (sigue siendo indexable). */
+.faq-panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.faq-item.is-open .faq-panel {
+  grid-template-rows: 1fr;
+}
+
+.faq-panel-inner {
+  min-height: 0;
+  overflow: hidden;
+  /* Cerrado: los enlaces de la respuesta no reciben foco con Tab */
+  visibility: hidden;
+  transition: visibility 0s linear 0.35s;
+}
+
+.faq-item.is-open .faq-panel-inner {
+  visibility: visible;
+  transition-delay: 0s;
 }
 
 .faq-answer {
   margin: 0;
+  padding: 0 24px 22px 58px; /* alineada con el texto de la pregunta (icono + gap) */
   color: var(--color-title);
   font-size: 1rem;
   line-height: 1.7;
@@ -98,7 +173,9 @@
   font-weight: 600;
 }
 
-@media (max-width: 768px) {
+/* Por debajo de 900px cada columna sería demasiado estrecha para mostrar la
+   pregunta más larga en 2 líneas, así que pasamos a una sola columna */
+@media (max-width: 900px) {
   .faq-list {
     grid-template-columns: 1fr;
   }
@@ -109,7 +186,26 @@
     font-size: 1.7rem;
   }
 
-  .faq-item {
-    padding: 18px 18px;
+  .faq-trigger {
+    /* En móviles estrechos la pregunta más larga puede ocupar 3 líneas */
+    --faq-question-lines: 3;
+    --faq-trigger-padding-y: 18px;
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+
+  .faq-answer {
+    padding: 0 18px 18px 18px;
+  }
+}
+
+/* Respeta la preferencia del usuario de menos movimiento */
+@media (prefers-reduced-motion: reduce) {
+  .faq-item,
+  .faq-trigger,
+  .faq-chevron,
+  .faq-panel,
+  .faq-panel-inner {
+    transition: none;
   }
 }

@@ -4,15 +4,39 @@
 
   <div class="faq-container">
 
-    <!-- Respuestas siempre visibles (no acordeón): el texto cuenta como contenido
-         indexable y es citable tal cual por buscadores y asistentes de IA -->
+    <!-- Acordeón accesible (patrón "disclosure"): la pregunta sigue siendo un <h3>
+         y la respuesta permanece siempre en el DOM (solo se colapsa visualmente),
+         por lo que el texto sigue siendo indexable y citable por buscadores y asistentes de IA.
+         Coincide con el bloque FAQPage del JSON-LD de src/index.html. -->
     <div class="faq-list">
-      <article class="faq-item" *ngFor="let faq of faqs; trackBy: trackByQuestion">
+      <article
+        class="faq-item"
+        *ngFor="let faq of faqs; let i = index; trackBy: trackByQuestion"
+        [class.is-open]="isOpen(i)">
+
         <h3 class="faq-question">
-          <i class="fas fa-circle-question faq-icon" aria-hidden="true"></i>
-          {{ faq.question }}
+          <button
+            type="button"
+            class="faq-trigger"
+            [id]="'faq-trigger-' + i"
+            [attr.aria-expanded]="isOpen(i)"
+            [attr.aria-controls]="'faq-panel-' + i"
+            (click)="toggle(i)">
+            <i class="fas fa-circle-question faq-icon" aria-hidden="true"></i>
+            <span class="faq-question-text">{{ faq.question }}</span>
+            <i class="fas fa-chevron-down faq-chevron" aria-hidden="true"></i>
+          </button>
         </h3>
-        <p class="faq-answer" [innerHTML]="faq.answer"></p>
+
+        <div
+          class="faq-panel"
+          [id]="'faq-panel-' + i"
+          role="region"
+          [attr.aria-labelledby]="'faq-trigger-' + i">
+          <div class="faq-panel-inner">
+            <p class="faq-answer" [innerHTML]="faq.answer"></p>
+          </div>
+        </div>
       </article>
     </div>
 

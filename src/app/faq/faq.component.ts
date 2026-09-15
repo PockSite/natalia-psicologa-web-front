@@ -43,7 +43,7 @@ export class FaqComponent {
       question: '¿Atienden a personas que viven fuera de Colombia?',
       answer:
         'Sí. La consulta está en Bogotá, pero la atención es principalmente virtual y en español, por lo que acompañamos ' +
-        'a personas de toda Latinoamérica y de España. Al agendar, el horario se muestra en hora de Bogotá (UTC-5); ' +
+        'a personas de Latinoamérica y el mundo. Al agendar, el horario se muestra en hora de Bogotá (UTC-5); ' +
         'solo tienes que ajustarlo a tu zona horaria.'
     },
     {
@@ -69,6 +69,21 @@ export class FaqComponent {
         'riesgo vital, llama a la línea de emergencias de tu país (123 en Colombia, 112 en España) o acude a urgencias.'
     }
   ];
+
+  /** Índices de las preguntas desplegadas. Cada una se abre/cierra de forma independiente. */
+  private readonly openItems = new Set<number>();
+
+  isOpen(index: number): boolean {
+    return this.openItems.has(index);
+  }
+
+  toggle(index: number): void {
+    if (this.openItems.has(index)) {
+      this.openItems.delete(index);
+    } else {
+      this.openItems.add(index);
+    }
+  }
 
   trackByQuestion(_index: number, item: FaqItem): string {
     return item.question;
